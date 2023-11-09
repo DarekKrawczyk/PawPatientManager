@@ -1,4 +1,5 @@
 ﻿using PawPatientManager.Models;
+using PawPatientManager.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -16,13 +17,13 @@ namespace PawPatientManager
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            Owner pioter = new Owner(0, "Piotrek", "Baniak", true, DateTime.Now, "Lubliniec", "piotrek@gmail.com", "94251558235");
-            Pet pet = new Pet(0, "Szarik", true, pioter, DateTime.Now, "Pies", "Owczarek Niemiecki", "997");
-            pioter.AddPet(pet);
+            VetSystem vetSystem = new VetSystem();
+            MainWindow = new MainWindow()
+            {
+                DataContext = new MainViewModel(vetSystem)
+            };
 
-            Vet lekarz = new Vet(0, "Jarek", "Lekarek");
-            Medication xanax = new Medication(0, "Xanax", "Healing strong!");
-            Visit wizyta = new Visit(0, pet, lekarz, DateTime.Now, new List<Medication>() { xanax });
+            MainWindow.Show();
         }
     }
 }

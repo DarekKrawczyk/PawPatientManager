@@ -25,18 +25,14 @@
 
         <TextBlock Text="Manage Owners View" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"/>
 
-        <ListView Grid.Row="1" Grid.Column="1">
-            <ListViewItem/>
-            <ListViewItem/>
-            <ListViewItem/>
-            <ListViewItem/>
+        <ListView Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Owners}">
             <ListView.View>
                 <GridView>
                     
                     <GridViewColumn Header="ID">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="expl"/>
+                                <TextBlock Text="{Binding ID}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -44,7 +40,7 @@
                     <GridViewColumn Header="Name">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="Maciek"/>
+                                <TextBlock Text="{Binding Name}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -52,7 +48,7 @@
                     <GridViewColumn Header="Surname">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="Taciek"/>
+                                <TextBlock Text="{Binding Surname}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -60,7 +56,7 @@
                     <GridViewColumn Header="Birthday">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="expl"/>
+                                <TextBlock Text="{Binding BirthDate}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -68,7 +64,7 @@
                     <GridViewColumn Header="Phone number">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="+48example"/>
+                                <TextBlock Text="{Binding PhoneNumber}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -76,7 +72,7 @@
                     <GridViewColumn Header="E-mail">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="maciek.taciek@gmail.com"/>
+                                <TextBlock Text="{Binding Email}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -91,9 +87,9 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             
-            <Button Content="Add owner" Grid.Row="2" Grid.Column="0"/>
-            <Button Content="Delete owner" Grid.Row="2" Grid.Column="1"/>
-            <Button Content="Edit owner" Grid.Row="2" Grid.Column="2"/>
+            <Button Content="Add owner" Grid.Row="2" Grid.Column="0" Command="{Binding CommandAddOwner}"/>
+            <Button Content="Delete owner" Grid.Row="2" Grid.Column="1" Command="{Binding CommandDeleteOwner}"/>
+            <Button Content="Edit owner" Grid.Row="2" Grid.Column="2" Command="{Binding CommandEditOwner}"/>
         </Grid>
     </Grid>
 </UserControl>

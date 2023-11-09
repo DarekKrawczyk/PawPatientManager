@@ -20,16 +20,16 @@ namespace PawPatientManager.Models
         private string _pesel;
         //private string _photo;
         //private string _notes;
-        public uint Id { get { return _id; } set { _id = value; } }
+        public uint ID { get { return _id; } set { _id = value; } }
         public string Name { get { return _name; } set { _name = value; } }
         public string Surname { get { return _surname; } set { _surname = value; } }
         public List<Pet> Pets { get { return _pets; } set { _pets = value; } }
-        public bool Gender { get; set; }
-        public DateTime BirthDate { get; set; }
-        public string Adress { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Email { get; set; }
-        public string PESEL { get; set; }
+        public bool Gender { get { return _gender; } set { _gender = value; } }
+        public DateTime BirthDate { get { return _birthDate; } set { _birthDate = value; } }
+        public string Adress { get { return _adress; } set { _adress = value; } }
+        public string PhoneNumber { get { return _phoneNumber; } set { _phoneNumber = value; } }
+        public string Email { get { return _email; } set { _email = value; } }
+        public string PESEL { get { return _pesel; } set { _pesel = value; } }
         //public string Photo { get; set; }
         //public string Notes { get; set; }
         public Owner(uint id, string name, string surname, List<Pet> pets)
@@ -39,7 +39,7 @@ namespace PawPatientManager.Models
             _surname = surname;
             _pets = pets;
         }
-        public Owner(uint id, string name, string surname, bool gender, DateTime birthDate, string adress, string email, string pesel)
+        public Owner(uint id, string name, string surname, bool gender, DateTime birthDate, string adress, string phoneNumber, string email, string pesel)
         {
             _id = id;
             _name = name;
@@ -48,6 +48,7 @@ namespace PawPatientManager.Models
             _gender = gender;
             _birthDate = birthDate;
             _adress = adress;
+            _phoneNumber = phoneNumber;
             _email = email;
             _pesel = pesel;
         }

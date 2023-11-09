@@ -19,7 +19,9 @@ namespace PawPatientManager.ViewModels
          * and create placeholders for values that you get from there. All of the fields specyfied in 
          * .xaml file have to have representation in this class.
          */
-
+        #region Fields
+        private VetSystem _vetSystem;
+        #endregion 
         #region Representation of "View" fields
         private string _name;
         private string _surname;
@@ -37,25 +39,28 @@ namespace PawPatientManager.ViewModels
          *  in fields of the .xaml file.
          */
 
-        public string Name { get { return _name; } set { _name = value; OnPropertyChanged(nameof(_name)); } }
-        public string Surname { get { return _surname; } set { _surname = value; OnPropertyChanged(nameof(_surname)); } }
-        public bool Gender { get { return _gender; } set { _gender = value; OnPropertyChanged(nameof(_gender)); } }
-        public DateTime BirthDate { get { return _birthDate; } set { _birthDate = value; OnPropertyChanged(nameof(_birthDate)); } }
-        public string Adress { get { return _adress; } set { _adress = value; OnPropertyChanged(nameof(_adress)); } }
-        public string PhoneNumber { get { return _phoneNumber; } set { _phoneNumber = value; OnPropertyChanged(nameof(_phoneNumber)); } }
-        public string Email { get { return _email; } set { _email = value; OnPropertyChanged(nameof(_email)); } }
-        public string PESEL { get { return _pesel; } set { _pesel = value; OnPropertyChanged(nameof(_pesel)); } }
+        public string Name { get { return _name; } set { _name = value; OnPropertyChanged(nameof(Name)); } }
+        public string Surname { get { return _surname; } set { _surname = value; OnPropertyChanged(nameof(Surname)); } }
+        public bool Gender { get { return _gender; } set { _gender = value; OnPropertyChanged(nameof(Gender)); } }
+        public DateTime BirthDate { get { return _birthDate; } set { _birthDate = value; OnPropertyChanged(nameof(BirthDate)); } }
+        public string Adress { get { return _adress; } set { _adress = value; OnPropertyChanged(nameof(Adress)); } }
+        public string PhoneNumber { get { return _phoneNumber; } set { _phoneNumber = value; OnPropertyChanged(nameof(PhoneNumber)); } }
+        public string Email { get { return _email; } set { _email = value; OnPropertyChanged(nameof(Email)); } }
+        public string PESEL { get { return _pesel; } set { _pesel = value; OnPropertyChanged(nameof(PESEL)); } }
         #endregion
         #region Commands
         /* These are commands used in .xaml, for example *CommandRegsiterOwner* is a command for button click of 
          * *Register Owner* button. They have to have binding like properties!!!!
          */
         public ICommand CommandRegisterOwner{ get; }
+        public ICommand CommandClearData { get; }
         #endregion
         #region Constructor
-        public OwnerRegistrationViewModel()
+        public OwnerRegistrationViewModel(VetSystem vetSystem)
         {
-
+            _vetSystem = vetSystem;
+            CommandRegisterOwner = new Commands.OwnerRegistratorViewModelCommands.RegisterOwner(_vetSystem, this);
+            CommandClearData = new Commands.OwnerRegistratorViewModelCommands.ClearData(this);
         }
         #endregion
     }

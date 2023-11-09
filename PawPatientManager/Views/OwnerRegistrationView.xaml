@@ -33,29 +33,30 @@
         <TextBlock Text="Owner Registration View" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
 
         <TextBlock Text="Name" Grid.Row="1" Grid.Column="1"/>
-        <TextBox Text="{Binding Name}" Grid.Row="1" Grid.Column="2"/>
+        <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="2"/>
 
         <TextBlock Text="Surname" Grid.Row="2" Grid.Column="1"/>
-        <TextBox Text="{Binding Surname}" Grid.Row="2" Grid.Column="2"/>
+        <TextBox Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="2"/>
 
         <TextBlock Text="Gender" Grid.Row="3" Grid.Column="1"/>
-        <CheckBox Grid.Row="3" Grid.Column="2" IsChecked="{Binding Gender}"/>
+        <CheckBox Grid.Row="3" Grid.Column="2" IsChecked="{Binding Gender, UpdateSourceTrigger=PropertyChanged}"/>
 
         <TextBlock Text="Birth date" Grid.Row="4" Grid.Column="1"/>
         <DatePicker SelectedDate="{Binding BirthDate}" Grid.Row="4" Grid.Column="2"/>
 
         <TextBlock Text="Adress" Grid.Row="5" Grid.Column="1"/>
-        <TextBox Text="{Binding Adress}" Grid.Row="5" Grid.Column="2"/>
+        <TextBox Text="{Binding Adress, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="2"/>
 
         <TextBlock Text="Phone number" Grid.Row="6" Grid.Column="1"/>
-        <TextBox Text="{Binding PhoneNumber}" Grid.Row="6" Grid.Column="2"/>
+        <TextBox Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="2"/>
 
         <TextBlock Text="E-mail" Grid.Row="7" Grid.Column="1"/>
-        <TextBox Text="{Binding Email}" Grid.Row="7" Grid.Column="2"/>
+        <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="2"/>
 
         <TextBlock Text="PESEL" Grid.Row="8" Grid.Column="1"/>
-        <TextBox Text="{Binding PESEL}" Grid.Row="8" Grid.Column="2"/>
+        <TextBox Text="{Binding PESEL, UpdateSourceTrigger=PropertyChanged}" Grid.Row="8" Grid.Column="2"/>
 
         <Button Content="Register" Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2" Command="{Binding CommandRegisterOwner}"></Button>
+        <Button Content="Clear" Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2" Command="{Binding CommandClearData}"></Button>
     </Grid>
 </UserControl>
