@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using PawPatientManager.Models;
 using System.Security.Cryptography;
 using System.Windows.Input;
+using PawPatientManager.Stores;
 
 namespace PawPatientManager.ViewModels
 {
@@ -21,7 +22,12 @@ namespace PawPatientManager.ViewModels
          */
         #region Fields
         private VetSystem _vetSystem;
-        #endregion 
+        //private NavigationBarViewModel _navigationBarVM;
+        private NavigationStore _navigator;
+        #endregion
+        #region Properties
+        //public NavigationBarViewModel NavigationBarVM {  get { return _navigationBarVM; } }
+        #endregion
         #region Representation of "View" fields
         private string _name;
         private string _surname;
@@ -54,13 +60,17 @@ namespace PawPatientManager.ViewModels
          */
         public ICommand CommandRegisterOwner{ get; }
         public ICommand CommandClearData { get; }
+        public ICommand CommandReturn { get; }
         #endregion
         #region Constructor
-        public OwnerRegistrationViewModel(VetSystem vetSystem)
+        public OwnerRegistrationViewModel(VetSystem vetSystem, NavigationStore navigator)
         {
+            //_navigationBarVM = navigationBarVM;
             _vetSystem = vetSystem;
+            _navigator = navigator;
             CommandRegisterOwner = new Commands.OwnerRegistratorViewModelCommands.RegisterOwner(_vetSystem, this);
             CommandClearData = new Commands.OwnerRegistratorViewModelCommands.ClearData(this);
+            CommandReturn = new Commands.OwnerRegistratorViewModelCommands.Return(_navigator, _vetSystem);
         }
         #endregion
     }

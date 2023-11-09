@@ -1,4 +1,6 @@
-﻿using PawPatientManager.Models;
+﻿using PawPatientManager.Commands;
+using PawPatientManager.Models;
+using PawPatientManager.Stores;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,6 +19,8 @@ namespace PawPatientManager.ViewModels
          */
         #region 
         private ObservableCollection<OwnerViewModel> _owners;
+        //private NavigationBarViewModel _navigationBarVM;
+        private NavigationStore _navigationStore;
         private VetSystem _vetSystem;
         #endregion
         #region Properties
@@ -24,22 +28,25 @@ namespace PawPatientManager.ViewModels
          *  because it will be mostly used to iterate through and check smth. Plus it provides interface.
          */
         public IEnumerable<OwnerViewModel> Owners {  get { return _owners; } }
+        //public NavigationBarViewModel NavigationBarVM {  get { return _navigationBarVM; } }
         #endregion
         #region Commands
         public ICommand CommandAddOwner { get; }
         public ICommand CommandDeleteOwner { get; }
         public ICommand CommandEditOwner { get; }
         #endregion
-        public ManageOwnersViewModel(VetSystem vetSystem) 
+        public ManageOwnersViewModel(NavigationStore navigator, VetSystem vetSystem) 
         { 
+            //_navigationBarVM = navigationBarVM;
             _vetSystem = vetSystem;
-            _owners = new ObservableCollection<OwnerViewModel>()
+            _navigationStore = navigator;
+            _owners = new ObservableCollection<OwnerViewModel>();
+            foreach(Owner owner in vetSystem.Owners)
             {
-                new OwnerViewModel(new Models.Owner(0, "Maciek", "Surma", true, DateTime.Now, "Gliwice", "662943136", "MaciekSurma@gmail.com", "53562764523")),
-                new OwnerViewModel(new Models.Owner(1, "Adrian", "Kieszonka", false, DateTime.Now, "Katowice", "662943136", "Adrian_Kieszonq@hotmail.com", "535278964623")),
-                new OwnerViewModel(new Models.Owner(2, "Jurek", "Piernik", true, DateTime.Now, "Zabrze", "662943136", "666Jureczko666@gmail.com", "96705744523"))
-            };
+                _owners.Add(new OwnerViewModel(owner));
+            }
             // TODO: Commands!!
+            CommandAddOwner = new ManageOwnersViewModelCommands.AddOwner(_navigationStore, _vetSystem);
         }
     }
 }

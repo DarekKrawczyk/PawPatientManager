@@ -3,10 +3,24 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PawPatientManager" xmlns:views="clr-namespace:PawPatientManager.Views"
+        xmlns:viewModels="clr-namespace:PawPatientManager.ViewModels" 
+        xmlns:views="clr-namespace:PawPatientManager.Views" 
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <views:OwnerRegistrationView DataContext="{Binding CurrentViewModel}"/>
-    </Grid>
+    <ContentControl Content="{Binding CurrentViewModel}">
+        <ContentControl.Resources>
+            <DataTemplate DataType="{x:Type viewModels:ManageOwnersViewModel}">
+                <views:ManageOwnersView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:OwnerRegistrationViewModel}">
+                <views:OwnerRegistrationView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:HomeViewModel}">
+                <views:HomeView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:LayotViewModel}">
+                <views:Layout/>
+            </DataTemplate>
+        </ContentControl.Resources>
+    </ContentControl>
 </Window>

@@ -1,4 +1,5 @@
 ﻿using PawPatientManager.Models;
+using PawPatientManager.Stores;
 using PawPatientManager.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -18,9 +19,18 @@ namespace PawPatientManager
         protected override void OnStartup(StartupEventArgs e)
         {
             VetSystem vetSystem = new VetSystem();
+
+            NavigationStore navigationStore = new NavigationStore();
+            NavigationBarViewModel navigationBarVM = new NavigationBarViewModel(navigationStore, vetSystem);
+
+            navigationStore.CurrentViewModel = new HomeViewModel();
+            //navigationStore.CurrentViewModel = new HomeViewModel(navigationBarVM);
+            //navigationStore.CurrentViewModel = new ManageOwnersViewModel(navigationStore, vetSystem, navigationBarVM);
+
             MainWindow = new MainWindow()
             {
-                DataContext = new MainViewModel(vetSystem)
+                DataContext = new MainViewModel(vetSystem, navigationStore)
+                //DataContext = new MainViewModel(vetSystem, navigationStore, navigationBarVM)
             };
 
             MainWindow.Show();

@@ -1,4 +1,5 @@
 ﻿using PawPatientManager.Models;
+using PawPatientManager.Stores;
 using PawPatientManager.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -83,6 +84,25 @@ namespace PawPatientManager.Commands
                 _vetSystem.AddOwner(newOwner);
 
                 // TODO: if sucess -> clear data and messagebox; else messagebox?
+            }
+        }
+        public class Return : CommandBase
+        {
+            private NavigationStore _navigator;
+            //private NavigationBarViewModel _navigationBarVM;
+            private VetSystem _vetSystem;
+            public NavigationStore Navigator { get { return _navigator; } }
+            public Return(NavigationStore navigator, VetSystem vetSystem)
+            {
+                _navigator = navigator;
+                _vetSystem = vetSystem;
+                //_navigationBarVM = navigationBarVM;
+            }
+
+            public override void Execute(object? parameter)
+            {
+                _navigator.CurrentViewModel = new ManageOwnersViewModel(_navigator,_vetSystem);
+                //_navigator.CurrentViewModel = new ManageOwnersViewModel(_navigator,_vetSystem, _navigationBarVM);
             }
         }
     }
