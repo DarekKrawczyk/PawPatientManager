@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PawPatientManager.Components
+namespace PawPatientManager.Views
 {
     /// <summary>
-    /// Interaction logic for Layout.xaml
+    /// Interaction logic for LayoutView.xaml
     /// </summary>
-    public partial class Layout : UserControl
+    public partial class LayoutView : Page
     {
-        public Layout()
+        public LayoutView()
         {
             InitializeComponent();
         }

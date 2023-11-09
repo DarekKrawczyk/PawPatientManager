@@ -19,7 +19,7 @@
                 <views:HomeView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:LayotViewModel}">
-                <views:Layout/>
+                <views:LayoutView/>
             </DataTemplate>
         </ContentControl.Resources>
     </ContentControl>

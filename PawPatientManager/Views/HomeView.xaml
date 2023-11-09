@@ -16,7 +16,7 @@
         <components:NavigationBar Grid.Column="0" DataContext="{Binding NavigationBarVM}"/>
         <TextBlock Grid.Column="1" Text="HOME"/>
         <Grid Grid.Column="1">
-            
+
         </Grid>
     </Grid>
 </UserControl>
