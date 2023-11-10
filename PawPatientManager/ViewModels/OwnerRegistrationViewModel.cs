@@ -9,6 +9,8 @@ using PawPatientManager.Models;
 using System.Security.Cryptography;
 using System.Windows.Input;
 using PawPatientManager.Stores;
+using PawPatientManager.Commands;
+using PawPatientManager.Services;
 
 namespace PawPatientManager.ViewModels
 {
@@ -70,7 +72,7 @@ namespace PawPatientManager.ViewModels
             _navigator = navigator;
             CommandRegisterOwner = new Commands.OwnerRegistratorViewModelCommands.RegisterOwner(_vetSystem, this);
             CommandClearData = new Commands.OwnerRegistratorViewModelCommands.ClearData(this);
-            CommandReturn = new Commands.OwnerRegistratorViewModelCommands.Return(_navigator, _vetSystem);
+            CommandReturn = new NavigateCommand<ManageOwnersViewModel>(new NavigationService<ManageOwnersViewModel>(_navigator, () => new ManageOwnersViewModel(_navigator, _vetSystem)));
         }
         #endregion
     }

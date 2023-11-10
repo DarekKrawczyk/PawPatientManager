@@ -1,5 +1,6 @@
 ﻿using PawPatientManager.Commands;
 using PawPatientManager.Models;
+using PawPatientManager.Services;
 using PawPatientManager.Stores;
 using System;
 using System.Collections.Generic;
@@ -46,7 +47,7 @@ namespace PawPatientManager.ViewModels
                 _owners.Add(new OwnerViewModel(owner));
             }
             // TODO: Commands!!
-            CommandAddOwner = new ManageOwnersViewModelCommands.AddOwner(_navigationStore, _vetSystem);
+            CommandAddOwner = new NavigateCommand<OwnerRegistrationViewModel>(new NavigationService<OwnerRegistrationViewModel>(_navigationStore, ()=> new OwnerRegistrationViewModel(_vetSystem, _navigationStore)));
         }
     }
 }

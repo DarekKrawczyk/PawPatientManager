@@ -1,5 +1,6 @@
 ﻿using PawPatientManager.Commands;
 using PawPatientManager.Models;
+using PawPatientManager.Services;
 using PawPatientManager.Stores;
 using System;
 using System.Collections.Generic;
@@ -28,11 +29,12 @@ namespace PawPatientManager.ViewModels
         {
             _navigator = navigator;
             _vetSystem = vetSystem;
-            CommandNavigateHome = new NavigationBarViewModelCommands.GoHome(_navigator);
-            CommandNavigateOwners = new NavigationBarViewModelCommands.GoOwners(_navigator, _vetSystem);
-            CommandNavigatePets = new NavigationBarViewModelCommands.GoPets();
-            CommandNavigateVisits = new NavigationBarViewModelCommands.GoVisits();
-            CommandNavigateMeds = new NavigationBarViewModelCommands.GoMeds();
+            //CommandNavigateHome = new NavigationService<HomeViewModel>(_navigator, () => new HomeViewModel());
+            CommandNavigateHome = new NavigateCommand<HomeViewModel>(new NavigationService<HomeViewModel>(_navigator, () => new HomeViewModel()));
+            CommandNavigateOwners = new NavigateCommand<ManageOwnersViewModel>(new NavigationService<ManageOwnersViewModel>(_navigator, () => new ManageOwnersViewModel(_navigator, _vetSystem)));
+            //CommandNavigatePets = new NavigateCommand<HomeViewModel>(_navigator, () => new HomeViewModel());
+            //CommandNavigateVisits = new NavigateCommand<HomeViewModel>(_navigator, () => new HomeViewModel());
+            //CommandNavigateMeds = new NavigateCommand<HomeViewModel>(_navigator, () => new HomeViewModel());
         }
         #endregion
     }
