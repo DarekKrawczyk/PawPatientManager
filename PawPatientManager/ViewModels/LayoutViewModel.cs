@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace PawPatientManager.ViewModels
 {
-    public class LayotViewModel : ViewModelBase
+    public class LayoutViewModel : ViewModelBase
     {
         #region
         private NavigationBarViewModel _navigationBarVM;
         private ViewModelBase _contentVM;
         #endregion
         #region
-        public NavigationBarViewModel NavigationBarVM {  get { return _navigationBarVM; } }
+        public NavigationBarViewModel NavigationBarVM { get { return _navigationBarVM; } }
         public ViewModelBase ContentVM { get { return _contentVM; } }
         #endregion
         #region
-        public LayotViewModel(NavigationBarViewModel navigationBarVM, ViewModelBase contentVM)
+        public LayoutViewModel(NavigationBarViewModel navigationBarVM, ViewModelBase contentVM)
         {
             _navigationBarVM = navigationBarVM;
             _contentVM = contentVM;

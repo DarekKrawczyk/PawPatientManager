@@ -20,6 +20,7 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
         <TextBlock Text="Navigation Bar" Grid.Row="0" Grid.Column="0"/>
@@ -29,6 +30,7 @@
         <Button Content="Pets" Command="{Binding CommandNavigatePets}" Grid.Row="3" Grid.Column="0"/>
         <Button Content="Visits" Command="{Binding CommandNavigateVisits}" Grid.Row="4" Grid.Column="0"/>
         <Button Content="Meds" Command="{Binding CommandNavigateMeds}" Grid.Row="5" Grid.Column="0"/>
+        <Button Content="Logout" Command="{Binding CommandLogout}" Grid.Row="6" Grid.Column="0"/>
 
     </Grid>
 </UserControl>

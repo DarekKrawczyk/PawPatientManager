@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PawPatientManager.Stores;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,8 +15,11 @@ namespace PawPatientManager.ViewModels
         //{
         //    _navigationBarVM = navigationBarVM;
         //}
-        public HomeViewModel()
+        private AccountStore _accountStore;
+        public string Username { get { return _accountStore.CurrentAccount.Username; } }
+        public HomeViewModel(AccountStore accountStore)
         {
+            _accountStore = accountStore;
         }
     }
 }

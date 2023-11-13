@@ -26,6 +26,8 @@ namespace PawPatientManager.ViewModels
         private VetSystem _vetSystem;
         //private NavigationBarViewModel _navigationBarVM;
         private NavigationStore _navigator;
+        private INavigationService<ManageOwnersViewModel> _navManageOwnersService;
+        //private NavigationStore _navigator;
         #endregion
         #region Properties
         //public NavigationBarViewModel NavigationBarVM {  get { return _navigationBarVM; } }
@@ -65,14 +67,16 @@ namespace PawPatientManager.ViewModels
         public ICommand CommandReturn { get; }
         #endregion
         #region Constructor
-        public OwnerRegistrationViewModel(VetSystem vetSystem, NavigationStore navigator)
+        public OwnerRegistrationViewModel(VetSystem vetSystem, INavigationService<ManageOwnersViewModel> navManageOwnersService)
         {
             //_navigationBarVM = navigationBarVM;
             _vetSystem = vetSystem;
-            _navigator = navigator;
+            _navManageOwnersService = navManageOwnersService;
             CommandRegisterOwner = new Commands.OwnerRegistratorViewModelCommands.RegisterOwner(_vetSystem, this);
             CommandClearData = new Commands.OwnerRegistratorViewModelCommands.ClearData(this);
-            CommandReturn = new NavigateCommand<ManageOwnersViewModel>(new NavigationService<ManageOwnersViewModel>(_navigator, () => new ManageOwnersViewModel(_navigator, _vetSystem)));
+            //CommandReturn = new NavigateCommand<ManageOwnersViewModel>(new NavigationService<ManageOwnersViewModel>(navigator, ()=> new ));
+            CommandReturn = new NavigateCommand<ManageOwnersViewModel>(_navManageOwnersService);
+            //CommandReturn = new NavigateCommand<ManageOwnersViewModel>(new NavigationService<ManageOwnersViewModel>(_navigator, () => new ManageOwnersViewModel(_navigator, _vetSystem)));
         }
         #endregion
     }

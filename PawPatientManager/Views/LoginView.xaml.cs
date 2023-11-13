@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace PawPatientManager.Views
 {
     /// <summary>
-    /// Interaction logic for LayoutView.xaml
+    /// Interaction logic for LoginView.xaml
     /// </summary>
-    public partial class LayoutView : UserControl
+    public partial class LoginView : UserControl
     {
-        public LayoutView()
+        public LoginView()
         {
             InitializeComponent();
         }

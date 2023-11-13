@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Navigation;
 
 namespace PawPatientManager.ViewModels
 {
@@ -22,6 +23,7 @@ namespace PawPatientManager.ViewModels
         private ObservableCollection<OwnerViewModel> _owners;
         //private NavigationBarViewModel _navigationBarVM;
         private NavigationStore _navigationStore;
+        private INavigationService<OwnerRegistrationViewModel> _navOwnerRegisterService;
         private VetSystem _vetSystem;
         #endregion
         #region Properties
@@ -36,18 +38,20 @@ namespace PawPatientManager.ViewModels
         public ICommand CommandDeleteOwner { get; }
         public ICommand CommandEditOwner { get; }
         #endregion
-        public ManageOwnersViewModel(NavigationStore navigator, VetSystem vetSystem) 
+        public ManageOwnersViewModel(INavigationService<OwnerRegistrationViewModel> navOwnerRegisterService, VetSystem vetSystem) 
         { 
             //_navigationBarVM = navigationBarVM;
             _vetSystem = vetSystem;
-            _navigationStore = navigator;
+            //_navigationStore = navigationStore;
+            _navOwnerRegisterService = navOwnerRegisterService;
             _owners = new ObservableCollection<OwnerViewModel>();
             foreach(Owner owner in vetSystem.Owners)
             {
                 _owners.Add(new OwnerViewModel(owner));
             }
             // TODO: Commands!!
-            CommandAddOwner = new NavigateCommand<OwnerRegistrationViewModel>(new NavigationService<OwnerRegistrationViewModel>(_navigationStore, ()=> new OwnerRegistrationViewModel(_vetSystem, _navigationStore)));
+            CommandAddOwner = new NavigateCommand<OwnerRegistrationViewModel>(_navOwnerRegisterService);
+            //CommandAddOwner = new NavigateCommand<OwnerRegistrationViewModel>(new NavigationService<OwnerRegistrationViewModel>(_navigationStore, ()=> new OwnerRegistrationViewModel(_vetSystem, _navigationStore)));
         }
     }
 }

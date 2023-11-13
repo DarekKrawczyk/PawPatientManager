@@ -18,8 +18,11 @@
             <DataTemplate DataType="{x:Type viewModels:HomeViewModel}">
                 <views:HomeView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewModels:LayotViewModel}">
+            <DataTemplate DataType="{x:Type viewModels:LayoutViewModel}">
                 <views:LayoutView/>
+            </DataTemplate>            
+            <DataTemplate DataType="{x:Type viewModels:LoginViewModel}">
+                <views:LoginView/>
             </DataTemplate>
         </ContentControl.Resources>
     </ContentControl>
