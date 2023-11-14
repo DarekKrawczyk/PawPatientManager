@@ -13,7 +13,7 @@ namespace PawPatientManager.Models
         private Medication _medication;
         // Dawkowanie...
 
-        public uint Id { get { return _id; } set { _id = value; } }
+        public uint ID { get { return _id; } set { _id = value; } }
         public DateTime Signed { get { return _signed; } set { _signed = value; } }
         public Medication Medication { get { return _medication; } set { _medication = value; } }
         public MedicalReceipt(uint id, DateTime signed, Medication medication) 

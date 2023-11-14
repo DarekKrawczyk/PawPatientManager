@@ -19,6 +19,7 @@ namespace PawPatientManager.ViewModels
         private INavigationService<ManageOwnersViewModel> _navManageOwnersService;
         private INavigationService<LoginViewModel> _navLoginService;
         private INavigationService<PetsViewModel> _navPetsVMService;
+        private INavigationService<VisitsViewModel> _navVisitsVMService;
         private VetSystem _vetSystem;
         #endregion
         #region Commands
@@ -31,17 +32,19 @@ namespace PawPatientManager.ViewModels
         #endregion
         #region Constructor
         public NavigationBarViewModel(VetSystem vetSystem, INavigationService<HomeViewModel> navHomeSercice, INavigationService<ManageOwnersViewModel> navManageOwnersService,
-            INavigationService<LoginViewModel> navLoginService, INavigationService<PetsViewModel> navPetsVMService) 
+            INavigationService<LoginViewModel> navLoginService, INavigationService<PetsViewModel> navPetsVMService, INavigationService<VisitsViewModel> navVisitsVMService) 
         {
             _navLoginService = navLoginService;
             _navHomeService = navHomeSercice;
             _navManageOwnersService = navManageOwnersService;
             _navPetsVMService = navPetsVMService;
+            _navVisitsVMService = navVisitsVMService;
             _vetSystem = vetSystem;
 
             CommandNavigateHome = new NavigateCommand<HomeViewModel>(_navHomeService);
             CommandNavigateOwners = new NavigateCommand<ManageOwnersViewModel>(_navManageOwnersService);
             CommandNavigatePets = new NavigateCommand<PetsViewModel>(_navPetsVMService);
+            CommandNavigateVisits = new NavigateCommand<VisitsViewModel>(_navVisitsVMService);
             CommandLogout = new NavigateCommand<LoginViewModel>(_navLoginService);
         }
         #endregion

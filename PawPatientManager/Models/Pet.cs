@@ -42,7 +42,7 @@ namespace PawPatientManager.Models
             _birthDate = petVM.BirthDate;
             _visits = petVM.Visits;
             _medicals = petVM.Medicals;
-            _species = petVM.Spiecies;
+            _species = petVM.Species;
             _race = petVM.Race;
             _microchipNumber = petVM.MicrochipNumber;
         }

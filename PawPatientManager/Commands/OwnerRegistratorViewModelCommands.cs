@@ -1,4 +1,5 @@
 ﻿using PawPatientManager.Models;
+using PawPatientManager.Services;
 using PawPatientManager.Stores;
 using PawPatientManager.ViewModels;
 using System;
@@ -7,9 +8,81 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace PawPatientManager.Commands
 {
+    public struct VisitsCommandsCombobox
+    {
+        public class DeleteVisit : CommandBase
+        {
+            private VisitsViewModel _visitsVM;
+            public DeleteVisit(VisitsViewModel visitsVM)
+            {
+                _visitsVM = visitsVM;
+            }
+            public override void Execute(object? parameter)
+            {
+                bool result = false;
+                VisitViewModel visitVM = _visitsVM.SelectedVisit;
+                if (visitVM != null)
+                {
+                    result = _visitsVM.DeleteVisit(visitVM);
+                }
+                string text = (result == true) ? "deleted succesfully!" : "not deleted!";
+                MessageBox.Show($"Visit {text}", "PawPatientManager", MessageBoxButton.OK);
+            }
+        }
+
+        public class UpdateSelected : CommandBase
+        {
+            private VisitsViewModel _petsViewModel;
+            private readonly Action<object> _execute;
+            private readonly Func<object, bool> _canExecute;
+
+            public UpdateSelected(VisitsViewModel petsViewModel)
+            {
+                _petsViewModel = petsViewModel;
+            }
+
+            public bool CanExecute(object parameter)
+            {
+                return _canExecute == null || _canExecute(parameter);
+            }
+
+            public override void Execute(object? parameter)
+            {
+                if (parameter is VisitViewModel selectedItem)
+                {
+                    _petsViewModel.SelectedVisit = selectedItem;
+                }
+                else
+                {
+                    _petsViewModel.SelectedVisit = null;
+                }
+            }
+        }
+
+        public class EditVisit : CommandBase
+        {
+            private VisitsViewModel _visitsVM;
+            private LayoutNavigationServiceParam<VisitViewModel, EditVisitViewModel> _navService;
+            public EditVisit(VisitsViewModel visitsVM, LayoutNavigationServiceParam<VisitViewModel, EditVisitViewModel> navService)
+            {
+                _visitsVM = visitsVM;
+                _navService = navService;
+            }
+            public override void Execute(object? parameter)
+            {
+                VisitViewModel visitVM = _visitsVM.SelectedVisit;
+                if (visitVM is null || visitVM.IsNull() == true)
+                {
+                    MessageBox.Show("Invalid visit selected", "PawPatientManager", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else _navService.Navigate(visitVM);
+            }
+        }
+    }
     public struct OwnerRegistratorViewModelCommands
     {
         // TODO: some kind of magic for initializing all of the commands within this structure.

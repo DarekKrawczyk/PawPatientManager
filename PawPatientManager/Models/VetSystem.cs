@@ -36,6 +36,11 @@ namespace PawPatientManager.Models
         {
             _owners.Add(owner);
         }
+        
+        public void AddVisit(Visit visit)
+        {
+            _visits.Add(visit);
+        }
 
         public void AddPetToOwner(Pet pet)
         {

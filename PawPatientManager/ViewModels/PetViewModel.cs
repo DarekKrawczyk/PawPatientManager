@@ -18,7 +18,6 @@ namespace PawPatientManager.ViewModels
         public uint ID { get { return _pet.ID; } set { _pet.ID = value; } }
         public string Name { get { return _pet.Name; } set { _pet.Name = value; } }
         public bool Gender { get { return _pet.Gender; } set { _pet.Gender = value; } }
-        public string Spiecies { get { return _pet.Species; } set { _pet.Species = value; } }
         public string Race { get { return _pet.Race; } set { _pet.Race = value; } }
         public string MicrochipNumber { get { return _pet.MicrochipNumber; } set { _pet.MicrochipNumber = value; } }
         public string OwnerNameAndSurname { get { return $"{_pet.Owner?.Name} {_pet.Owner?.Surname}"; } }
@@ -26,6 +25,10 @@ namespace PawPatientManager.ViewModels
         public DateTime BirthDate { get { return _pet.BirthDate; } set { _pet.BirthDate = value; } }
         public List<Visit> Visits { get { return _pet.Visits; } set { _pet.Visits = value; } }
         public List<MedicalReceipt> Medicals { get { return _pet.Medicals; } set { _pet.Medicals = value; } }
+        #endregion
+        #region Properties - *RegisterVisitViewModel.cs*
+        public string OwnerFullName { get { return $"{_pet.Owner?.Name} { _pet.Owner?.Surname}"; } }
+        public string Species { get { return _pet.Species; } set { _pet.Species = value; } }
         #endregion
         #region Constructor
         public PetViewModel(Pet pet)

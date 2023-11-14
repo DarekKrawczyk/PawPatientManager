@@ -27,13 +27,17 @@ namespace PawPatientManager
         public App()
         {
             _vetSystem = new VetSystem();
-
-            _vetSystem.Pets.Add(new Pet(0, "Bolek", true, null, DateTime.Now, "Dog", "German shepard", "9293492394"));
-            _vetSystem.Pets.Add(new Pet(1, "Taciek", true, null, DateTime.Now, "Cat", "Dachowiec", "23452345"));
-            _vetSystem.Pets.Add(new Pet(2, "Masny", true, null, DateTime.Now, "Frog", "Green frog", "2323465216"));
-            _vetSystem.Pets.Add(new Pet(3, "Bogol", true, null, DateTime.Now, "Horse", "Big horse", "3644363245"));
-
+            
             _vetSystem.Owners.Add(new Owner(0, "Mariusz", "Pudzianowski", true, DateTime.Now, "Gliwice ul.Pszczyńska 23", "+48424525252", "mariusz.pudzian@gmail.com", "9923523582385"));
+
+            _vetSystem.Pets.Add(new Pet(0, "Bolek", true, _vetSystem.Owners[0], DateTime.Now, "Dog", "German shepard", "9293492394"));
+            _vetSystem.Pets.Add(new Pet(1, "Taciek", true, _vetSystem.Owners[0], DateTime.Now, "Cat", "Dachowiec", "23452345"));
+            _vetSystem.Pets.Add(new Pet(2, "Masny", true, _vetSystem.Owners[0], DateTime.Now, "Frog", "Green frog", "2323465216"));
+            _vetSystem.Pets.Add(new Pet(3, "Bogol", true, _vetSystem.Owners[0], DateTime.Now, "Horse", "Big horse", "3644363245"));
+
+            _vetSystem.Vets.Add(new Vet(0, "Jarek", "Marek"));
+
+            _vetSystem.Visits.Add(new Visit(0, _vetSystem.Pets[0], _vetSystem.Vets[0], DateTime.Now, null));
 
             _navigationStore = new NavigationStore();
             _accountStore = new AccountStore();
@@ -119,7 +123,43 @@ namespace PawPatientManager
                     CreatePetsNavService()
                     ),
                 CreateNavBarVM);
-        }        
+        }
+        #endregion
+        #region Factories - Visits
+        private INavigationService<RegisterVisitViewModel> CreateRegisterVisitNavService()
+        {
+            return new LayoutNavigationService<RegisterVisitViewModel>(
+                _navigationStore,
+                () => new RegisterVisitViewModel(
+                    _vetSystem,
+                    CreateVisitsNavService()
+                    ),
+                CreateNavBarVM);
+        }
+        private INavigationService<VisitsViewModel> CreateVisitsNavService()
+        {
+            return new LayoutNavigationService<VisitsViewModel>(
+                _navigationStore,
+                () => new VisitsViewModel(
+                    _vetSystem,
+                    CreateRegisterVisitNavService(),
+                    CreateEditVisitNavService()
+                    ),
+                CreateNavBarVM
+                );
+        }
+
+        private LayoutNavigationServiceParam<VisitViewModel, EditVisitViewModel> CreateEditVisitNavService()
+        {
+            return new LayoutNavigationServiceParam<VisitViewModel, EditVisitViewModel>(
+                _navigationStore,
+                (paramater) => new EditVisitViewModel(
+                    _vetSystem,
+                    paramater,
+                    CreateVisitsNavService()
+                    ),
+                CreateNavBarVM);
+        }
         #endregion
         #region Factories - Home
         private INavigationService<HomeViewModel> CreateHomeNavService()
@@ -145,7 +185,8 @@ namespace PawPatientManager
                 CreateHomeNavService(),
                 CreateManageOwnersNavService(),
                 CreateLoginNavService(),
-                CreatePetsNavService()
+                CreatePetsNavService(),
+                CreateVisitsNavService()
                 );
         }
         #endregion

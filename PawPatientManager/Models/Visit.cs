@@ -12,20 +12,21 @@ namespace PawPatientManager.Models
         private Pet _pet;
         private Vet _vet;
         private DateTime _date;
-        private List<Medication> _medications;
+        private List<MedicalReceipt> _medicalReceipts;
 
-        public uint Id { get { return _id; } set { _id = value; } }
+        public uint ID { get { return _id; } set { _id = value; } }
         public Pet Pet { get { return _pet; } set { _pet = value; } }
         public Vet Vet { get { return _vet; } set { _vet = value; } }
+        public Owner Owner { get { return _pet.Owner; } set { _pet.Owner = value; } }
         public DateTime Date { get { return _date;} set { _date = value; } }
-        public List<Medication> Medications { get { return _medications; } set { _medications = value; } }
-        public Visit(uint id, Pet pet, Vet vet, DateTime date, List<Medication> medications)
+        public List<MedicalReceipt> MedicalReceipts { get { return _medicalReceipts; } set { _medicalReceipts = value; } }
+        public Visit(uint id, Pet pet, Vet vet, DateTime date, List<MedicalReceipt> medicalReceipts)
         {
             _id = id;
             _pet = pet;
             _vet = vet;
             _date = date;
-            _medications = medications;
+            _medicalReceipts = medicalReceipts;
         }   
     }
 }

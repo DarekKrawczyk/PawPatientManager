@@ -59,7 +59,7 @@ namespace PawPatientManager.ViewModels
             _name = petVM.Name;
             _owner = petVM.Owner;
             _gender = petVM.Gender;
-            _species = petVM.Spiecies;
+            _species = petVM.Species;
             _race = petVM.Race;
             _microchipNumber = petVM.MicrochipNumber;
             _birthDate = petVM.BirthDate;

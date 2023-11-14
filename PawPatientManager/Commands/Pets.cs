@@ -11,9 +11,125 @@ using System.Threading.Tasks;
 using System.Windows;
 using static PawPatientManager.Commands.ManageOwnersViewModelCommands;
 using System.Windows.Input;
+using static PawPatientManager.ViewModels.RegisterVisitViewModel;
 
 namespace PawPatientManager.Commands
 {
+    public struct RegisterVisitCommands 
+    {
+        public class RegisterVisit : CommandBase
+        {
+            private static uint _idIterator;
+            private VetSystem _vetSystem;
+            private RegisterVisitViewModel _vm;
+            public RegisterVisit(VetSystem vetSystem, RegisterVisitViewModel vm)
+            {
+                _vetSystem = vetSystem;
+                _vm = vm;
+            }
+
+            public override void Execute(object? parameter)
+            {
+                Visit newVisit = new Visit(0, _vm.SelectedPet.Pet, _vm.SelectedVet.Vet, _vm.GetVisitDateTime(), null);
+                _vetSystem.AddVisit(newVisit);
+
+                // TODO: if sucess -> clear data and messagebox; else messagebox?
+            }
+        }
+        public class UpdatePet : CommandBase
+        {
+            private RegisterVisitViewModel _vm;
+            private readonly Action<object> _execute;
+            private readonly Func<object, bool> _canExecute;
+
+            public UpdatePet(RegisterVisitViewModel vm)
+            {
+                _vm = vm;
+            }
+
+            public override void Execute(object? parameter)
+            {
+                if (parameter is PetViewModel selectedItem)
+                {
+                    _vm.SelectedPet = selectedItem;
+                }
+                else
+                {
+                    _vm.SelectedPet = null;
+                }
+            }
+        }
+
+        public class UpdateVet : CommandBase
+        {
+            private RegisterVisitViewModel _vm;
+            private readonly Action<object> _execute;
+            private readonly Func<object, bool> _canExecute;
+
+            public UpdateVet(RegisterVisitViewModel vm)
+            {
+                _vm = vm;
+            }
+
+            public override void Execute(object? parameter)
+            {
+                if (parameter is VetViewModel selectedItem)
+                {
+                    _vm.SelectedVet = selectedItem;
+                }
+                else
+                {
+                    _vm.SelectedVet = null;
+                }
+            }
+        }
+        public class UpdateHour : CommandBase
+        {
+            private RegisterVisitViewModel _vm;
+            private readonly Action<object> _execute;
+            private readonly Func<object, bool> _canExecute;
+
+            public UpdateHour(RegisterVisitViewModel vm)
+            {
+                _vm = vm;
+            }
+
+            public override void Execute(object? parameter)
+            {
+                if (parameter is HourViewModel selectedItem)
+                {
+                    _vm.SelectedHour = selectedItem;
+                }
+                else
+                {
+                    _vm.SelectedHour = null;
+                }
+            }
+        }        
+        public class UpdateDate : CommandBase
+        {
+            private RegisterVisitViewModel _vm;
+            private readonly Action<object> _execute;
+            private readonly Func<object, bool> _canExecute;
+
+            public UpdateDate(RegisterVisitViewModel vm)
+            {
+                _vm = vm;
+            }
+
+            public override void Execute(object? parameter)
+            {
+                if (parameter is DateTime selectedItem)
+                {
+                    _vm.SelectedDate = selectedItem;
+                }
+                else
+                {
+                    _vm.SelectedDate = DateTime.Now;
+                }
+            }
+        }
+    }
     public struct EditPetCommand
     {
         public class RegisterPet : CommandBase
