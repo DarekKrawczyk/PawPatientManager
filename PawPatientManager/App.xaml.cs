@@ -78,10 +78,24 @@ namespace PawPatientManager
             return new LayoutNavigationService<ManageOwnersViewModel>(
                 _navigationStore,
                 () => new ManageOwnersViewModel(
+                    _vetSystem,
                     CreateOwnerRegisterService(),
-                    _vetSystem),
+                    CreateEditOwnerNavService()
+                    ),
                 CreateNavBarVM);
         }
+        private LayoutNavigationServiceParam<OwnerViewModel, EditOwnerViewModel> CreateEditOwnerNavService()
+        {
+            return new LayoutNavigationServiceParam<OwnerViewModel, EditOwnerViewModel>(
+                _navigationStore,
+                (paramater) => new EditOwnerViewModel(
+                    _vetSystem,
+                    paramater,
+                    CreateManageOwnersNavService()
+                    ),
+                CreateNavBarVM);
+        }
+
         private INavigationService<LoginViewModel> CreateLoginNavService()
         {
             return new NavigationService<LoginViewModel>(
@@ -93,7 +107,8 @@ namespace PawPatientManager
             return new NavigationBarViewModel(_vetSystem,
                 CreateHomeNavService(),
                 CreateManageOwnersNavService(),
-                CreateLoginNavService());
+                CreateLoginNavService()
+                );
         }
     }
 }

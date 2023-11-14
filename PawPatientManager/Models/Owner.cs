@@ -32,6 +32,10 @@ namespace PawPatientManager.Models
         public string PESEL { get { return _pesel; } set { _pesel = value; } }
         //public string Photo { get; set; }
         //public string Notes { get; set; }
+        public Owner()
+        {
+            _pets = new List<Pet>();
+        }
         public Owner(uint id, string name, string surname, List<Pet> pets)
         {
             _id = id;

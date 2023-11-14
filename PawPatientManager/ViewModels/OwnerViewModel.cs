@@ -19,11 +19,15 @@ namespace PawPatientManager.ViewModels
         private Owner _ownerModel;
         #endregion
         #region Properties for fields
+        public Owner Owner{ get { return _ownerModel; } }
         public uint ID { get { return _ownerModel.ID; } }
         public string Name { get { return _ownerModel.Name; } }
         public string Surname { get { return _ownerModel.Surname; } }
+        public bool Gender { get { return _ownerModel.Gender; } }
         public DateTime BirthDate { get { return _ownerModel.BirthDate; } }
         public string PhoneNumber { get { return _ownerModel.PhoneNumber; } }
+        public string Adress { get { return _ownerModel.Adress; } }
+        public string PESEL { get { return _ownerModel.PESEL; } }
         public string Email { get { return _ownerModel.Email; } }
         #endregion
         #region Commands
@@ -32,6 +36,13 @@ namespace PawPatientManager.ViewModels
         public OwnerViewModel(Owner ownerModel)
         {
             _ownerModel = ownerModel;
+        }
+        #endregion
+        #region Methods
+        public bool IsNull()
+        {
+            if (_ownerModel == null) return true;
+            else return false;
         }
         #endregion
     }

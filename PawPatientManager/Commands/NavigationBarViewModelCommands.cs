@@ -24,61 +24,20 @@ namespace PawPatientManager.Commands
         }
     }
 
-    public struct NavigationBarViewModelCommands
+    public class NavigateCommandParam<TParameter, TViewModel> : CommandBase
+    where TViewModel : ViewModelBase
     {
-        //public class GoHome : CommandBase
-        //{
-        //    private NavigationStore _navigator;
-        //    //private NavigationBarViewModel _navigationBarVM;
-        //    public GoHome(NavigationStore navigator)
-        //    {
-        //        //_navigationBarVM = navigationBarVM;
-        //        _navigator = navigator;
-        //    }
-        //    public override void Execute(object? parameter)
-        //    {
-        //        _navigator.CurrentViewModel = new HomeViewModel();
-        //        //_navigator.CurrentViewModel = new HomeViewModel(_navigationBarVM);
-        //    }
-        //}
-        //public class GoOwners : CommandBase
-        //{
-        //    private NavigationStore _navigator;
-
-        //    //private NavigationBarViewModel _navigationBarVM;
-        //    private VetSystem _vetSystem;
-        //    public GoOwners(NavigationStore navigator, VetSystem vetSystem)
-        //    {
-        //        _navigator = navigator;
-        //        _vetSystem = vetSystem;
-        //        //_navigationBarVM = navigationBarVM;
-        //    }
-        //    public override void Execute(object? parameter)
-        //    {
-        //        _navigator.CurrentViewModel = new ManageOwnersViewModel(_navigator, _vetSystem);
-        //        //_navigator.CurrentViewModel = new ManageOwnersViewModel(_navigator, _vetSystem, _navigationBarVM);
-        //    }
-        //}
-        //public class GoPets : CommandBase
-        //{
-        //    public override void Execute(object? parameter)
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-        //}
-        //public class GoVisits : CommandBase
-        //{
-        //    public override void Execute(object? parameter)
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-        //}
-        //public class GoMeds : CommandBase
-        //{
-        //    public override void Execute(object? parameter)
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-        //}
+        private LayoutNavigationServiceParam<TParameter, TViewModel> _navigationService;
+        private TParameter _parameter;
+        public NavigateCommandParam(LayoutNavigationServiceParam<TParameter, TViewModel> navigationService, TParameter tparameter)
+        {
+            _navigationService = navigationService;
+            _parameter = tparameter;
+        }
+        public override void Execute(object? parameter)
+        {
+            _navigationService.Navigate(_parameter);
+        }
     }
+
 }
