@@ -22,9 +22,12 @@ namespace PawPatientManager.ViewModels
         public Owner Owner{ get { return _ownerModel; } }
         public uint ID { get { return _ownerModel.ID; } }
         public string Name { get { return _ownerModel.Name; } }
+        public string NameAndSurname { get { return $"{_ownerModel.Name} {_ownerModel.Surname}"; } }
         public string Surname { get { return _ownerModel.Surname; } }
         public bool Gender { get { return _ownerModel.Gender; } }
+        public List<Pet> Pets { get { return _ownerModel.Pets; } }
         public DateTime BirthDate { get { return _ownerModel.BirthDate; } }
+        public string BirthDateAsString { get { return $"{_ownerModel.BirthDate}"; } }
         public string PhoneNumber { get { return _ownerModel.PhoneNumber; } }
         public string Adress { get { return _ownerModel.Adress; } }
         public string PESEL { get { return _ownerModel.PESEL; } }

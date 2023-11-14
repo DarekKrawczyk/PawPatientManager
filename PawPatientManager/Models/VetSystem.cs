@@ -36,6 +36,40 @@ namespace PawPatientManager.Models
         {
             _owners.Add(owner);
         }
+
+        public void AddPetToOwner(Pet pet)
+        {
+            _pets.Add(pet);
+            for(int i = 0; i<_owners.Count; i++)
+            {
+                if (_owners[i] == pet.Owner)
+                {
+                    _owners[i].AddPet(pet);
+                }
+            }
+        }
+
+        public void EditOwner(Owner owner)
+        {
+            for(int i =0; i < _owners.Count; i++)
+            {
+                if (_owners[i].ID == owner.ID)
+                {
+                    _owners[i] = owner;
+                }
+            }
+        }
+
+        public void EditPet(Pet pet)
+        {
+            for(int i = 0; i < _pets.Count ; i++)
+            {
+                if (_pets[i].ID == pet.ID)
+                {
+                    _pets[i] = pet;
+                }
+            }
+        }
         public void AssignPetToOwner(Owner owner, Pet pet)
         {
             throw new NotImplementedException();

@@ -1,8 +1,12 @@
-﻿using System;
+﻿using PawPatientManager.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Xml.Linq;
 
 namespace PawPatientManager.Models
 {
@@ -36,6 +40,19 @@ namespace PawPatientManager.Models
         {
             _pets = new List<Pet>();
         }
+        public Owner(OwnerViewModel ownerVM)
+        {
+            _id = ownerVM.ID;
+            _name = ownerVM.Name;
+            _surname = ownerVM.Surname;
+            _pets = ownerVM.Pets;
+            _gender = ownerVM.Gender;
+            _birthDate = ownerVM.BirthDate;
+            _adress = ownerVM.Adress;
+            _phoneNumber = ownerVM.PhoneNumber;
+            _email = ownerVM.Email;
+            _pesel = ownerVM.PESEL;
+        }
         public Owner(uint id, string name, string surname, List<Pet> pets)
         {
             _id = id;
@@ -55,6 +72,66 @@ namespace PawPatientManager.Models
             _phoneNumber = phoneNumber;
             _email = email;
             _pesel = pesel;
+        }
+
+        // Override == operator
+        public static bool operator ==(Owner owner1, Owner owner2)
+        {
+            // Check for null on both sides.
+            if (ReferenceEquals(owner1, null) && ReferenceEquals(owner2, null))
+                return true;
+
+            // Check for null on one side only.
+            if (ReferenceEquals(owner1, null) || ReferenceEquals(owner2, null))
+                return false;
+
+            // Compare individual fields for equality.
+            return owner1.ID == owner2.ID &&
+                   owner1.Name == owner2.Name &&
+                   owner1.Surname == owner2.Surname &&
+                   owner1.Gender == owner2.Gender &&
+                   owner1.BirthDate == owner2.BirthDate &&
+                   owner1.Adress == owner2.Adress &&
+                   owner1.PhoneNumber == owner2.PhoneNumber &&
+                   owner1.Email == owner2.Email &&
+                   owner1.PESEL == owner2.PESEL &&
+                   ArePetsEqual(owner1.Pets, owner2.Pets);
+        }
+
+        public static bool operator !=(Owner owner1, Owner owner2)
+        {
+            return !(owner1 == owner2);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Owner otherOwner)
+            {
+                return this == otherOwner;
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            var hash = new HashCode();
+            hash.Add(ID);
+            hash.Add(Name);
+            hash.Add(Surname);
+            hash.Add(Pets);
+            hash.Add(Gender);
+            hash.Add(BirthDate);
+            hash.Add(Adress);
+            hash.Add(PhoneNumber);
+            hash.Add(Email);
+            hash.Add(PESEL);
+            return hash.ToHashCode();
+        }
+
+        private static bool ArePetsEqual(List<Pet> pets1, List<Pet> pets2)
+        {
+            return ReferenceEquals(pets1, pets2);
         }
 
         public void AddPet(Pet pet)

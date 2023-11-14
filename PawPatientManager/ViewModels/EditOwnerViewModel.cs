@@ -15,12 +15,12 @@ namespace PawPatientManager.ViewModels
     {
         #region Fields
         private VetSystem _vetSystem;
-        private OwnerViewModel ownerViewModel;
         private INavigationService<ManageOwnersViewModel> _navManageOwnersService;
         #endregion
         #region Properties
         #endregion
         #region Representation of "View" fields
+        private uint _id;
         private string _name;
         private string _surname;
         private bool _gender;
@@ -31,6 +31,7 @@ namespace PawPatientManager.ViewModels
         private string _pesel;
         #endregion
         #region Properties of representations
+        public uint ID { get { return _id; } set { _id = value; OnPropertyChanged(nameof(ID)); } }
         public string Name { get { return _name; } set { _name = value; OnPropertyChanged(nameof(Name)); } }
         public string Surname { get { return _surname; } set { _surname = value; OnPropertyChanged(nameof(Surname)); } }
         public bool Gender { get { return _gender; } set { _gender = value; OnPropertyChanged(nameof(Gender)); } }
@@ -41,8 +42,7 @@ namespace PawPatientManager.ViewModels
         public string PESEL { get { return _pesel; } set { _pesel = value; OnPropertyChanged(nameof(PESEL)); } }
         #endregion
         #region Commands
-        public ICommand CommandRegisterOwner { get; }
-        public ICommand CommandClearData { get; }
+        public ICommand CommandEditOwner { get; }
         public ICommand CommandReturn { get; }
         #endregion
         #region Constructor
@@ -51,7 +51,6 @@ namespace PawPatientManager.ViewModels
             _vetSystem = vetSystem;
             _navManageOwnersService = navManageOwnersService;
 
-            // Set default values.
             _name = ownerVM.Name;
             _surname = ownerVM.Surname;
             _gender = ownerVM.Gender;
@@ -61,9 +60,8 @@ namespace PawPatientManager.ViewModels
             _email = ownerVM.Email;
             _pesel = ownerVM.PESEL;
 
-        //CommandRegisterOwner = new Commands.OwnerRegistratorViewModelCommands.RegisterOwner(_vetSystem, this);
-        //CommandClearData = new Commands.OwnerRegistratorViewModelCommands.ClearData(this);
-        //CommandReturn = new NavigateCommand<ManageOwnersViewModel>(_navManageOwnersService);
+            CommandEditOwner = new Commands.OwnerRegistratorViewModelCommands.EditOwner(_vetSystem, this);
+            CommandReturn = new NavigateCommand<ManageOwnersViewModel>(_navManageOwnersService);
     }
         #endregion
     }

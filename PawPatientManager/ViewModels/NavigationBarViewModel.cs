@@ -18,6 +18,7 @@ namespace PawPatientManager.ViewModels
         private INavigationService<HomeViewModel> _navHomeService;
         private INavigationService<ManageOwnersViewModel> _navManageOwnersService;
         private INavigationService<LoginViewModel> _navLoginService;
+        private INavigationService<PetsViewModel> _navPetsVMService;
         private VetSystem _vetSystem;
         #endregion
         #region Commands
@@ -30,21 +31,18 @@ namespace PawPatientManager.ViewModels
         #endregion
         #region Constructor
         public NavigationBarViewModel(VetSystem vetSystem, INavigationService<HomeViewModel> navHomeSercice, INavigationService<ManageOwnersViewModel> navManageOwnersService,
-            INavigationService<LoginViewModel> navLoginService) 
+            INavigationService<LoginViewModel> navLoginService, INavigationService<PetsViewModel> navPetsVMService) 
         {
             _navLoginService = navLoginService;
             _navHomeService = navHomeSercice;
             _navManageOwnersService = navManageOwnersService;
+            _navPetsVMService = navPetsVMService;
             _vetSystem = vetSystem;
-            //CommandNavigateHome = new NavigationService<HomeViewModel>(_navigator, () => new HomeViewModel());
+
             CommandNavigateHome = new NavigateCommand<HomeViewModel>(_navHomeService);
-            //CommandNavigateHome = new NavigateCommand<HomeViewModel>(new NavigationService<HomeViewModel>(_navigator, () => new HomeViewModel()));
             CommandNavigateOwners = new NavigateCommand<ManageOwnersViewModel>(_navManageOwnersService);
+            CommandNavigatePets = new NavigateCommand<PetsViewModel>(_navPetsVMService);
             CommandLogout = new NavigateCommand<LoginViewModel>(_navLoginService);
-            //CommandNavigateOwners = new NavigateCommand<ManageOwnersViewModel>(new NavigationService<ManageOwnersViewModel>(_navigator, () => new ManageOwnersViewModel(_navigator, _vetSystem)));
-            //CommandNavigatePets = new NavigateCommand<HomeViewModel>(_navigator, () => new HomeViewModel());
-            //CommandNavigateVisits = new NavigateCommand<HomeViewModel>(_navigator, () => new HomeViewModel());
-            //CommandNavigateMeds = new NavigateCommand<HomeViewModel>(_navigator, () => new HomeViewModel());
         }
         #endregion
     }

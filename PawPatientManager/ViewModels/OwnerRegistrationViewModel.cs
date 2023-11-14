@@ -33,6 +33,7 @@ namespace PawPatientManager.ViewModels
         //public NavigationBarViewModel NavigationBarVM {  get { return _navigationBarVM; } }
         #endregion
         #region Representation of "View" fields
+        public uint _id;
         private string _name;
         private string _surname;
         private bool _gender;
@@ -49,6 +50,7 @@ namespace PawPatientManager.ViewModels
          *  in fields of the .xaml file.
          */
 
+        public uint ID { get { return _id; } set { _id = value; OnPropertyChanged(nameof(ID)); } }
         public string Name { get { return _name; } set { _name = value; OnPropertyChanged(nameof(Name)); } }
         public string Surname { get { return _surname; } set { _surname = value; OnPropertyChanged(nameof(Surname)); } }
         public bool Gender { get { return _gender; } set { _gender = value; OnPropertyChanged(nameof(Gender)); } }

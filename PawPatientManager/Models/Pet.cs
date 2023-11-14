@@ -1,9 +1,13 @@
-﻿using System;
+﻿using PawPatientManager.ViewModels;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace PawPatientManager.Models
 {
@@ -19,7 +23,7 @@ namespace PawPatientManager.Models
         private DateTime _birthDate;
         private List<Visit> _visits;
         private List<MedicalReceipt> _medicals;
-        public uint Id { get { return _id; } set { _id = value; } }
+        public uint ID { get { return _id; } set { _id = value; } }
         public string Name { get { return _name; } set { _name = value; } }
         public bool Gender { get { return _gender; } set { _gender = value; } }
         public string Species { get { return _species; } set { _species = value; } }
@@ -28,7 +32,20 @@ namespace PawPatientManager.Models
         public Owner Owner { get { return _owner; } set { _owner = value; } }
         public DateTime BirthDate { get { return _birthDate; } set { _birthDate = value; } }
         public List<Visit> Visits { get { return _visits; } set { _visits = value; } }
-        public List<MedicalReceipt> Medicals { get { return _medicals; } set { _medicals = value; } } 
+        public List<MedicalReceipt> Medicals { get { return _medicals; } set { _medicals = value; } }
+        public Pet(PetViewModel petVM)
+        {
+            _id = petVM.ID;
+            _name = petVM.Name;
+            _gender = petVM.Gender;
+            _owner = petVM.Owner;
+            _birthDate = petVM.BirthDate;
+            _visits = petVM.Visits;
+            _medicals = petVM.Medicals;
+            _species = petVM.Spiecies;
+            _race = petVM.Race;
+            _microchipNumber = petVM.MicrochipNumber;
+        }
         public Pet(uint id, string name, bool gender, Owner owner, DateTime dateTime, List<Visit> visits, List<MedicalReceipt> medicals, string species, string race, string microchipnumber)
         {
             _id = id;

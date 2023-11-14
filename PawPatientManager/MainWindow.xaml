@@ -26,6 +26,15 @@
             </DataTemplate>            
             <DataTemplate DataType="{x:Type viewModels:EditOwnerViewModel}">
                 <views:EditOwnerView/>
+            </DataTemplate>            
+            <DataTemplate DataType="{x:Type viewModels:PetsViewModel}">
+                <views:PetsView/>
+            </DataTemplate>            
+            <DataTemplate DataType="{x:Type viewModels:RegisterPetViewModel}">
+                <views:PetRegistrationView/>
+            </DataTemplate>            
+            <DataTemplate DataType="{x:Type viewModels:EditPetViewModel}">
+                <views:EditPetView/>
             </DataTemplate>
         </ContentControl.Resources>
     </ContentControl>

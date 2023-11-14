@@ -33,6 +33,35 @@ namespace PawPatientManager.Commands
                 _ownerRegistrationModel.PESEL = string.Empty;
             }
         }
+        public class EditOwner : CommandBase
+        {
+            private VetSystem _vetSystem;
+            private EditOwnerViewModel _ownerRegistrationViewModel;
+            public EditOwner(VetSystem vetSystem, EditOwnerViewModel ownerRegistrationViewModel)
+            {
+                _vetSystem = vetSystem;
+                _ownerRegistrationViewModel = ownerRegistrationViewModel;
+            }
+            public override bool CanExecute(object? parameter)
+            {
+                return !string.IsNullOrEmpty(_ownerRegistrationViewModel.Name) && base.CanExecute(parameter);
+            }
+
+            public override void Execute(object? parameter)
+            {
+                Owner newOwner = new Owner(_ownerRegistrationViewModel.ID,
+                    _ownerRegistrationViewModel.Name,
+                    _ownerRegistrationViewModel.Surname,
+                    _ownerRegistrationViewModel.Gender,
+                    _ownerRegistrationViewModel.BirthDate,
+                    _ownerRegistrationViewModel.Adress,
+                    _ownerRegistrationViewModel.PhoneNumber,
+                    _ownerRegistrationViewModel.Email,
+                    _ownerRegistrationViewModel.PESEL
+                    );
+                _vetSystem.EditOwner(newOwner);
+            }
+        }
         public class RegisterOwner : CommandBase
         {
             private static uint _idIterator;
@@ -71,7 +100,7 @@ namespace PawPatientManager.Commands
 
             public override void Execute(object? parameter)
             {
-                Owner newOwner = new Owner(_idIterator++,
+                Owner newOwner = new Owner(_ownerRegistrationViewModel.ID,
                     _ownerRegistrationViewModel.Name,
                     _ownerRegistrationViewModel.Surname,
                     _ownerRegistrationViewModel.Gender,

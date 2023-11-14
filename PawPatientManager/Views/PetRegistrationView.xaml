@@ -32,26 +32,65 @@
         
         <TextBlock Text="Pet Registration View" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
 
-        <TextBlock Text="Owners List" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"/>
+        <TextBlock Text="Owner" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"/>
+        <ComboBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding Owners}" SelectedItem="{Binding SelectedOwner}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <TextBlock Text="Name:" Grid.Row="0" Grid.Column="0"/>
+                        <TextBlock Text="{Binding Name}" Grid.Row="0" Grid.Column="1"/>
+
+                        <TextBlock Text="Surname:" Grid.Row="1" Grid.Column="0"/>
+                        <TextBlock Text="{Binding Surname}" Grid.Row="1" Grid.Column="1"/>
+
+                        <TextBlock Text="Birth date:" Grid.Row="0" Grid.Column="2"/>
+                        <TextBlock Text="{Binding BirthDateAsString}" Grid.Row="0" Grid.Column="3"/>
+
+                        <TextBlock Text="Adress:" Grid.Row="1" Grid.Column="2"/>
+                        <TextBlock Text="{Binding Adress}" Grid.Row="1" Grid.Column="3"/>
+
+                        <TextBlock Text="Phone number:" Grid.Row="0" Grid.Column="4"/>
+                        <TextBlock Text="{Binding PhoneNumber}" Grid.Row="0" Grid.Column="5"/>
+
+                        <TextBlock Text="E-mail:" Grid.Row="1" Grid.Column="4"/>
+                        <TextBlock Text="{Binding Email}" Grid.Row="1" Grid.Column="5"/>
+                    </Grid>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
         
         <TextBlock Text="Name" Grid.Row="2" Grid.Column="1"/>
-        <TextBox Text="example" Grid.Row="2" Grid.Column="2"/>
+        <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="2"/>
 
         <TextBlock Text="Species" Grid.Row="3" Grid.Column="1"/>
-        <TextBox Text="example" Grid.Row="3" Grid.Column="2"/>
+        <TextBox Text="{Binding Spieces, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="2"/>
 
         <TextBlock Text="Race" Grid.Row="4" Grid.Column="1"/>
-        <TextBox Text="example" Grid.Row="4" Grid.Column="2"/>
+        <TextBox Text="{Binding Race, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="2"/>
 
         <TextBlock Text="Gender" Grid.Row="5" Grid.Column="1"/>
-        <CheckBox Grid.Row="5" Grid.Column="2"/>
+        <CheckBox IsChecked="{Binding Gender, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="2"/>
 
         <TextBlock Text="Birth date" Grid.Row="6" Grid.Column="1"/>
-        <DatePicker Text="" Grid.Row="6" Grid.Column="2"/>
+        <DatePicker SelectedDate="{Binding BirthDate}" Grid.Row="6" Grid.Column="2"/>
 
         <TextBlock Text="Microchip number" Grid.Row="7" Grid.Column="1"/>
-        <TextBox Text="example" Grid.Row="7" Grid.Column="2"/>
+        <TextBox Text="{Binding MicrochipNumber, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="2"/>
 
-        <Button Content="Register" Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2"></Button>
+        <Button Content="Register" Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" Command="{Binding CommandRegisterPet}"></Button>
+        <Button Content="Return" Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2" Command="{Binding CommandReturn}"></Button>
     </Grid>
 </UserControl>

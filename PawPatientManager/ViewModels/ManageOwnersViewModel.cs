@@ -83,19 +83,5 @@ namespace PawPatientManager.ViewModels
                 _owners.Add(new OwnerViewModel(owner));
             }
         }
-
-        private void AddSelectLocomotif(object parameter)
-        {
-            if (parameter is OwnerViewModel selectedItem)
-            {
-                _selectedOwnerViewModel = selectedItem;
-            }
-        }
-
-        private bool CanAddSelectLocomotif(object parameter)
-        {
-            // Optionally implement a condition to enable or disable the command
-            return true;
-        }
     }
 }
