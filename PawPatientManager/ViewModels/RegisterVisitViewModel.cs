@@ -68,13 +68,6 @@ namespace PawPatientManager.ViewModels
         }
         #endregion
         #region Methods
-        public DateTime GetVisitDateTime()
-        {
-            DateTime timePart = DateTime.ParseExact(_selectedHourVM.Hour, "H:mm", null);
-            DateTime dateTime = new DateTime(_selectedDate.Year, _selectedDate.Month, _selectedDate.Day,
-                timePart.Hour, timePart.Minute, timePart.Second);
-            return dateTime;
-        }
         private void ReloadPets()
         {
             _pets.Clear();

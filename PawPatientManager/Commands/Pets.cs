@@ -12,9 +12,36 @@ using System.Windows;
 using static PawPatientManager.Commands.ManageOwnersViewModelCommands;
 using System.Windows.Input;
 using static PawPatientManager.ViewModels.RegisterVisitViewModel;
+using PawPatientManager.Utility;
 
 namespace PawPatientManager.Commands
 {
+    public struct EditVisitCommands
+    {
+        public class EditVisit : CommandBase
+        {
+            private VetSystem _vetSystem;
+            private EditVisitViewModel _vm;
+            public EditVisit(VetSystem vetSystem, EditVisitViewModel vm)
+            {
+                _vetSystem = vetSystem;
+                _vm = vm;
+            }
+
+            public override void Execute(object? parameter)
+            {
+                DateTime date = Globals.GetVisitDateTime(_vm.SelectedDate, _vm.SelectedHour);
+                Visit editedVisit = new Visit(
+                    _vm.ID,
+                    _vm.SelectedPet.Pet,
+                    _vm.SelectedVet.Vet,
+                    date,
+                    null
+                    );
+                _vetSystem.EditVisit(editedVisit);
+            }
+        }
+    }
     public struct RegisterVisitCommands 
     {
         public class RegisterVisit : CommandBase
@@ -30,7 +57,8 @@ namespace PawPatientManager.Commands
 
             public override void Execute(object? parameter)
             {
-                Visit newVisit = new Visit(0, _vm.SelectedPet.Pet, _vm.SelectedVet.Vet, _vm.GetVisitDateTime(), null);
+                DateTime date = Globals.GetVisitDateTime(_vm.SelectedDate, _vm.SelectedHour);
+                Visit newVisit = new Visit(0, _vm.SelectedPet.Pet, _vm.SelectedVet.Vet, date, null);
                 _vetSystem.AddVisit(newVisit);
 
                 // TODO: if sucess -> clear data and messagebox; else messagebox?

@@ -16,7 +16,7 @@ namespace PawPatientManager.ViewModels
         #region Fields
         private VetSystem _vetSystem;
         private VisitViewModel _selectedVisitVM;
-        private INavigationService<VisitsViewModel> _navVisitsVMService;
+        private INavigationService<VisitsViewModel> _nevReturnVM;
         private LayoutNavigationServiceParam<VisitViewModel, EditVisitViewModel> _navEditVisitService;
         #endregion
         #region Properties
@@ -28,8 +28,26 @@ namespace PawPatientManager.ViewModels
         private HourViewModel _selectedHourVM;
         private ObservableCollection<PetViewModel> _pets;
         private ObservableCollection<VetViewModel> _vets;
+        public uint _id;
+        public string _petName;
+        public string _ownerFullName;
+        public string _species;
+        public string _race;
+        public bool _gender;
+        public string _microchipNumber;
+        public string _vetName;
+        public string _vetSurname;
         #endregion
         #region Properties for XAML
+        public uint ID { get { return _id; } set { _id = value; } }
+        public string PetName { get { return _petName; } set { _petName = value; OnPropertyChanged(nameof(PetName)); } }
+        public string OwnerFullName { get { return _ownerFullName; } set { _ownerFullName = value; OnPropertyChanged(nameof(OwnerFullName)); } }
+        public string Species { get { return _species; } set { _species = value; OnPropertyChanged(nameof(Species)); } }
+        public string Race { get { return _race; } set { _race = value; OnPropertyChanged(nameof(Race)); } }
+        public bool Gender { get { return _gender; } set { _gender = value; OnPropertyChanged(nameof(Gender)); } }
+        public string MicrochipNumber { get { return _microchipNumber; } set { _microchipNumber = value; OnPropertyChanged(nameof(MicrochipNumber)); } }
+        public string VetName { get { return _vetName; } set { _vetName = value; OnPropertyChanged(nameof(VetName)); } }
+        public string VetSurname { get { return _vetSurname; } set { _vetSurname = value; OnPropertyChanged(nameof(VetSurname)); } }
         public IEnumerable<VetViewModel> Vets { get { return _vets; } set { OnPropertyChanged(nameof(Vets)); } }
         public IEnumerable<PetViewModel> Pets { get { return _pets; } set { OnPropertyChanged(nameof(Pets)); } }
         public IEnumerable<HourViewModel> Hours { get { return HourViewModel.GenerateHours(); } set { OnPropertyChanged(nameof(Hours)); } }
@@ -43,10 +61,10 @@ namespace PawPatientManager.ViewModels
         public ICommand CommandReturn { get; }
         #endregion
         #region Constructor
-        public EditVisitViewModel(VetSystem vetSystem, VisitViewModel visitVM, INavigationService<VisitsViewModel> navVisitsVMService)
+        public EditVisitViewModel(VetSystem vetSystem, VisitViewModel visitVM, INavigationService<VisitsViewModel> nevReturnVM)
         {
             _vetSystem = vetSystem;
-            _navVisitsVMService = navVisitsVMService;
+            _nevReturnVM = nevReturnVM;
             _selectedVisitVM = visitVM;
 
             _pets = new ObservableCollection<PetViewModel>();
@@ -55,14 +73,23 @@ namespace PawPatientManager.ViewModels
             ReloadPets();
             ReloadVets();
 
+            ID = _selectedVisitVM.ID;
+            PetName = _selectedVisitVM.Pet.Name;
+            OwnerFullName = _selectedVisitVM.OwnerFullName;
+            Species = _selectedVisitVM.Pet.Species;
+            Race = _selectedVisitVM.Pet.Race;
+            Gender = _selectedVisitVM.Pet.Gender;
+            MicrochipNumber = _selectedVisitVM.Pet.MicrochipNumber;
+            VetName = _selectedVisitVM.Vet.Name;
+            VetSurname = _selectedVisitVM.Vet.Surname;
+
             SelectedDate = _selectedVisitVM.Date;
             SelectedVet = new VetViewModel(_selectedVisitVM.Vet);
             SelectedPet = new PetViewModel(_selectedVisitVM.Pet);
             SelectedHour = new HourViewModel() { Hour = _selectedVisitVM.VisitDateHour };
 
-
-            //CommandEditPet = new Commands.EditPetCommand.EditPet(_vetSystem, this);
-            //CommandReturn = new NavigateCommand<PetsViewModel>(_navPetsVMService);
+            CommandUpdateVisit = new Commands.EditVisitCommands.EditVisit(_vetSystem, this);
+            CommandReturn = new NavigateCommand<VisitsViewModel>(_nevReturnVM);
         }
         #endregion
         private void ReloadPets()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PawPatientManager.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -65,6 +66,17 @@ namespace PawPatientManager.Models
             }
         }
 
+        public void EditVisit(Visit visit)
+        {
+            for (int i = 0; i < _visits.Count; i++)
+            {
+                if (_visits[i].ID == visit.ID)
+                {
+                    _visits[i] = visit;
+                }
+            }
+        }
+
         public void EditPet(Pet pet)
         {
             for(int i = 0; i < _pets.Count ; i++)
@@ -75,18 +87,6 @@ namespace PawPatientManager.Models
                 }
             }
         }
-        public void AssignPetToOwner(Owner owner, Pet pet)
-        {
-            throw new NotImplementedException();
-            //_pets.Add(pet);
-        }
-        // TODO:
-        //Pet pet = new Pet(0, "Szarik", true, pioter, DateTime.Now, "Pies", "Owczarek Niemiecki", "997");
-        //pioter.AddPet(pet);
-
-        //Vet lekarz = new Vet(0, "Jarek", "Lekarek");
-        //Medication xanax = new Medication(0, "Xanax", "Healing strong!");
-        //Visit wizyta = new Visit(0, pet, lekarz, DateTime.Now, new List<Medication>() { xanax });
         #endregion
     }
 }
