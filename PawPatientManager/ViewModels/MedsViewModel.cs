@@ -49,6 +49,7 @@ namespace PawPatientManager.ViewModels
         public ICommand CommandEditMed { get; }
         public ICommand CommandDeleteMed { get; }
         public ICommand CommandHandleMedSelectionChange { get; }
+        public ICommand CommandLoadMeds { get; }
         #endregion
         public MedsViewModel(VetSystem vetSystem)
         {
@@ -56,25 +57,33 @@ namespace PawPatientManager.ViewModels
             _vetSystem = vetSystem;
 
             _meds = new ObservableCollection<MedViewModel>();
-            ReloadMeds();
 
             CommandAddMed = new Commands.MedsCommands.AddMed(_vetSystem, this);
             CommandEditMed = new Commands.MedsCommands.EditMed(_vetSystem, this);
             CommandDeleteMed = new Commands.MedsCommands.DeleteMed(_vetSystem, this);
-            //CommandRegisterVisit = new NavigateCommand<RegisterVisitViewModel>(_navRegisterVisitVMService);
-            //CommandEditVisit = new Commands.VisitsCommandsCombobox.EditVisit(this, _navEditVisitService);
-            //CommandDeleteVisit = new Commands.VisitsCommandsCombobox.DeleteVisit(this);
-            //CommandHandleVisitSelectionChange = new Commands.VisitsCommandsCombobox.UpdateSelected(this);
+            CommandLoadMeds = new Commands.MedsCommands.LoadMeds(_vetSystem, this);
             CommandHandleMedSelectionChange = new Commands.MedsCommands.SelectedMedChanged(this);
         }
 
-        public void ReloadMeds()
+        public static MedsViewModel LoadMedsViewModel(VetSystem vetSystem)
+        {
+            MedsViewModel _vm = new MedsViewModel(vetSystem);
+
+            _vm.CommandLoadMeds.Execute(null);
+
+            return _vm;
+        }
+
+        public void ReloadMeds(IEnumerable<Medication> meds)
         {
             _meds.Clear();
-            foreach (Medication med in _vetSystem.Meds)
+            foreach (Medication med in meds)
             {
                 _meds.Add(new MedViewModel(med));
             }
+
+            // Notify UI
+            OnPropertyChanged(nameof(Meds));
         }
 
         //public bool DeleteVisit(VisitViewModel visitVM)

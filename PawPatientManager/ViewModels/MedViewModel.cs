@@ -13,7 +13,7 @@ namespace PawPatientManager.ViewModels
         private Medication _med;
         #endregion
         #region Properties for XAML
-        public uint ID { get { return _med.ID; } set { _med.ID = value; } }
+        public Guid ID { get { return _med.ID; } set { _med.ID = value; } }
         public string Name { get { return _med.Name; } set { _med.Name = value; } }
         public string Description { get { return _med.Description; } set { _med.Description = value; } }
         public int Amount { get { return _med.Amount; } set { _med.Amount = value; } }

@@ -1,6 +1,11 @@
-﻿using PawPatientManager.Components;
+﻿using Microsoft.EntityFrameworkCore;
+using PawPatientManager.Components;
+using PawPatientManager.DbContexts;
 using PawPatientManager.Models;
 using PawPatientManager.Services;
+using PawPatientManager.Services.MedicationConflicters;
+using PawPatientManager.Services.MedicationCreators;
+using PawPatientManager.Services.MedicationProviders;
 using PawPatientManager.Stores;
 using PawPatientManager.ViewModels;
 using System;
@@ -19,14 +24,26 @@ namespace PawPatientManager
     /// </summary>
     public partial class App : Application
     {
+        private static string ConnectionString = "Data Source=medication.db";
         private AccountStore _accountStore;
         private VetSystem _vetSystem;
         private NavigationStore _navigationStore;
         private INavigationService<LoginViewModel> _firstNavService;
+        #region Fields - Database
+        private IMedicationProvider _medicationProvider;
+        private IMedicationCreator _medicationCreator;
+        private IMedicationConflicter _medicationConflicter;
+        private MedicationDbContextFactory _medicationDbContextFactory;
+        #endregion
 
         public App()
         {
-            _vetSystem = new VetSystem();
+            _medicationDbContextFactory = new MedicationDbContextFactory(ConnectionString);
+            _medicationCreator = new DatabaseMedicationCreator(_medicationDbContextFactory);
+            _medicationProvider = new DatabaseMedicationProvider(_medicationDbContextFactory);
+            _medicationConflicter = new DatabaseMedicationConflicter(_medicationDbContextFactory);
+
+            _vetSystem = new VetSystem(_medicationProvider, _medicationCreator, _medicationConflicter);
 
             _vetSystem.Owners.Add(new Owner(0, "Mariusz", "Pudzianowski", true, DateTime.Now, "Gliwice ul.Pszczyńska 23", "+48424525252", "mariusz.pudzian@gmail.com", "9923523582385"));
 
@@ -39,11 +56,11 @@ namespace PawPatientManager
 
             _vetSystem.Visits.Add(new Visit(0, _vetSystem.Pets[0], _vetSystem.Vets[0], DateTime.Now, null));
 
-            _vetSystem.Meds.Add(new Medication(0, "Majeranek", "Na ból głowy", 20));
-            _vetSystem.Meds.Add(new Medication(1, "XANAX", "Go sleep bonobo", 2137));
-            _vetSystem.Meds.Add(new Medication(2, "Pawulonix", "O_O", 33));
-            _vetSystem.Meds.Add(new Medication(3, "APAP", "Na ból dupy", 40));
-            _vetSystem.Meds.Add(new Medication(4, "Witamina C", "Be healthy bro", 204));
+            //_vetSystem.Meds.Add(new Medication(0, "Majeranek", "Na ból głowy", 20));
+            //_vetSystem.Meds.Add(new Medication(1, "XANAX", "Go sleep bonobo", 2137));
+            //_vetSystem.Meds.Add(new Medication(2, "Pawulonix", "O_O", 33));
+            //_vetSystem.Meds.Add(new Medication(3, "APAP", "Na ból dupy", 40));
+            //_vetSystem.Meds.Add(new Medication(4, "Witamina C", "Be healthy bro", 204));
 
             _navigationStore = new NavigationStore();
             _accountStore = new AccountStore();
@@ -54,6 +71,13 @@ namespace PawPatientManager
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            DbContextOptions options = new DbContextOptionsBuilder().UseSqlite(ConnectionString).Options;
+            using (MedicationDbContext medsDbContext = new MedicationDbContext(options))
+            {
+                medsDbContext.Database.Migrate();
+            };
+
+
             _firstNavService.Navigate();
             MainWindow = new MainWindow()
             {
@@ -172,14 +196,18 @@ namespace PawPatientManager
         {
             return new LayoutNavigationService<MedsViewModel>(
                 _navigationStore,
-                () => new MedsViewModel(
-                    _vetSystem
-                    ),
+                () => MedsViewModel.LoadMedsViewModel(_vetSystem),
                 CreateNavBarVM);
+            //return new LayoutNavigationService<MedsViewModel>(
+            //    _navigationStore,
+            //    () => new MedsViewModel(
+            //        _vetSystem
+            //        ),
+            //    CreateNavBarVM);
         }
 
         #endregion
-            #region Factories - Home
+        #region Factories - Home
         private INavigationService<HomeViewModel> CreateHomeNavService()
         {
             return new LayoutNavigationService<HomeViewModel>(

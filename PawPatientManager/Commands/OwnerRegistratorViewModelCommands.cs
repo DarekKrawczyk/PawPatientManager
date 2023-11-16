@@ -14,7 +14,29 @@ namespace PawPatientManager.Commands
 {
     public struct MedsCommands
     {
-        public class AddMed : CommandBase
+        public class LoadMeds : AsyncCommandBase
+        {
+            private VetSystem _system;
+            private MedsViewModel _viewModel;
+            public LoadMeds(VetSystem system, MedsViewModel viewModel)
+            {
+                _system = system;
+                _viewModel = viewModel;
+            }
+
+            public override async Task ExecuteAsync(object parameter)
+            {
+                try
+                {
+                    IEnumerable<Medication> meds = await _system.GetAllMedicationsAsync();
+                    _viewModel.ReloadMeds(meds);
+                }catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "LoadMeds class");
+                }
+            }
+        }
+        public class AddMed : AsyncCommandBase
         {
             private VetSystem _vetSystem;
             private MedsViewModel _medVM;
@@ -24,17 +46,26 @@ namespace PawPatientManager.Commands
                 _medVM = medVM;
             }
 
-            public override void Execute(object? parameter)
+            public override async Task ExecuteAsync(object parameter)
             {
-                Medication newMed = new Medication((uint)_vetSystem.Meds.Count,
+                Medication newMed = new Medication(new Guid(),
                     _medVM.AddName,
                     _medVM.AddDescription,
                     _medVM.AddAmount
                     );
-                _vetSystem.AddMed(newMed);
-                _medVM.ReloadMeds();
+                try
+                {
+                    // Firstly add
+                    await _vetSystem.AddMedication(newMed);
 
-                // TODO: if sucess -> clear data and messagebox; else messagebox?
+                    // Then refresh
+                    IEnumerable<Medication> meds = await _vetSystem.GetAllMedicationsAsync();
+                    _medVM.ReloadMeds(meds);
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "AddMed class");
+                }
             }
         }
         public class SelectedMedChanged : CommandBase
@@ -60,7 +91,7 @@ namespace PawPatientManager.Commands
                 }
             }
         }
-        public class EditMed : CommandBase
+        public class EditMed : AsyncCommandBase
         {
             private VetSystem _system;
             private MedsViewModel _medVM;
@@ -69,18 +100,27 @@ namespace PawPatientManager.Commands
                 _system = vetSystem;
                 _medVM = medVM;
             }
-            public override void Execute(object? parameter)
+
+            public override async Task ExecuteAsync(object parameter)
             {
-                Medication editedMed = new Medication(_medVM.SelectedMed.ID,
-                    _medVM.EditName,
-                    _medVM.EditDescription,
-                    _medVM.EditAmount
-                    );
-                _system.EditMed(editedMed);
-                _medVM.ReloadMeds();
+                Medication selectedMed = new Medication(_medVM.SelectedMed.ID, _medVM.SelectedMed.Name, _medVM.SelectedMed.Description, _medVM.SelectedMed.Amount);
+                Medication editedMed = new Medication(_medVM.SelectedMed.ID, _medVM.EditName, _medVM.EditDescription, _medVM.EditAmount);
+                try
+                {
+                    // First delete
+                    await _system.EditMedication(selectedMed, editedMed);
+
+                    // Then refresh data
+                    IEnumerable<Medication> meds = await _system.GetAllMedicationsAsync();
+                    _medVM.ReloadMeds(meds);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "EditMed class");
+                }
             }
         }
-        public class DeleteMed : CommandBase
+        public class DeleteMed : AsyncCommandBase
         {
             private VetSystem _system;
             private MedsViewModel _medVM;
@@ -89,15 +129,23 @@ namespace PawPatientManager.Commands
                 _system = vetSystem;
                 _medVM = medVM;
             }
-            public override void Execute(object? parameter)
+
+            public override async Task ExecuteAsync(object parameter)
             {
-                Medication editedMed = new Medication(_medVM.SelectedMed.ID,
-                    _medVM.SelectedMed.Name,
-                    _medVM.SelectedMed.Description,
-                    _medVM.SelectedMed.Amount
-                    );
-                _system.DeleteMed(editedMed);
-                _medVM.ReloadMeds();
+                try
+                {
+                    Medication editedMed = new Medication(_medVM.SelectedMed.ID, _medVM.SelectedMed.Name, _medVM.SelectedMed.Description, _medVM.SelectedMed.Amount);
+                    // First delete
+                    await _system.DeleteMedication(editedMed);
+
+                    // Then refresh data
+                    IEnumerable<Medication> meds = await _system.GetAllMedicationsAsync();
+                    _medVM.ReloadMeds(meds);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "DeleteMed class");
+                }
             }
         }
     }
