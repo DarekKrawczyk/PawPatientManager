@@ -15,7 +15,7 @@ namespace PawPatientManager.ViewModels
         #endregion
         #region Properties for fields
         public Pet Pet { get { return _pet; } }
-        public uint ID { get { return _pet.ID; } set { _pet.ID = value; } }
+        public Guid ID { get { return _pet.ID; } set { _pet.ID = value; } }
         public string Name { get { return _pet.Name; } set { _pet.Name = value; } }
         public bool Gender { get { return _pet.Gender; } set { _pet.Gender = value; } }
         public string Race { get { return _pet.Race; } set { _pet.Race = value; } }

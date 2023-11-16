@@ -243,7 +243,7 @@ namespace PawPatientManager.Commands
                 _ownerRegistrationModel.PESEL = string.Empty;
             }
         }
-        public class EditOwner : CommandBase
+        public class EditOwner : AsyncCommandBase
         {
             private VetSystem _vetSystem;
             private EditOwnerViewModel _ownerRegistrationViewModel;
@@ -257,22 +257,50 @@ namespace PawPatientManager.Commands
                 return !string.IsNullOrEmpty(_ownerRegistrationViewModel.Name) && base.CanExecute(parameter);
             }
 
-            public override void Execute(object? parameter)
+            //public override void Execute(object? parameter)
+            //{
+            //    Owner selectedOwner = new Owner(_ownerRegistrationViewModel.OriginalOwner);
+
+            //    Owner newOwner = new Owner(_ownerRegistrationViewModel.OriginalOwner.ID,
+            //        _ownerRegistrationViewModel.Name,
+            //        _ownerRegistrationViewModel.Surname,
+            //        _ownerRegistrationViewModel.Gender,
+            //        _ownerRegistrationViewModel.BirthDate,
+            //        _ownerRegistrationViewModel.OriginalOwner.Pets,
+            //        _ownerRegistrationViewModel.Adress,
+            //        _ownerRegistrationViewModel.PhoneNumber,
+            //        _ownerRegistrationViewModel.Email,
+            //        _ownerRegistrationViewModel.PESEL
+            //        );
+            //    _vetSystem.EditOwner(selectedOwner, newOwner);
+            //}
+
+            public override async Task ExecuteAsync(object parameter)
             {
-                Owner newOwner = new Owner(_ownerRegistrationViewModel.ID,
-                    _ownerRegistrationViewModel.Name,
-                    _ownerRegistrationViewModel.Surname,
-                    _ownerRegistrationViewModel.Gender,
-                    _ownerRegistrationViewModel.BirthDate,
-                    _ownerRegistrationViewModel.Adress,
-                    _ownerRegistrationViewModel.PhoneNumber,
-                    _ownerRegistrationViewModel.Email,
-                    _ownerRegistrationViewModel.PESEL
-                    );
-                _vetSystem.EditOwner(newOwner);
+                try
+                {
+                    Owner selectedOwner = new Owner(_ownerRegistrationViewModel.OriginalOwner);
+
+                    Owner newOwner = new Owner(_ownerRegistrationViewModel.OriginalOwner.ID,
+                        _ownerRegistrationViewModel.Name,
+                        _ownerRegistrationViewModel.Surname,
+                        _ownerRegistrationViewModel.Gender,
+                        _ownerRegistrationViewModel.BirthDate,
+                        _ownerRegistrationViewModel.OriginalOwner.Pets,
+                        _ownerRegistrationViewModel.Adress,
+                        _ownerRegistrationViewModel.PhoneNumber,
+                        _ownerRegistrationViewModel.Email,
+                        _ownerRegistrationViewModel.PESEL
+                        );
+                    _vetSystem.EditOwner(selectedOwner, newOwner);
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "OwnerRegistratorViewModelCommands.EditOwner class");
+                }
             }
         }
-        public class RegisterOwner : CommandBase
+        public class RegisterOwner : AsyncCommandBase
         {
             private static uint _idIterator;
             private VetSystem _vetSystem;
@@ -308,41 +336,44 @@ namespace PawPatientManager.Commands
                 return !string.IsNullOrEmpty(_ownerRegistrationViewModel.Name) && base.CanExecute(parameter);
             }
 
-            public override void Execute(object? parameter)
-            {
-                Owner newOwner = new Owner(_ownerRegistrationViewModel.ID,
-                    _ownerRegistrationViewModel.Name,
-                    _ownerRegistrationViewModel.Surname,
-                    _ownerRegistrationViewModel.Gender,
-                    _ownerRegistrationViewModel.BirthDate,
-                    _ownerRegistrationViewModel.Adress,
-                    _ownerRegistrationViewModel.PhoneNumber,
-                    _ownerRegistrationViewModel.Email,
-                    _ownerRegistrationViewModel.PESEL
-                    );
-                _vetSystem.AddOwner(newOwner);
+            //public override void Execute(object? parameter)
+            //{
+            //    Owner newOwner = new Owner(_ownerRegistrationViewModel.ID,
+            //        _ownerRegistrationViewModel.Name,
+            //        _ownerRegistrationViewModel.Surname,
+            //        _ownerRegistrationViewModel.Gender,
+            //        _ownerRegistrationViewModel.BirthDate,
+            //        _ownerRegistrationViewModel.Adress,
+            //        _ownerRegistrationViewModel.PhoneNumber,
+            //        _ownerRegistrationViewModel.Email,
+            //        _ownerRegistrationViewModel.PESEL
+            //        );
+            //    _vetSystem.AddOwner(newOwner);
 
-                // TODO: if sucess -> clear data and messagebox; else messagebox?
+            //}
+
+            public override async Task ExecuteAsync(object parameter)
+            {
+                try
+                {
+                    Owner newOwner = new Owner(_ownerRegistrationViewModel.ID,
+                        _ownerRegistrationViewModel.Name,
+                        _ownerRegistrationViewModel.Surname,
+                        _ownerRegistrationViewModel.Gender,
+                        _ownerRegistrationViewModel.BirthDate,
+                        null,
+                        _ownerRegistrationViewModel.Adress,
+                        _ownerRegistrationViewModel.PhoneNumber,
+                        _ownerRegistrationViewModel.Email,
+                        _ownerRegistrationViewModel.PESEL
+                        );
+                    await _vetSystem.AddOwner(newOwner);
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "RegisterOwner class");
+                }
             }
         }
-        //public class Return : CommandBase
-        //{
-        //    private NavigationStore _navigator;
-        //    //private NavigationBarViewModel _navigationBarVM;
-        //    private VetSystem _vetSystem;
-        //    public NavigationStore Navigator { get { return _navigator; } }
-        //    public Return(NavigationStore navigator, VetSystem vetSystem)
-        //    {
-        //        _navigator = navigator;
-        //        _vetSystem = vetSystem;
-        //        //_navigationBarVM = navigationBarVM;
-        //    }
-
-        //    public override void Execute(object? parameter)
-        //    {
-        //        _navigator.CurrentViewModel = new ManageOwnersViewModel(_navigator,_vetSystem);
-        //        //_navigator.CurrentViewModel = new ManageOwnersViewModel(_navigator,_vetSystem, _navigationBarVM);
-        //    }
-        //}
     }
 }

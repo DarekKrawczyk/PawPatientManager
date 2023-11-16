@@ -20,7 +20,7 @@ namespace PawPatientManager.ViewModels
         #endregion
         #region Properties for fields
         public Owner Owner{ get { return _ownerModel; } }
-        public uint ID { get { return _ownerModel.ID; } }
+        public Guid ID { get { return _ownerModel.ID; } }
         public string Name { get { return _ownerModel.Name; } }
         public string NameAndSurname { get { return $"{_ownerModel.Name} {_ownerModel.Surname}"; } }
         public string Surname { get { return _ownerModel.Surname; } }

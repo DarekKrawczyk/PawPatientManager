@@ -13,7 +13,7 @@ namespace PawPatientManager.Models
 {
     public class Pet
     {
-        private uint _id;
+        private Guid _id;
         private string _name;
         private bool _gender;
         private string _species;
@@ -23,7 +23,7 @@ namespace PawPatientManager.Models
         private DateTime _birthDate;
         private List<Visit> _visits;
         private List<MedicalReceipt> _medicals;
-        public uint ID { get { return _id; } set { _id = value; } }
+        public Guid ID { get { return _id; } set { _id = value; } }
         public string Name { get { return _name; } set { _name = value; } }
         public bool Gender { get { return _gender; } set { _gender = value; } }
         public string Species { get { return _species; } set { _species = value; } }
@@ -46,7 +46,7 @@ namespace PawPatientManager.Models
             _race = petVM.Race;
             _microchipNumber = petVM.MicrochipNumber;
         }
-        public Pet(uint id, string name, bool gender, Owner owner, DateTime dateTime, List<Visit> visits, List<MedicalReceipt> medicals, string species, string race, string microchipnumber)
+        public Pet(Guid id, string name, bool gender, Owner owner, DateTime dateTime, List<Visit> visits, List<MedicalReceipt> medicals, string species, string race, string microchipnumber)
         {
             _id = id;
             _name = name;
@@ -60,7 +60,7 @@ namespace PawPatientManager.Models
             _microchipNumber = microchipnumber;
         }
 
-        public Pet(uint id, string name, bool gender, Owner owner, DateTime dateTime, string species, string race, string microchipnumber)
+        public Pet(Guid id, string name, bool gender, Owner owner, DateTime dateTime, string species, string race, string microchipnumber)
         {
             _id = id;
             _name = name;

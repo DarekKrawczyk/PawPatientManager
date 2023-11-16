@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using PawPatientManager.DbContextsFiles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace PawPatientManager.DbContexts
 {
-    public class MedicationDesignTimeDbContextFactory : IDesignTimeDbContextFactory<MedicationDbContext>
+    public class MedicationDesignTimeDbContextFactory : IDesignTimeDbContextFactory<MyDbContent>
     {
-        public MedicationDbContext CreateDbContext(string[] args)
+        public MyDbContent CreateDbContext(string[] args)
         {
             DbContextOptions options = new DbContextOptionsBuilder().UseSqlite("Data Source=medication.db").Options;
-            return new MedicationDbContext(options);
+            return new MyDbContent(options);
         }
     }
 }

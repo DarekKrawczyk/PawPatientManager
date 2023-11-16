@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Navigation;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using static PawPatientManager.Commands.ManageOwnersViewModelCommands;
 
 namespace PawPatientManager.ViewModels
@@ -40,6 +41,7 @@ namespace PawPatientManager.ViewModels
         public ICommand CommandDeleteOwner { get; }
         public ICommand CommandEditOwner { get; }
         public ICommand AddSelectLocomotifCommand { get; }
+        public ICommand CommandLoadOwners { get; }
         #endregion
         public ManageOwnersViewModel(VetSystem vetSystem, INavigationService<OwnerRegistrationViewModel> navOwnerRegisterService,
             LayoutNavigationServiceParam<OwnerViewModel, EditOwnerViewModel> navEditOwnerService) 
@@ -50,35 +52,28 @@ namespace PawPatientManager.ViewModels
             _navOwnerRegisterService = navOwnerRegisterService;
 
             _owners = new ObservableCollection<OwnerViewModel>();
-            ReloadOwners();
-            // TODO: Commands!!
-            //OwnerViewModel os = OwnersList
+
             AddSelectLocomotifCommand = new Commands.ManageOwnersViewModelCommands.UpdateSelected(this);
-            //AddSelectLocomotifCommand = new RelayCommand(AddSelectLocomotif, CanAddSelectLocomotif);
+            CommandLoadOwners = new Commands.ManageOwnersViewModelCommands.LoadOwners(_vetSystem, this);
             CommandAddOwner = new NavigateCommand<OwnerRegistrationViewModel>(_navOwnerRegisterService);
-            CommandDeleteOwner = new Commands.ManageOwnersViewModelCommands.DeleteOwner(this);
+            CommandDeleteOwner = new Commands.ManageOwnersViewModelCommands.DeleteOwner(_vetSystem, this);
             CommandEditOwner = new Commands.ManageOwnersViewModelCommands.EditOwner(this, _navEditOwnerService);
-            //CommandEditOwner = new NavigateCommandParam<OwnerViewModel, EditOwnerViewModel>(_navEditOwnerService, SelectedOwnerViewModel);
-            //CommandAddOwner = new NavigateCommand<OwnerRegistrationViewModel>(new NavigationService<OwnerRegistrationViewModel>(_navigationStore, ()=> new OwnerRegistrationViewModel(_vetSystem, _navigationStore)));
         }
 
-        public bool DeleteOwner(OwnerViewModel ownerVM)
+        public static ManageOwnersViewModel LoadMedsViewModel(VetSystem vetSystem, INavigationService<OwnerRegistrationViewModel> navOwnerRegisterService,
+            LayoutNavigationServiceParam<OwnerViewModel, EditOwnerViewModel> navEditOwnerService)
         {
-            bool result = false;
-            if (ownerVM == null)
-            {
-                result = _vetSystem.Owners.Remove(_selectedOwnerViewModel.Owner);
-            }
-            else result = _vetSystem.Owners.Remove(ownerVM.Owner);
-            ReloadOwners();
-            OnPropertyChanged(nameof(Owners));
-            return result;
+            ManageOwnersViewModel _vm = new ManageOwnersViewModel(vetSystem, navOwnerRegisterService, navEditOwnerService);
+
+            _vm.CommandLoadOwners.Execute(null);
+
+            return _vm;
         }
 
-        private void ReloadOwners()
+        public void ReloadOwners(IEnumerable<Owner> owners)
         {
             _owners.Clear();
-            foreach (Owner owner in _vetSystem.Owners)
+            foreach (Owner owner in owners)
             {
                 _owners.Add(new OwnerViewModel(owner));
             }

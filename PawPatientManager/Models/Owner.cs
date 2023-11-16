@@ -1,6 +1,7 @@
 ﻿using PawPatientManager.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -12,7 +13,7 @@ namespace PawPatientManager.Models
 {
     public class Owner
     {
-        private uint _id;
+        private Guid _id;
         private string _name;
         private string _surname;
         private List<Pet> _pets;
@@ -24,7 +25,7 @@ namespace PawPatientManager.Models
         private string _pesel;
         //private string _photo;
         //private string _notes;
-        public uint ID { get { return _id; } set { _id = value; } }
+        public Guid ID { get { return _id; } set { _id = value; } }
         public string Name { get { return _name; } set { _name = value; } }
         public string Surname { get { return _surname; } set { _surname = value; } }
         public List<Pet> Pets { get { return _pets; } set { _pets = value; } }
@@ -53,19 +54,19 @@ namespace PawPatientManager.Models
             _email = ownerVM.Email;
             _pesel = ownerVM.PESEL;
         }
-        public Owner(uint id, string name, string surname, List<Pet> pets)
+        public Owner(Guid id, string name, string surname, List<Pet> pets)
         {
             _id = id;
             _name = name;
             _surname = surname;
             _pets = pets;
         }
-        public Owner(uint id, string name, string surname, bool gender, DateTime birthDate, string adress, string phoneNumber, string email, string pesel)
+        public Owner(Guid id, string name, string surname, bool gender, DateTime birthDate, List<Pet> pets, string adress, string phoneNumber, string email, string pesel)
         {
             _id = id;
             _name = name;
             _surname = surname;
-            _pets = new List<Pet>();
+            _pets = pets;
             _gender = gender;
             _birthDate = birthDate;
             _adress = adress;

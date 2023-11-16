@@ -20,7 +20,7 @@ namespace PawPatientManager.ViewModels
         #region Properties
         #endregion
         #region Representation of "View" fields
-        private uint _id;
+        private Guid _id;
         private string _name;
         private string _surname;
         private bool _gender;
@@ -29,9 +29,10 @@ namespace PawPatientManager.ViewModels
         private string _phoneNumber;
         private string _email;
         private string _pesel;
+        private OwnerViewModel _originalOwner;
         #endregion
         #region Properties of representations
-        public uint ID { get { return _id; } set { _id = value; OnPropertyChanged(nameof(ID)); } }
+        public Guid ID { get { return _id; } set { _id = value; OnPropertyChanged(nameof(ID)); } }
         public string Name { get { return _name; } set { _name = value; OnPropertyChanged(nameof(Name)); } }
         public string Surname { get { return _surname; } set { _surname = value; OnPropertyChanged(nameof(Surname)); } }
         public bool Gender { get { return _gender; } set { _gender = value; OnPropertyChanged(nameof(Gender)); } }
@@ -40,6 +41,7 @@ namespace PawPatientManager.ViewModels
         public string PhoneNumber { get { return _phoneNumber; } set { _phoneNumber = value; OnPropertyChanged(nameof(PhoneNumber)); } }
         public string Email { get { return _email; } set { _email = value; OnPropertyChanged(nameof(Email)); } }
         public string PESEL { get { return _pesel; } set { _pesel = value; OnPropertyChanged(nameof(PESEL)); } }
+        public OwnerViewModel OriginalOwner { get { return _originalOwner; } }
         #endregion
         #region Commands
         public ICommand CommandEditOwner { get; }
@@ -50,6 +52,7 @@ namespace PawPatientManager.ViewModels
         {
             _vetSystem = vetSystem;
             _navManageOwnersService = navManageOwnersService;
+            _originalOwner = ownerVM;
 
             _name = ownerVM.Name;
             _surname = ownerVM.Surname;

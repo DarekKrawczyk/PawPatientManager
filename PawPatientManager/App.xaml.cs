@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PawPatientManager.Components;
 using PawPatientManager.DbContexts;
+using PawPatientManager.DbContextsFiles;
 using PawPatientManager.Models;
 using PawPatientManager.Services;
-using PawPatientManager.Services.MedicationConflicters;
 using PawPatientManager.Services.MedicationCreators;
-using PawPatientManager.Services.MedicationProviders;
+using PawPatientManager.Services.OwnerDatabaseActions;
 using PawPatientManager.Stores;
 using PawPatientManager.ViewModels;
 using System;
@@ -30,31 +30,36 @@ namespace PawPatientManager
         private NavigationStore _navigationStore;
         private INavigationService<LoginViewModel> _firstNavService;
         #region Fields - Database
-        private IMedicationProvider _medicationProvider;
-        private IMedicationCreator _medicationCreator;
-        private IMedicationConflicter _medicationConflicter;
-        private MedicationDbContextFactory _medicationDbContextFactory;
+        //private IMedicationProvider _medicationProvider;
+        private IMedicationDatabaseHandler _medicationCreator;
+        private IOwnerDatabaseHandler _ownerCreator;
+        //private IMedicationConflicter _medicationConflicter;
+        private DbContentFactory _dbContextFactory;
         #endregion
 
         public App()
         {
-            _medicationDbContextFactory = new MedicationDbContextFactory(ConnectionString);
-            _medicationCreator = new DatabaseMedicationCreator(_medicationDbContextFactory);
-            _medicationProvider = new DatabaseMedicationProvider(_medicationDbContextFactory);
-            _medicationConflicter = new DatabaseMedicationConflicter(_medicationDbContextFactory);
+            _dbContextFactory = new DbContentFactory(ConnectionString);
 
-            _vetSystem = new VetSystem(_medicationProvider, _medicationCreator, _medicationConflicter);
+            _medicationCreator = new MedicationDatabaseHandler(_dbContextFactory);
+            _ownerCreator = new OwnerDatabaseHandler(_dbContextFactory);
 
-            _vetSystem.Owners.Add(new Owner(0, "Mariusz", "Pudzianowski", true, DateTime.Now, "Gliwice ul.Pszczyńska 23", "+48424525252", "mariusz.pudzian@gmail.com", "9923523582385"));
+            //_medicationProvider = new DatabaseMedicationProvider(_dbContextFactory);
+            ////_medicationConflicter = new DatabaseMedicationConflicter(_dbContextFactory);
 
-            _vetSystem.Pets.Add(new Pet(0, "Bolek", true, _vetSystem.Owners[0], DateTime.Now, "Dog", "German shepard", "9293492394"));
-            _vetSystem.Pets.Add(new Pet(1, "Taciek", true, _vetSystem.Owners[0], DateTime.Now, "Cat", "Dachowiec", "23452345"));
-            _vetSystem.Pets.Add(new Pet(2, "Masny", true, _vetSystem.Owners[0], DateTime.Now, "Frog", "Green frog", "2323465216"));
-            _vetSystem.Pets.Add(new Pet(3, "Bogol", true, _vetSystem.Owners[0], DateTime.Now, "Horse", "Big horse", "3644363245"));
+            _vetSystem = new VetSystem(_medicationCreator, _ownerCreator);
+            //_vetSystem = new VetSystem(_medicationProvider, _medicationCreator, _medicationConflicter);
 
-            _vetSystem.Vets.Add(new Vet(0, "Jarek", "Marek"));
+            //_vetSystem.Owners.Add(new Owner(new Guid(), "Mariusz", "Pudzianowski", true, DateTime.Now, "Gliwice ul.Pszczyńska 23", "+48424525252", "mariusz.pudzian@gmail.com", "9923523582385"));
 
-            _vetSystem.Visits.Add(new Visit(0, _vetSystem.Pets[0], _vetSystem.Vets[0], DateTime.Now, null));
+            //_vetSystem.Pets.Add(new Pet(0, "Bolek", true, _vetSystem.Owners[0], DateTime.Now, "Dog", "German shepard", "9293492394"));
+            //_vetSystem.Pets.Add(new Pet(1, "Taciek", true, _vetSystem.Owners[0], DateTime.Now, "Cat", "Dachowiec", "23452345"));
+            //_vetSystem.Pets.Add(new Pet(2, "Masny", true, _vetSystem.Owners[0], DateTime.Now, "Frog", "Green frog", "2323465216"));
+            //_vetSystem.Pets.Add(new Pet(3, "Bogol", true, _vetSystem.Owners[0], DateTime.Now, "Horse", "Big horse", "3644363245"));
+
+            //_vetSystem.Vets.Add(new Vet(0, "Jarek", "Marek"));
+
+            //_vetSystem.Visits.Add(new Visit(0, _vetSystem.Pets[0], _vetSystem.Vets[0], DateTime.Now, null));
 
             //_vetSystem.Meds.Add(new Medication(0, "Majeranek", "Na ból głowy", 20));
             //_vetSystem.Meds.Add(new Medication(1, "XANAX", "Go sleep bonobo", 2137));
@@ -72,9 +77,9 @@ namespace PawPatientManager
         protected override void OnStartup(StartupEventArgs e)
         {
             DbContextOptions options = new DbContextOptionsBuilder().UseSqlite(ConnectionString).Options;
-            using (MedicationDbContext medsDbContext = new MedicationDbContext(options))
+            using (MyDbContent medsDbContext = new MyDbContent(options))
             {
-                medsDbContext.Database.Migrate();
+                RelationalDatabaseFacadeExtensions.Migrate(medsDbContext.Database);
             };
 
 
@@ -100,12 +105,20 @@ namespace PawPatientManager
         {
             return new LayoutNavigationService<ManageOwnersViewModel>(
                 _navigationStore,
-                () => new ManageOwnersViewModel(
+                () => ManageOwnersViewModel.LoadMedsViewModel(
                     _vetSystem,
                     CreateOwnerRegisterService(),
                     CreateEditOwnerNavService()
                     ),
                 CreateNavBarVM);
+            //return new LayoutNavigationService<ManageOwnersViewModel>(
+            //    _navigationStore,
+            //    () => new ManageOwnersViewModel(
+            //        _vetSystem,
+            //        CreateOwnerRegisterService(),
+            //        CreateEditOwnerNavService()
+            //        ),
+            //    CreateNavBarVM);
         }
         private LayoutNavigationServiceParam<OwnerViewModel, EditOwnerViewModel> CreateEditOwnerNavService()
         {

@@ -23,7 +23,7 @@ namespace PawPatientManager.ViewModels
         #region Properties
         #endregion
         #region Representation of "View" fields
-        private uint _id;
+        private Guid _id;
         private string _name;
         private bool _gender;
         private string _species;
@@ -33,7 +33,7 @@ namespace PawPatientManager.ViewModels
         #endregion
         #region Properties of representations
         public IEnumerable<OwnerViewModel> Owners { get { return _owners; } }
-        public uint ID { get { return _id; } set { _id = value; OnPropertyChanged(nameof(ID)); } }
+        public Guid ID { get { return _id; } set { _id = value; OnPropertyChanged(nameof(ID)); } }
         public string Name { get { return _name; } set { _name = value; OnPropertyChanged(nameof(Name)); } }
         public OwnerViewModel SelectedOwner { get { return _selectedOwnerVM; } set { _selectedOwnerVM = value; OnPropertyChanged(nameof(SelectedOwner)); } }
         public bool Gender { get { return _gender; } set { _gender = value; OnPropertyChanged(nameof(Gender)); } }

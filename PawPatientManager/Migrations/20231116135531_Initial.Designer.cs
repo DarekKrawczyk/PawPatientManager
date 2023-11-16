@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using PawPatientManager.DbContexts;
+using PawPatientManager.DbContextsFiles;
 
 #nullable disable
 
 namespace PawPatientManager.Migrations
 {
-    [DbContext(typeof(MedicationDbContext))]
+    [DbContext(typeof(MyDbContent))]
     [Migration("20231116135531_Initial")]
     partial class Initial
     {

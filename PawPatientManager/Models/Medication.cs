@@ -8,14 +8,19 @@ namespace PawPatientManager.Models
 {
     public class Medication
     {
+        #region Fields
         private Guid _id;
         private string _name;
         private string _description;
         private int _amount;
+        #endregion
+        #region Properties
         public Guid ID { get { return _id; } set { _id = value; } }
         public string Name { get { return _name; } set { _name = value; } }
         public string Description { get { return _description; } set { _description = value; } }
         public int Amount { get { return _amount; } set { _amount = value; } }
+        #endregion
+        #region Constructor
         public Medication(Guid id, string name, string description, int amount) 
         {
             _id = id;
@@ -23,10 +28,6 @@ namespace PawPatientManager.Models
             _description = description;
             _amount = amount;
         }
-        public bool Conflicts(Medication other)
-        {
-            if (_name == other.Name && _description == other.Description && _amount == other.Amount) return true;
-            else return false;
-        }
+        #endregion
     }
 }

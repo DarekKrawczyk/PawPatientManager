@@ -1,6 +1,5 @@
-﻿using PawPatientManager.Services.MedicationConflicters;
-using PawPatientManager.Services.MedicationCreators;
-using PawPatientManager.Services.MedicationProviders;
+﻿using PawPatientManager.Services.MedicationCreators;
+using PawPatientManager.Services.OwnerDatabaseActions;
 using PawPatientManager.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -23,9 +22,8 @@ namespace PawPatientManager.Models
         private List<Medication> _meds;
         #endregion
         #region Fields - Database
-        private IMedicationProvider _medicationProvider;
-        private IMedicationCreator _medicationCreator;
-        private IMedicationConflicter _medicationConflicter;
+        private IMedicationDatabaseHandler _medicationCreator;
+        private IOwnerDatabaseHandler _ownerCreator;
         #endregion
         #region Properties
         public List<Owner> Owners { get { return _owners; } set { _owners = value; } }
@@ -35,11 +33,11 @@ namespace PawPatientManager.Models
         public List<Medication> Meds { get { return _meds; } set { _meds = value; } }
         #endregion
         #region Constructor
-        public VetSystem(IMedicationProvider medicationProvider, IMedicationCreator medicationCreator, IMedicationConflicter medicationConflicter) 
+        public VetSystem(IMedicationDatabaseHandler medicationCreator, IOwnerDatabaseHandler ownerCreator) 
         { 
-            _medicationProvider = medicationProvider;
             _medicationCreator = medicationCreator;
-            _medicationConflicter = medicationConflicter;
+            _ownerCreator = ownerCreator;
+
             _owners = new List<Owner>();
             _pets = new List<Pet>();
             _vets = new List<Vet>();
@@ -48,16 +46,6 @@ namespace PawPatientManager.Models
         }
         #endregion
         #region Methods
-        public void AddOwner(Owner owner)
-        {
-            _owners.Add(owner);
-        }
-
-        public void AddMed(Medication med)
-        {
-            _meds.Add(med);
-        }
-
         public void AddVisit(Visit visit)
         {
             _visits.Add(visit);
@@ -71,40 +59,6 @@ namespace PawPatientManager.Models
                 if (_owners[i] == pet.Owner)
                 {
                     _owners[i].AddPet(pet);
-                }
-            }
-        }
-
-        public void EditOwner(Owner owner)
-        {
-            for(int i =0; i < _owners.Count; i++)
-            {
-                if (_owners[i].ID == owner.ID)
-                {
-                    _owners[i] = owner;
-                }
-            }
-        }
-
-        public void DeleteMed(Medication med)
-        {
-            for(int i = _meds.Count - 1; i >= 0 ; i--)
-            {
-                if (_meds[i].ID == med.ID)
-                {
-                    _meds.RemoveAt(i);
-                    break;
-                }
-            }
-        }
-
-        public void EditMed(Medication med)
-        {
-            for (int i = 0; i < _meds.Count; i++)
-            {
-                if (_meds[i].ID == med.ID)
-                {
-                    _meds[i] = med;
                 }
             }
         }
@@ -131,14 +85,14 @@ namespace PawPatientManager.Models
             }
         }
         #endregion
-        #region Methods - Database
+        #region Methods - Database - Meds
         public async Task<IEnumerable<Medication>> GetAllMedicationsAsync()
         {
-            return await _medicationProvider.GetAllMedications();
+            return await _medicationCreator.GetAllMedications();
         }
         public async Task AddMedication(Medication medication)
         { 
-            Medication conflictableMedication = await _medicationConflicter.GetConflictingMedication(medication);
+            Medication conflictableMedication = await _medicationCreator.GetConflictingMedication(medication);
 
             if(conflictableMedication != null)
             {
@@ -149,7 +103,7 @@ namespace PawPatientManager.Models
         }
         public async Task DeleteMedication(Medication medication)
         {
-            Medication conflictableMedication = await _medicationConflicter.GetConflictingMedication(medication);
+            Medication conflictableMedication = await _medicationCreator.GetConflictingMedication(medication);
 
             if (conflictableMedication == null)
             {
@@ -159,13 +113,50 @@ namespace PawPatientManager.Models
         }
         public async Task EditMedication(Medication selected, Medication edited)
         {
-            Medication conflictableMedication = await _medicationConflicter.GetConflictingMedication(selected);
+            Medication conflictableMedication = await _medicationCreator.GetConflictingMedication(selected);
 
             if (conflictableMedication == null)
             {
                 MessageBox.Show("EditMedication() - medication wasnt found");
             }
             else await _medicationCreator.EditMedication(selected, edited);
+        }
+        #endregion
+        #region Methods - Database - Owner
+        public async Task<IEnumerable<Owner>> GetAllOwnersAsync()
+        {
+            return await _ownerCreator.GetAllOwners();
+        }
+        public async Task AddOwner(Owner owner)
+        {
+            Owner conflictableOwner = await _ownerCreator.GetConflictingOwner(owner);
+
+            if (conflictableOwner != null)
+            {
+                MessageBox.Show("AddOwner() - there was conflict whil adding owner");
+            }
+
+            else await _ownerCreator.CreateOwner(owner);
+        }
+        public async Task EditOwner(Owner selected, Owner edited)
+        {
+            Owner conflictableOwner = await _ownerCreator.GetConflictingOwner(selected);
+
+            if (conflictableOwner == null)
+            {
+                MessageBox.Show("EditOwner() - medication wasnt found");
+            }
+            else await _ownerCreator.EditOwner(selected, edited);
+        }
+        public async Task DeleteOwner(Owner owner)
+        {
+            Owner conflictableOwner = await _ownerCreator.GetConflictingOwner(owner);
+
+            if (conflictableOwner == null)
+            {
+                MessageBox.Show("DeleteOwner() - there is no such owner!");
+            }
+            else await _ownerCreator.DeleteOwner(conflictableOwner);
         }
         #endregion
     }

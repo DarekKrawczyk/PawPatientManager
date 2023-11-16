@@ -15,23 +15,43 @@ namespace PawPatientManager.Commands
 {
     public struct ManageOwnersViewModelCommands
     {
-        public class DeleteOwner : CommandBase
+        public class DeleteOwner : AsyncCommandBase
         {
+            private VetSystem _system;
             private ManageOwnersViewModel _manageOwnersVM;
-            public DeleteOwner(ManageOwnersViewModel manageOwnersVM)
+            public DeleteOwner(VetSystem vetSystem, ManageOwnersViewModel manageOwnersVM)
             {
+                _system = vetSystem;
                 _manageOwnersVM = manageOwnersVM;
             }
-            public override void Execute(object? parameter)
+            //public override void Execute(object? parameter)
+            //{
+            //    bool result = false;
+            //    OwnerViewModel ownerVM = _manageOwnersVM.SelectedOwner;
+            //    if(ownerVM != null)
+            //    {
+            //        result = _manageOwnersVM.DeleteOwner(ownerVM);
+            //    }
+            //    string text = (result == true) ? "deleted succesfully!" : "not deleted!";
+            //    MessageBox.Show($"Owner {text}", "PawPatientManager", MessageBoxButton.OK);
+            //}
+
+            public override async Task ExecuteAsync(object parameter)
             {
-                bool result = false;
-                OwnerViewModel ownerVM = _manageOwnersVM.SelectedOwner;
-                if(ownerVM != null)
+                try
                 {
-                    result = _manageOwnersVM.DeleteOwner(ownerVM);
+                    Owner ownerToBeDeleted = new Owner(_manageOwnersVM.SelectedOwner);
+                    // First delete
+                    await _system.DeleteOwner(ownerToBeDeleted);
+
+                    // Then refresh data
+                    IEnumerable<Owner> meds = await _system.GetAllOwnersAsync();
+                    _manageOwnersVM.ReloadOwners(meds);
                 }
-                string text = (result == true) ? "deleted succesfully!" : "not deleted!";
-                MessageBox.Show($"Owner {text}", "PawPatientManager", MessageBoxButton.OK);
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "DeleteMed class");
+                }
             }
         }
         public class EditOwner : CommandBase
@@ -76,6 +96,30 @@ namespace PawPatientManager.Commands
             }
         }
 
+        public class LoadOwners : AsyncCommandBase
+        {
+            private VetSystem _system;
+            private ManageOwnersViewModel _viewModel;
+            public LoadOwners(VetSystem system, ManageOwnersViewModel viewModel)
+            {
+                _system = system;
+                _viewModel = viewModel;
+            }
+
+            public override async Task ExecuteAsync(object parameter)
+            {
+                try
+                {
+                    IEnumerable<Owner> owners = await _system.GetAllOwnersAsync();
+                    _viewModel.ReloadOwners(owners);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "LoadMeds class");
+                }
+            }
+        }
+
         public class UpdateSelected : CommandBase
         {
             private ManageOwnersViewModel _manageOwnerVM;
@@ -104,24 +148,5 @@ namespace PawPatientManager.Commands
                 }
             }
         }
-
-        //public class AddOwner : CommandBase
-        //{
-        //    private NavigationStore _navigator;
-        //    //private NavigationBarViewModel _navigationBarVM;
-        //    private VetSystem _vetSystem;
-
-        //    public AddOwner(NavigationStore navigator, VetSystem vetSystem)
-        //    {
-        //        _navigator = navigator;
-        //        _vetSystem = vetSystem;
-        //        //_navigationBarVM = navigationBarVM;
-        //    }
-        //    public override void Execute(object? parameter)
-        //    {
-        //        _navigator.CurrentViewModel = new OwnerRegistrationViewModel(_vetSystem, _navigator);
-        //        //_navigator.CurrentViewModel = new OwnerRegistrationViewModel(_vetSystem, _navigator, _navigationBarVM);
-        //    }
-        //}
     }
 }
