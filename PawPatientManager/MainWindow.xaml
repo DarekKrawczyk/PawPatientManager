@@ -44,6 +44,9 @@
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:RegisterVisitViewModel}">
                 <views:RegisterVisitView/>
+            </DataTemplate>            
+            <DataTemplate DataType="{x:Type viewModels:MedsViewModel}">
+                <views:MedsView/>
             </DataTemplate>
         </ContentControl.Resources>
     </ContentControl>

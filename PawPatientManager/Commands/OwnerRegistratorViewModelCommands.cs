@@ -12,6 +12,95 @@ using System.Windows;
 
 namespace PawPatientManager.Commands
 {
+    public struct MedsCommands
+    {
+        public class AddMed : CommandBase
+        {
+            private VetSystem _vetSystem;
+            private MedsViewModel _medVM;
+            public AddMed(VetSystem vetSystem, MedsViewModel medVM)
+            {
+                _vetSystem = vetSystem;
+                _medVM = medVM;
+            }
+
+            public override void Execute(object? parameter)
+            {
+                Medication newMed = new Medication((uint)_vetSystem.Meds.Count,
+                    _medVM.AddName,
+                    _medVM.AddDescription,
+                    _medVM.AddAmount
+                    );
+                _vetSystem.AddMed(newMed);
+                _medVM.ReloadMeds();
+
+                // TODO: if sucess -> clear data and messagebox; else messagebox?
+            }
+        }
+        public class SelectedMedChanged : CommandBase
+        {
+            private MedsViewModel _medsVM;
+            private readonly Action<object> _execute;
+            private readonly Func<object, bool> _canExecute;
+
+            public SelectedMedChanged(MedsViewModel medsVM)
+            {
+                _medsVM = medsVM;
+            }
+
+            public override void Execute(object? parameter)
+            {
+                if (parameter is MedViewModel selectedItem)
+                {
+                    _medsVM.SelectedMed = selectedItem;
+                }
+                else
+                {
+                    _medsVM.SelectedMed = null;
+                }
+            }
+        }
+        public class EditMed : CommandBase
+        {
+            private VetSystem _system;
+            private MedsViewModel _medVM;
+            public EditMed(VetSystem vetSystem, MedsViewModel medVM)
+            {
+                _system = vetSystem;
+                _medVM = medVM;
+            }
+            public override void Execute(object? parameter)
+            {
+                Medication editedMed = new Medication(_medVM.SelectedMed.ID,
+                    _medVM.EditName,
+                    _medVM.EditDescription,
+                    _medVM.EditAmount
+                    );
+                _system.EditMed(editedMed);
+                _medVM.ReloadMeds();
+            }
+        }
+        public class DeleteMed : CommandBase
+        {
+            private VetSystem _system;
+            private MedsViewModel _medVM;
+            public DeleteMed(VetSystem vetSystem, MedsViewModel medVM)
+            {
+                _system = vetSystem;
+                _medVM = medVM;
+            }
+            public override void Execute(object? parameter)
+            {
+                Medication editedMed = new Medication(_medVM.SelectedMed.ID,
+                    _medVM.SelectedMed.Name,
+                    _medVM.SelectedMed.Description,
+                    _medVM.SelectedMed.Amount
+                    );
+                _system.DeleteMed(editedMed);
+                _medVM.ReloadMeds();
+            }
+        }
+    }
     public struct VisitsCommandsCombobox
     {
         public class DeleteVisit : CommandBase

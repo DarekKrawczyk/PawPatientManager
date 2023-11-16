@@ -16,12 +16,14 @@ namespace PawPatientManager.Models
         private List<Pet> _pets;
         private List<Vet> _vets;
         private List<Visit> _visits;
+        private List<Medication> _meds;
         #endregion
         #region Properties
         public List<Owner> Owners { get { return _owners; } set { _owners = value; } }
         public List<Pet> Pets { get { return _pets; } set { _pets = value; } }
         public List<Vet> Vets { get { return _vets; } set { _vets = value; } }
         public List<Visit> Visits { get { return _visits; } set { _visits = value; } }
+        public List<Medication> Meds { get { return _meds; } set { _meds = value; } }
         #endregion
         #region Constructor
         public VetSystem() 
@@ -30,6 +32,7 @@ namespace PawPatientManager.Models
             _pets = new List<Pet>();
             _vets = new List<Vet>();
             _visits = new List<Visit>();
+            _meds = new List<Medication>();
         }
         #endregion
         #region Methods
@@ -37,7 +40,12 @@ namespace PawPatientManager.Models
         {
             _owners.Add(owner);
         }
-        
+
+        public void AddMed(Medication med)
+        {
+            _meds.Add(med);
+        }
+
         public void AddVisit(Visit visit)
         {
             _visits.Add(visit);
@@ -62,6 +70,29 @@ namespace PawPatientManager.Models
                 if (_owners[i].ID == owner.ID)
                 {
                     _owners[i] = owner;
+                }
+            }
+        }
+
+        public void DeleteMed(Medication med)
+        {
+            for(int i = _meds.Count - 1; i >= 0 ; i--)
+            {
+                if (_meds[i].ID == med.ID)
+                {
+                    _meds.RemoveAt(i);
+                    break;
+                }
+            }
+        }
+
+        public void EditMed(Medication med)
+        {
+            for (int i = 0; i < _meds.Count; i++)
+            {
+                if (_meds[i].ID == med.ID)
+                {
+                    _meds[i] = med;
                 }
             }
         }

@@ -20,6 +20,7 @@ namespace PawPatientManager.ViewModels
         private INavigationService<LoginViewModel> _navLoginService;
         private INavigationService<PetsViewModel> _navPetsVMService;
         private INavigationService<VisitsViewModel> _navVisitsVMService;
+        private INavigationService<MedsViewModel> _navMedsVMService;
         private VetSystem _vetSystem;
         #endregion
         #region Commands
@@ -32,19 +33,22 @@ namespace PawPatientManager.ViewModels
         #endregion
         #region Constructor
         public NavigationBarViewModel(VetSystem vetSystem, INavigationService<HomeViewModel> navHomeSercice, INavigationService<ManageOwnersViewModel> navManageOwnersService,
-            INavigationService<LoginViewModel> navLoginService, INavigationService<PetsViewModel> navPetsVMService, INavigationService<VisitsViewModel> navVisitsVMService) 
+            INavigationService<LoginViewModel> navLoginService, INavigationService<PetsViewModel> navPetsVMService, INavigationService<VisitsViewModel> navVisitsVMService,
+            INavigationService<MedsViewModel> navMedsVMService) 
         {
             _navLoginService = navLoginService;
             _navHomeService = navHomeSercice;
             _navManageOwnersService = navManageOwnersService;
             _navPetsVMService = navPetsVMService;
             _navVisitsVMService = navVisitsVMService;
+            _navMedsVMService = navMedsVMService;
             _vetSystem = vetSystem;
 
             CommandNavigateHome = new NavigateCommand<HomeViewModel>(_navHomeService);
             CommandNavigateOwners = new NavigateCommand<ManageOwnersViewModel>(_navManageOwnersService);
             CommandNavigatePets = new NavigateCommand<PetsViewModel>(_navPetsVMService);
             CommandNavigateVisits = new NavigateCommand<VisitsViewModel>(_navVisitsVMService);
+            CommandNavigateMeds = new NavigateCommand<MedsViewModel>(_navMedsVMService);
             CommandLogout = new NavigateCommand<LoginViewModel>(_navLoginService);
         }
         #endregion

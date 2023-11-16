@@ -27,7 +27,7 @@ namespace PawPatientManager
         public App()
         {
             _vetSystem = new VetSystem();
-            
+
             _vetSystem.Owners.Add(new Owner(0, "Mariusz", "Pudzianowski", true, DateTime.Now, "Gliwice ul.Pszczyńska 23", "+48424525252", "mariusz.pudzian@gmail.com", "9923523582385"));
 
             _vetSystem.Pets.Add(new Pet(0, "Bolek", true, _vetSystem.Owners[0], DateTime.Now, "Dog", "German shepard", "9293492394"));
@@ -38,6 +38,12 @@ namespace PawPatientManager
             _vetSystem.Vets.Add(new Vet(0, "Jarek", "Marek"));
 
             _vetSystem.Visits.Add(new Visit(0, _vetSystem.Pets[0], _vetSystem.Vets[0], DateTime.Now, null));
+
+            _vetSystem.Meds.Add(new Medication(0, "Majeranek", "Na ból głowy", 20));
+            _vetSystem.Meds.Add(new Medication(1, "XANAX", "Go sleep bonobo", 2137));
+            _vetSystem.Meds.Add(new Medication(2, "Pawulonix", "O_O", 33));
+            _vetSystem.Meds.Add(new Medication(3, "APAP", "Na ból dupy", 40));
+            _vetSystem.Meds.Add(new Medication(4, "Witamina C", "Be healthy bro", 204));
 
             _navigationStore = new NavigationStore();
             _accountStore = new AccountStore();
@@ -161,7 +167,19 @@ namespace PawPatientManager
                 CreateNavBarVM);
         }
         #endregion
-        #region Factories - Home
+        #region Factories - Meds
+        private INavigationService<MedsViewModel> CreateMedsNavService()
+        {
+            return new LayoutNavigationService<MedsViewModel>(
+                _navigationStore,
+                () => new MedsViewModel(
+                    _vetSystem
+                    ),
+                CreateNavBarVM);
+        }
+
+        #endregion
+            #region Factories - Home
         private INavigationService<HomeViewModel> CreateHomeNavService()
         {
             return new LayoutNavigationService<HomeViewModel>(
@@ -186,7 +204,8 @@ namespace PawPatientManager
                 CreateManageOwnersNavService(),
                 CreateLoginNavService(),
                 CreatePetsNavService(),
-                CreateVisitsNavService()
+                CreateVisitsNavService(),
+                CreateMedsNavService()
                 );
         }
         #endregion
