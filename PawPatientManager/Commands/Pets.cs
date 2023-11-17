@@ -160,7 +160,54 @@ namespace PawPatientManager.Commands
     }
     public struct EditPetCommand
     {
-        public class RegisterPet : CommandBase
+        public class LoadPets : AsyncCommandBase
+        {
+            private VetSystem _system;
+            private PetsViewModel _viewModel;
+            public LoadPets(VetSystem system, PetsViewModel viewModel)
+            {
+                _system = system;
+                _viewModel = viewModel;
+            }
+
+            public override async Task ExecuteAsync(object parameter)
+            {
+                try
+                {
+                    IEnumerable<Pet> pets = await _system.GetAllPetsFromAllOwners();
+                    _viewModel.ReloadPets(pets);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "LoadMeds class");
+                }
+            }
+        }
+
+        public class LoadOwners : AsyncCommandBase
+        {
+            private VetSystem _system;
+            private RegisterPetViewModel _viewModel;
+            public LoadOwners(VetSystem system, RegisterPetViewModel viewModel)
+            {
+                _system = system;
+                _viewModel = viewModel;
+            }
+
+            public override async Task ExecuteAsync(object parameter)
+            {
+                try
+                {
+                    IEnumerable<Owner> owners = await _system.GetAllOwnersAsync();
+                    _viewModel.ReloadOwners(owners);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "EditPetCommand.LoadOwners class");
+                }
+            }
+        }
+        public class RegisterPet : AsyncCommandBase
         {
             private static uint _idIterator;
             private VetSystem _vetSystem;
@@ -186,14 +233,39 @@ namespace PawPatientManager.Commands
             //    return !string.IsNullOrEmpty(_editPetVM.Name) && base.CanExecute(parameter);
             //}
 
-            public override void Execute(object? parameter)
+            //public override void Execute(object? parameter)
+            //{
+            //    if(_editPetVM == null || _editPetVM.Owners == null)
+            //    {
+            //        MessageBox.Show("Please select owner of the pet!", "PawPatientManager", MessageBoxButton.OK);
+            //    }
+            //    else
+            //    {
+            //        Pet newPet = new Pet(
+            //            _editPetVM.ID,
+            //            _editPetVM.Name,
+            //            _editPetVM.Gender,
+            //            new Owner(_editPetVM.SelectedOwner),
+            //            _editPetVM.BirthDate,
+            //            null,
+            //            null,
+            //            _editPetVM.Spieces,
+            //            _editPetVM.Race,
+            //            _editPetVM.MicrochipNumber
+            //            );
+            //        _vetSystem.AddPetToOwner(newPet);
+            //    }
+            //}
+
+            public override async Task ExecuteAsync(object parameter)
             {
-                if(_editPetVM == null || _editPetVM.Owners == null)
+                if (_editPetVM == null || _editPetVM.Owners == null)
                 {
                     MessageBox.Show("Please select owner of the pet!", "PawPatientManager", MessageBoxButton.OK);
                 }
                 else
                 {
+                    Owner owner = new Owner(_editPetVM.SelectedOwner);
                     Pet newPet = new Pet(
                         _editPetVM.ID,
                         _editPetVM.Name,
@@ -206,11 +278,11 @@ namespace PawPatientManager.Commands
                         _editPetVM.Race,
                         _editPetVM.MicrochipNumber
                         );
-                    _vetSystem.AddPetToOwner(newPet);
+                    await _vetSystem.AssignPetToOwner(owner, newPet);
                 }
             }
         }
-        public class EditPet : CommandBase
+        public class EditPet : AsyncCommandBase
         {
             private VetSystem _vetSystem;
             private EditPetViewModel _editPetVM;
@@ -224,43 +296,60 @@ namespace PawPatientManager.Commands
                 return !string.IsNullOrEmpty(_editPetVM.Name) && base.CanExecute(parameter);
             }
 
-            public override void Execute(object? parameter)
+            public override async Task ExecuteAsync(object parameter)
             {
-                Pet editedPet = new Pet(
-                    _editPetVM.ID,
-                    _editPetVM.Name,
-                    _editPetVM.Gender,
-                    _editPetVM.Owner,
-                    _editPetVM.BirthDate,
-                    _editPetVM.Visits,
-                    _editPetVM.Medicals,
-                    _editPetVM.Spiecies,
-                    _editPetVM.Race,
-                    _editPetVM.MicrochipNumber
-                    );
-                _vetSystem.EditPet(editedPet);
+                try
+                {
+                    Pet editedPet = new Pet(
+                        _editPetVM.ID,
+                        _editPetVM.Name,
+                        _editPetVM.Gender,
+                        _editPetVM.Owner,
+                        _editPetVM.BirthDate,
+                        _editPetVM.Visits,
+                        _editPetVM.Medicals,
+                        _editPetVM.Spiecies,
+                        _editPetVM.Race,
+                        _editPetVM.MicrochipNumber
+                        );
+
+                    await _vetSystem.EditPet(editedPet);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "EditPetCommand.EditPet class");
+                }
             }
         }
     }
     public struct PetsCommands
     {
-        public class DeletePet : CommandBase
+        public class DeletePet : AsyncCommandBase
         {
             private PetsViewModel _petsViewModel;
-            public DeletePet(PetsViewModel petsViewModel)
+            private VetSystem _vetSystem;
+            public DeletePet(VetSystem vetSystem, PetsViewModel petsViewModel)
             {
                 _petsViewModel = petsViewModel;
+                _vetSystem = vetSystem;
             }
-            public override void Execute(object? parameter)
+
+            public override async Task ExecuteAsync(object parameter)
             {
-                bool result = false;
-                PetViewModel petVM = _petsViewModel.SelectedPet;
-                if (petVM != null)
+                try
                 {
-                    result = _petsViewModel.DeletePet(petVM);
+                    Pet petToDelete = new Pet(_petsViewModel.SelectedPet);
+                    Owner petsOwner = _petsViewModel.SelectedPet.Owner;
+
+                    _vetSystem.DeletePet(petsOwner, petToDelete);
+
+                    IEnumerable<Pet> pets = await _vetSystem.GetAllPetsFromAllOwners();
+                    _petsViewModel.ReloadPets(pets);
                 }
-                string text = (result == true) ? "deleted succesfully!" : "not deleted!";
-                MessageBox.Show($"Pet {text}", "PawPatientManager", MessageBoxButton.OK);
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "DeletePet class");
+                }
             }
         }
         public class EditPet : CommandBase

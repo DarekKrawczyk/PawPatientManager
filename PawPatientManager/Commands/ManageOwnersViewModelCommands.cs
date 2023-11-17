@@ -24,17 +24,6 @@ namespace PawPatientManager.Commands
                 _system = vetSystem;
                 _manageOwnersVM = manageOwnersVM;
             }
-            //public override void Execute(object? parameter)
-            //{
-            //    bool result = false;
-            //    OwnerViewModel ownerVM = _manageOwnersVM.SelectedOwner;
-            //    if(ownerVM != null)
-            //    {
-            //        result = _manageOwnersVM.DeleteOwner(ownerVM);
-            //    }
-            //    string text = (result == true) ? "deleted succesfully!" : "not deleted!";
-            //    MessageBox.Show($"Owner {text}", "PawPatientManager", MessageBoxButton.OK);
-            //}
 
             public override async Task ExecuteAsync(object parameter)
             {

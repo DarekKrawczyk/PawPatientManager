@@ -6,6 +6,7 @@ using PawPatientManager.Models;
 using PawPatientManager.Services;
 using PawPatientManager.Services.MedicationCreators;
 using PawPatientManager.Services.OwnerDatabaseActions;
+using PawPatientManager.Services.PetDatabaseActions;
 using PawPatientManager.Stores;
 using PawPatientManager.ViewModels;
 using System;
@@ -33,6 +34,7 @@ namespace PawPatientManager
         //private IMedicationProvider _medicationProvider;
         private IMedicationDatabaseHandler _medicationCreator;
         private IOwnerDatabaseHandler _ownerCreator;
+        private IPetDatabaseHandler _petCreator;
         //private IMedicationConflicter _medicationConflicter;
         private DbContentFactory _dbContextFactory;
         #endregion
@@ -43,11 +45,12 @@ namespace PawPatientManager
 
             _medicationCreator = new MedicationDatabaseHandler(_dbContextFactory);
             _ownerCreator = new OwnerDatabaseHandler(_dbContextFactory);
+            _petCreator = new PetDatabaseHandler(_dbContextFactory);
 
             //_medicationProvider = new DatabaseMedicationProvider(_dbContextFactory);
             ////_medicationConflicter = new DatabaseMedicationConflicter(_dbContextFactory);
 
-            _vetSystem = new VetSystem(_medicationCreator, _ownerCreator);
+            _vetSystem = new VetSystem(_medicationCreator, _ownerCreator, _petCreator);
             //_vetSystem = new VetSystem(_medicationProvider, _medicationCreator, _medicationConflicter);
 
             //_vetSystem.Owners.Add(new Owner(new Guid(), "Mariusz", "Pudzianowski", true, DateTime.Now, "Gliwice ul.Pszczyńska 23", "+48424525252", "mariusz.pudzian@gmail.com", "9923523582385"));
@@ -137,23 +140,39 @@ namespace PawPatientManager
         {
             return new LayoutNavigationService<RegisterPetViewModel>(
                 _navigationStore,
-                () => new RegisterPetViewModel(
+                () => RegisterPetViewModel.LoadMedsViewModel(
                     _vetSystem,
                     CreatePetsNavService()
                     ),
-                CreateNavBarVM);
+                CreateNavBarVM);           
+            //return new LayoutNavigationService<RegisterPetViewModel>(
+            //    _navigationStore,
+            //    () => new RegisterPetViewModel(
+            //        _vetSystem,
+            //        CreatePetsNavService()
+            //        ),
+            //    CreateNavBarVM);
         }
         private INavigationService<PetsViewModel> CreatePetsNavService()
         {
             return new LayoutNavigationService<PetsViewModel>(
                 _navigationStore,
-                () => new PetsViewModel(
+                () => PetsViewModel.LoadViewModel(
                     _vetSystem,
                     CreateRegisterPetNavService(),
                     CreateEditPetNavService()
                     ),
                 CreateNavBarVM
-                );
+                );            
+            //return new LayoutNavigationService<PetsViewModel>(
+            //    _navigationStore,
+            //    () => new PetsViewModel(
+            //        _vetSystem,
+            //        CreateRegisterPetNavService(),
+            //        CreateEditPetNavService()
+            //        ),
+            //    CreateNavBarVM
+            //    );
         }
 
         private LayoutNavigationServiceParam<PetViewModel, EditPetViewModel> CreateEditPetNavService()

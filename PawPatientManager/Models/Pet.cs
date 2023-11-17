@@ -1,4 +1,5 @@
-﻿using PawPatientManager.ViewModels;
+﻿using PawPatientManager.DTOs;
+using PawPatientManager.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -59,7 +60,18 @@ namespace PawPatientManager.Models
             _race = race;
             _microchipNumber = microchipnumber;
         }
-
+        public Pet(PetDTO petDTO, OwnerDTO ownerDTO) 
+        {
+            _id = petDTO.ID;
+            _name = petDTO.Name;
+            _gender = petDTO.Gender;
+            _owner = new Owner(ownerDTO);
+            _birthDate = petDTO.BirthDate;
+            _visits = null;
+            _species = petDTO.Species;
+            _race = petDTO.Race;
+            _microchipNumber = petDTO.MicrochipNumber;
+        }
         public Pet(Guid id, string name, bool gender, Owner owner, DateTime dateTime, string species, string race, string microchipnumber)
         {
             _id = id;

@@ -1,4 +1,5 @@
-﻿using PawPatientManager.ViewModels;
+﻿using PawPatientManager.DTOs;
+using PawPatientManager.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -40,6 +41,19 @@ namespace PawPatientManager.Models
         public Owner()
         {
             _pets = new List<Pet>();
+        }
+        public Owner(OwnerDTO ownerDTO)
+        {
+            _id = ownerDTO.ID;
+            _name = ownerDTO.Name;
+            _surname = ownerDTO.Surname;
+            _pets = null;
+            _gender = ownerDTO.Gender;
+            _birthDate = ownerDTO.BirthDate;
+            _adress = ownerDTO.Adress;
+            _phoneNumber = ownerDTO.PhoneNumber;
+            _email = ownerDTO.Email;
+            _pesel = ownerDTO.PESEL;
         }
         public Owner(OwnerViewModel ownerVM)
         {

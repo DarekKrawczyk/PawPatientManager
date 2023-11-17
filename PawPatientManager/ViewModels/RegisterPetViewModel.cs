@@ -46,6 +46,7 @@ namespace PawPatientManager.ViewModels
         public ICommand CommandRegisterPet { get; }
         public ICommand CommandReturn { get; }
         public ICommand CommandHandleComboBoxSelectionChanged { get; }
+        public ICommand CommandLoadOwners { get; }
         #endregion
         #region Constructor
         public RegisterPetViewModel(VetSystem vetSystem, INavigationService<PetsViewModel> navReturnService)
@@ -54,18 +55,26 @@ namespace PawPatientManager.ViewModels
             _navReturnService = navReturnService;
 
             _owners = new ObservableCollection<OwnerViewModel>();
-            ReloadOwners();
 
+            CommandLoadOwners = new Commands.EditPetCommand.LoadOwners(_vetSystem, this);
             CommandReturn = new NavigateCommand<PetsViewModel>(_navReturnService);
             CommandRegisterPet = new Commands.EditPetCommand.RegisterPet(_vetSystem, this);
             CommandHandleComboBoxSelectionChanged = new Commands.PetsCommands.UpdateSelectedOwner(this);
         }
         #endregion
         #region Methods
-        private void ReloadOwners()
+        public static RegisterPetViewModel LoadMedsViewModel(VetSystem vetSystem, INavigationService<PetsViewModel> navReturnService)
+        {
+            RegisterPetViewModel _vm = new RegisterPetViewModel(vetSystem, navReturnService);
+
+            _vm.CommandLoadOwners.Execute(null);
+
+            return _vm;
+        }
+        public void ReloadOwners(IEnumerable<Owner> owners)
         {
             _owners.Clear();
-            foreach(Owner owner in _vetSystem.Owners)
+            foreach(Owner owner in owners)
             {
                 _owners.Add(new OwnerViewModel(owner));
             }

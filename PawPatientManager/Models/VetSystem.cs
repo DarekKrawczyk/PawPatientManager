@@ -1,5 +1,6 @@
 ﻿using PawPatientManager.Services.MedicationCreators;
 using PawPatientManager.Services.OwnerDatabaseActions;
+using PawPatientManager.Services.PetDatabaseActions;
 using PawPatientManager.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ namespace PawPatientManager.Models
         #region Fields - Database
         private IMedicationDatabaseHandler _medicationCreator;
         private IOwnerDatabaseHandler _ownerCreator;
+        private IPetDatabaseHandler _petCreator;
         #endregion
         #region Properties
         public List<Owner> Owners { get { return _owners; } set { _owners = value; } }
@@ -33,10 +35,11 @@ namespace PawPatientManager.Models
         public List<Medication> Meds { get { return _meds; } set { _meds = value; } }
         #endregion
         #region Constructor
-        public VetSystem(IMedicationDatabaseHandler medicationCreator, IOwnerDatabaseHandler ownerCreator) 
+        public VetSystem(IMedicationDatabaseHandler medicationCreator, IOwnerDatabaseHandler ownerCreator, IPetDatabaseHandler petCreator) 
         { 
             _medicationCreator = medicationCreator;
             _ownerCreator = ownerCreator;
+            _petCreator = petCreator;
 
             _owners = new List<Owner>();
             _pets = new List<Pet>();
@@ -74,16 +77,6 @@ namespace PawPatientManager.Models
             }
         }
 
-        public void EditPet(Pet pet)
-        {
-            for(int i = 0; i < _pets.Count ; i++)
-            {
-                if (_pets[i].ID == pet.ID)
-                {
-                    _pets[i] = pet;
-                }
-            }
-        }
         #endregion
         #region Methods - Database - Meds
         public async Task<IEnumerable<Medication>> GetAllMedicationsAsync()
@@ -157,6 +150,98 @@ namespace PawPatientManager.Models
                 MessageBox.Show("DeleteOwner() - there is no such owner!");
             }
             else await _ownerCreator.DeleteOwner(conflictableOwner);
+        }
+        #endregion
+        #region Methods - Database - Pet
+        public async Task AssignPetToOwner(Owner owner, Pet pet)
+        {
+            Owner conflictableOwner = await _ownerCreator.GetConflictingOwner(owner);
+
+            if (conflictableOwner == null)
+            {
+                MessageBox.Show("AssignPetToOwner() - there is no such owner!");
+                return;
+            }
+            //await _ownerCreator.DeleteOwner(conflictableOwner);
+
+            Pet conflictablePet = await _petCreator.GetConflictingPet(owner, pet);
+            if(conflictablePet != null)
+            {
+                MessageBox.Show("DeleteOwner() - there was conflict whil assinging pet to owner!");
+            }
+            else await _petCreator.AssignPetToOwner(owner, pet);
+        }
+        public async Task<IEnumerable<Pet>> GetAllPetsFromOwner(Owner owner)
+        {
+            Owner conflictableOwner = await _ownerCreator.GetConflictingOwner(owner);
+
+            if (conflictableOwner == null)
+            {
+                MessageBox.Show("GetAllPetsFromOwner() - there is no such owner!");
+                return null;
+            }
+            //await _ownerCreator.DeleteOwner(conflictableOwner);
+
+            IEnumerable<Pet> pets = await _petCreator.GetAllPetsFromOwner(owner);
+            if (pets == null)
+            {
+                MessageBox.Show("GetAllPetsFromOwner() - there was conflict whil geting all oets from this owner!");
+                return null;
+            }
+            else return pets;
+        }
+        public async Task<IEnumerable<Pet>> GetAllPetsFromAllOwners()
+        {
+            IEnumerable<Owner> allOwners = await GetAllOwnersAsync();
+
+            if (allOwners == null)
+            {
+                MessageBox.Show("GetAllPetsFromAllOwners() - there was error getting all owners");
+                return null;
+            }
+
+            List<Pet> allPets = new List<Pet>();
+            foreach(Owner owner in allOwners)
+            {
+                IEnumerable<Pet> ownerPets = await GetAllPetsFromOwner(owner);
+                allPets.AddRange(ownerPets);
+            }
+
+            if (allPets == null)
+            {
+                MessageBox.Show("GetAllPetsFromOwner() - there was conflict whil geting all oets from all owners!");
+                return null;
+            }
+            else return allPets;
+        }
+        public async Task DeletePet(Owner owner, Pet pet)
+        {
+            Pet conflictablePet = await _petCreator.GetConflictingPet(owner, pet);
+            Owner conflictableOwner = await _ownerCreator.GetConflictingOwner(owner);
+            
+            if(conflictablePet == null && conflictableOwner == null)
+            {
+                MessageBox.Show("DeleteOwner() - there is no such owner and pet!");
+            }
+            else if (conflictableOwner == null)
+            {
+                MessageBox.Show("DeleteOwner() - there is no such owner!");
+            } 
+            else if(conflictablePet == null)
+            {
+                MessageBox.Show("DeleteOwner() - there is no such pet!");
+            }
+            else await _petCreator.DeletePet(owner, pet);
+        }
+        public async Task EditPet(Pet pet)
+        {
+            //Pet conflictablePet = await _petCreator.GetConflictingPet(pet);
+
+            //if (conflictablePet == null)
+            //{
+            //    MessageBox.Show("EditPet() - pet wasnt found");
+            //}
+            await _petCreator.EditPet(pet);
         }
         #endregion
     }
