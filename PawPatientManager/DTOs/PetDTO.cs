@@ -19,9 +19,9 @@ namespace PawPatientManager.DTOs
         public string Species { get; set; }
         public string Race { get; set; }
         public string MicrochipNumber { get; set; }
-        public Guid? OwnerID { get; set; }
+        public Guid OwnerID { get; set; }
         [ForeignKey("OwnerID")]
-        public OwnerDTO? Owner { get; set; }
+        public OwnerDTO Owner { get; set; }
         public DateTime BirthDate { get; set; }
         public ICollection<VisitDTO> Visits { get; set; } = new List<VisitDTO>();
     }
