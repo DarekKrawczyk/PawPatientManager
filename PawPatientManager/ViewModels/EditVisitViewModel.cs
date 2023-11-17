@@ -28,7 +28,7 @@ namespace PawPatientManager.ViewModels
         private HourViewModel _selectedHourVM;
         private ObservableCollection<PetViewModel> _pets;
         private ObservableCollection<VetViewModel> _vets;
-        public uint _id;
+        public Guid _id;
         public string _petName;
         public string _ownerFullName;
         public string _species;
@@ -39,7 +39,7 @@ namespace PawPatientManager.ViewModels
         public string _vetSurname;
         #endregion
         #region Properties for XAML
-        public uint ID { get { return _id; } set { _id = value; } }
+        public Guid ID { get { return _id; } set { _id = value; } }
         public string PetName { get { return _petName; } set { _petName = value; OnPropertyChanged(nameof(PetName)); } }
         public string OwnerFullName { get { return _ownerFullName; } set { _ownerFullName = value; OnPropertyChanged(nameof(OwnerFullName)); } }
         public string Species { get { return _species; } set { _species = value; OnPropertyChanged(nameof(Species)); } }

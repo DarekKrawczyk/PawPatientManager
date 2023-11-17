@@ -14,7 +14,7 @@ namespace PawPatientManager.ViewModels
         private Vet _vet;
         #endregion
         #region Properties
-        public uint ID { get { return _vet.ID; } set { _vet.ID = value; } }
+        public Guid ID { get { return _vet.ID; } set { _vet.ID = value; } }
         public Vet Vet { get { return _vet; } set { _vet = value; } }
         public string Name { get { return _vet.Name; } set { _vet.Name = value; } }
         public string Surname { get { return _vet.Surname; } set { _vet.Surname = value; } }

@@ -7,6 +7,8 @@ using PawPatientManager.Services;
 using PawPatientManager.Services.MedicationCreators;
 using PawPatientManager.Services.OwnerDatabaseActions;
 using PawPatientManager.Services.PetDatabaseActions;
+using PawPatientManager.Services.VetDatabaseActions;
+using PawPatientManager.Services.VisitDatabaseActions;
 using PawPatientManager.Stores;
 using PawPatientManager.ViewModels;
 using System;
@@ -31,11 +33,11 @@ namespace PawPatientManager
         private NavigationStore _navigationStore;
         private INavigationService<LoginViewModel> _firstNavService;
         #region Fields - Database
-        //private IMedicationProvider _medicationProvider;
         private IMedicationDatabaseHandler _medicationCreator;
         private IOwnerDatabaseHandler _ownerCreator;
         private IPetDatabaseHandler _petCreator;
-        //private IMedicationConflicter _medicationConflicter;
+        private IVetDatabaseHandler _vetCreator;
+        private IVisitDatabaseHandler _visitCreator;
         private DbContentFactory _dbContextFactory;
         #endregion
 
@@ -46,29 +48,10 @@ namespace PawPatientManager
             _medicationCreator = new MedicationDatabaseHandler(_dbContextFactory);
             _ownerCreator = new OwnerDatabaseHandler(_dbContextFactory);
             _petCreator = new PetDatabaseHandler(_dbContextFactory);
+            _vetCreator = new VetDatabaseHandler(_dbContextFactory);
+            _visitCreator = new VisitDatabaseHandler(_dbContextFactory);
 
-            //_medicationProvider = new DatabaseMedicationProvider(_dbContextFactory);
-            ////_medicationConflicter = new DatabaseMedicationConflicter(_dbContextFactory);
-
-            _vetSystem = new VetSystem(_medicationCreator, _ownerCreator, _petCreator);
-            //_vetSystem = new VetSystem(_medicationProvider, _medicationCreator, _medicationConflicter);
-
-            //_vetSystem.Owners.Add(new Owner(new Guid(), "Mariusz", "Pudzianowski", true, DateTime.Now, "Gliwice ul.Pszczyńska 23", "+48424525252", "mariusz.pudzian@gmail.com", "9923523582385"));
-
-            //_vetSystem.Pets.Add(new Pet(0, "Bolek", true, _vetSystem.Owners[0], DateTime.Now, "Dog", "German shepard", "9293492394"));
-            //_vetSystem.Pets.Add(new Pet(1, "Taciek", true, _vetSystem.Owners[0], DateTime.Now, "Cat", "Dachowiec", "23452345"));
-            //_vetSystem.Pets.Add(new Pet(2, "Masny", true, _vetSystem.Owners[0], DateTime.Now, "Frog", "Green frog", "2323465216"));
-            //_vetSystem.Pets.Add(new Pet(3, "Bogol", true, _vetSystem.Owners[0], DateTime.Now, "Horse", "Big horse", "3644363245"));
-
-            //_vetSystem.Vets.Add(new Vet(0, "Jarek", "Marek"));
-
-            //_vetSystem.Visits.Add(new Visit(0, _vetSystem.Pets[0], _vetSystem.Vets[0], DateTime.Now, null));
-
-            //_vetSystem.Meds.Add(new Medication(0, "Majeranek", "Na ból głowy", 20));
-            //_vetSystem.Meds.Add(new Medication(1, "XANAX", "Go sleep bonobo", 2137));
-            //_vetSystem.Meds.Add(new Medication(2, "Pawulonix", "O_O", 33));
-            //_vetSystem.Meds.Add(new Medication(3, "APAP", "Na ból dupy", 40));
-            //_vetSystem.Meds.Add(new Medication(4, "Witamina C", "Be healthy bro", 204));
+            _vetSystem = new VetSystem(_medicationCreator, _ownerCreator, _petCreator, _vetCreator, _visitCreator);
 
             _navigationStore = new NavigationStore();
             _accountStore = new AccountStore();
@@ -192,7 +175,7 @@ namespace PawPatientManager
         {
             return new LayoutNavigationService<RegisterVisitViewModel>(
                 _navigationStore,
-                () => new RegisterVisitViewModel(
+                () => RegisterVisitViewModel.LoadViewModel(
                     _vetSystem,
                     CreateVisitsNavService()
                     ),
@@ -202,7 +185,7 @@ namespace PawPatientManager
         {
             return new LayoutNavigationService<VisitsViewModel>(
                 _navigationStore,
-                () => new VisitsViewModel(
+                () => VisitsViewModel.LoadViewModel(
                     _vetSystem,
                     CreateRegisterVisitNavService(),
                     CreateEditVisitNavService()

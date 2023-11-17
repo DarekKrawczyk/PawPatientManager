@@ -1,6 +1,8 @@
 ﻿using PawPatientManager.Services.MedicationCreators;
 using PawPatientManager.Services.OwnerDatabaseActions;
 using PawPatientManager.Services.PetDatabaseActions;
+using PawPatientManager.Services.VetDatabaseActions;
+using PawPatientManager.Services.VisitDatabaseActions;
 using PawPatientManager.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -26,6 +28,8 @@ namespace PawPatientManager.Models
         private IMedicationDatabaseHandler _medicationCreator;
         private IOwnerDatabaseHandler _ownerCreator;
         private IPetDatabaseHandler _petCreator;
+        private IVetDatabaseHandler _vetCreator;
+        private IVisitDatabaseHandler _visitCreator;
         #endregion
         #region Properties
         public List<Owner> Owners { get { return _owners; } set { _owners = value; } }
@@ -35,11 +39,14 @@ namespace PawPatientManager.Models
         public List<Medication> Meds { get { return _meds; } set { _meds = value; } }
         #endregion
         #region Constructor
-        public VetSystem(IMedicationDatabaseHandler medicationCreator, IOwnerDatabaseHandler ownerCreator, IPetDatabaseHandler petCreator) 
+        public VetSystem(IMedicationDatabaseHandler medicationCreator, IOwnerDatabaseHandler ownerCreator, IPetDatabaseHandler petCreator,
+            IVetDatabaseHandler vetCreator, IVisitDatabaseHandler visitCreator) 
         { 
             _medicationCreator = medicationCreator;
             _ownerCreator = ownerCreator;
             _petCreator = petCreator;
+            _vetCreator = vetCreator;
+            _visitCreator = visitCreator;
 
             _owners = new List<Owner>();
             _pets = new List<Pet>();
@@ -54,17 +61,6 @@ namespace PawPatientManager.Models
             _visits.Add(visit);
         }
 
-        public void AddPetToOwner(Pet pet)
-        {
-            _pets.Add(pet);
-            for(int i = 0; i<_owners.Count; i++)
-            {
-                if (_owners[i] == pet.Owner)
-                {
-                    _owners[i].AddPet(pet);
-                }
-            }
-        }
 
         public void EditVisit(Visit visit)
         {
@@ -244,5 +240,47 @@ namespace PawPatientManager.Models
             await _petCreator.EditPet(pet);
         }
         #endregion
+        #region Methods - Database - Vets
+        public async Task<IEnumerable<Vet>> GetAllVetsAsync()
+        {
+            return await _vetCreator.GetAllVets();
+        }
+        public async Task AddVet(Vet vet)
+        {
+            Vet conflictableVet = await _vetCreator.GetConflictingVet(vet);
+
+            if (conflictableVet != null)
+            {
+                MessageBox.Show("AddVet() - there was conflict whil adding vet");
+            }
+
+            else await _vetCreator.CreateVet(vet);
+        }
+        public async Task DeleteVet(Vet vet)
+        {
+            Vet conflictableVet = await _vetCreator.GetConflictingVet(vet);
+
+            if (conflictableVet == null)
+            {
+                MessageBox.Show("DeleteVet() - there is no such Vet!");
+            }
+            else await _vetCreator.DeleteVet(conflictableVet);
+        }
+        #endregion
+        #region Methods - Database - Visits
+        public async Task<IEnumerable<Visit>> GetAllVisitsAsync()
+        {
+            return await _visitCreator.GetAllVisits();
+        }
+        public async Task AddVisit(Vet vet, Pet pet, DateTime date)
+        {
+            await _visitCreator.CreateVisit(vet, pet, date);
+        }
+        public async Task DeleteVisit(Visit visit)
+        {
+            await _visitCreator.DeleteVisit(visit);
+        }
+        #endregion
+
     }
 }

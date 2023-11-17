@@ -32,7 +32,7 @@ namespace PawPatientManager.Commands
             {
                 DateTime date = Globals.GetVisitDateTime(_vm.SelectedDate, _vm.SelectedHour);
                 Visit editedVisit = new Visit(
-                    _vm.ID,
+                    new Guid(),
                     _vm.SelectedPet.Pet,
                     _vm.SelectedVet.Vet,
                     date,
@@ -44,7 +44,30 @@ namespace PawPatientManager.Commands
     }
     public struct RegisterVisitCommands 
     {
-        public class RegisterVisit : CommandBase
+        public class LoadVets : AsyncCommandBase
+        {
+            private VetSystem _system;
+            private RegisterVisitViewModel _viewModel;
+            public LoadVets(VetSystem system, RegisterVisitViewModel viewModel)
+            {
+                _system = system;
+                _viewModel = viewModel;
+            }
+
+            public override async Task ExecuteAsync(object parameter)
+            {
+                try
+                {
+                    IEnumerable<Vet> vets = await _system.GetAllVetsAsync();
+                    _viewModel.ReloadVets(vets);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "LoadMeds class");
+                }
+            }
+        }
+        public class RegisterVisit : AsyncCommandBase
         {
             private static uint _idIterator;
             private VetSystem _vetSystem;
@@ -55,13 +78,16 @@ namespace PawPatientManager.Commands
                 _vm = vm;
             }
 
-            public override void Execute(object? parameter)
+            public override async Task ExecuteAsync(object parameter)
             {
-                DateTime date = Globals.GetVisitDateTime(_vm.SelectedDate, _vm.SelectedHour);
-                Visit newVisit = new Visit(0, _vm.SelectedPet.Pet, _vm.SelectedVet.Vet, date, null);
-                _vetSystem.AddVisit(newVisit);
-
-                // TODO: if sucess -> clear data and messagebox; else messagebox?
+                try
+                {
+                    DateTime date = Globals.GetVisitDateTime(_vm.SelectedDate, _vm.SelectedHour);
+                    await _vetSystem.AddVisit(_vm.SelectedVet.Vet, _vm.SelectedPet.Pet, date);
+                } catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message,"RegisterVisitsCommands.RegisterVisit");
+                }
             }
         }
         public class UpdatePet : CommandBase
@@ -160,6 +186,29 @@ namespace PawPatientManager.Commands
     }
     public struct EditPetCommand
     {
+        public class LoadPetsForVisits : AsyncCommandBase
+        {
+            private VetSystem _system;
+            private RegisterVisitViewModel _viewModel;
+            public LoadPetsForVisits(VetSystem system, RegisterVisitViewModel viewModel)
+            {
+                _system = system;
+                _viewModel = viewModel;
+            }
+
+            public override async Task ExecuteAsync(object parameter)
+            {
+                try
+                {
+                    IEnumerable<Pet> pets = await _system.GetAllPetsFromAllOwners();
+                    _viewModel.ReloadPets(pets);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "LoadMeds class");
+                }
+            }
+        }
         public class LoadPets : AsyncCommandBase
         {
             private VetSystem _system;

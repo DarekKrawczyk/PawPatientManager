@@ -151,23 +151,43 @@ namespace PawPatientManager.Commands
     }
     public struct VisitsCommandsCombobox
     {
-        public class DeleteVisit : CommandBase
+        public class DeleteVisit : AsyncCommandBase
         {
             private VisitsViewModel _visitsVM;
-            public DeleteVisit(VisitsViewModel visitsVM)
+            private VetSystem _vetSystem;
+            public DeleteVisit(VetSystem vetSystem, VisitsViewModel visitsVM)
             {
                 _visitsVM = visitsVM;
+                _vetSystem = vetSystem;
             }
-            public override void Execute(object? parameter)
+            //public override void Execute(object? parameter)
+            //{
+            //    bool result = false;
+            //    VisitViewModel visitVM = _visitsVM.SelectedVisit;
+            //    if (visitVM != null)
+            //    {
+            //        result = _visitsVM.DeleteVisit(visitVM);
+            //    }
+            //    string text = (result == true) ? "deleted succesfully!" : "not deleted!";
+            //    MessageBox.Show($"Visit {text}", "PawPatientManager", MessageBoxButton.OK);
+            //}
+
+            public override async Task ExecuteAsync(object parameter)
             {
-                bool result = false;
-                VisitViewModel visitVM = _visitsVM.SelectedVisit;
-                if (visitVM != null)
+                try
                 {
-                    result = _visitsVM.DeleteVisit(visitVM);
+                    Visit editedMed = new Visit(_visitsVM.SelectedVisit);
+                    // First delete
+                    await _vetSystem.DeleteVisit(editedMed);
+
+                    // Then refresh data
+                    IEnumerable<Visit> meds = await _vetSystem.GetAllVisitsAsync();
+                    _visitsVM.ReloadVisits(meds);
                 }
-                string text = (result == true) ? "deleted succesfully!" : "not deleted!";
-                MessageBox.Show($"Visit {text}", "PawPatientManager", MessageBoxButton.OK);
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "DeleteMed class");
+                }
             }
         }
 
@@ -196,6 +216,30 @@ namespace PawPatientManager.Commands
                 else
                 {
                     _petsViewModel.SelectedVisit = null;
+                }
+            }
+        }
+
+        public class LoadVisits : AsyncCommandBase
+        {
+            private VetSystem _system;
+            private VisitsViewModel _viewModel;
+            public LoadVisits(VetSystem system, VisitsViewModel viewModel)
+            {
+                _system = system;
+                _viewModel = viewModel;
+            }
+
+            public override async Task ExecuteAsync(object parameter)
+            {
+                try
+                {
+                    IEnumerable<Visit> visits = await _system.GetAllVisitsAsync();
+                    _viewModel.ReloadVisits(visits);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "LoadVisits class");
                 }
             }
         }

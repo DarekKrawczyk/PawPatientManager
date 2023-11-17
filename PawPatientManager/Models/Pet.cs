@@ -65,7 +65,7 @@ namespace PawPatientManager.Models
             _id = petDTO.ID;
             _name = petDTO.Name;
             _gender = petDTO.Gender;
-            _owner = new Owner(ownerDTO);
+            _owner = (ownerDTO != null) ? new Owner(ownerDTO) : null;
             _birthDate = petDTO.BirthDate;
             _visits = null;
             _species = petDTO.Species;

@@ -40,6 +40,8 @@ namespace PawPatientManager.ViewModels
         #region Commands
         public ICommand CommandRegisterVisit { get; }
         public ICommand CommandReturn { get; }
+        public ICommand CommandLoadVets { get; }
+        public ICommand CommandLoadPets { get; }
         public ICommand CommandHandleVetSelectionChanged { get; }
         public ICommand CommandHandlePetSelectionChanged { get; }
         public ICommand CommandHandleHourSelectionChanged { get; }
@@ -55,31 +57,38 @@ namespace PawPatientManager.ViewModels
             _pets = new ObservableCollection<PetViewModel>();
             _vets = new ObservableCollection<VetViewModel>();
 
+            CommandLoadPets = new Commands.EditPetCommand.LoadPetsForVisits(_vetSystem, this);
+            CommandLoadVets = new Commands.RegisterVisitCommands.LoadVets(_vetSystem, this);
             CommandHandleHourSelectionChanged = new Commands.RegisterVisitCommands.UpdateHour(this);
             CommandHandlePetSelectionChanged = new Commands.RegisterVisitCommands.UpdatePet(this);
             CommandHandleVetSelectionChanged = new Commands.RegisterVisitCommands.UpdateVet(this);
             CommandHandleVetSelectionChanged = new Commands.RegisterVisitCommands.UpdateDate(this);
             CommandReturn = new NavigateCommand<VisitsViewModel>(_navReturnService);
             CommandRegisterVisit = new Commands.RegisterVisitCommands.RegisterVisit(_vetSystem, this);
-
-            ReloadPets();
-            ReloadVets();
-
         }
         #endregion
         #region Methods
-        private void ReloadPets()
+        public static RegisterVisitViewModel LoadViewModel(VetSystem vetSystem, INavigationService<VisitsViewModel> navReturnService)
+        {
+            RegisterVisitViewModel vm = new RegisterVisitViewModel(vetSystem, navReturnService);
+
+            vm.CommandLoadPets.Execute(null);
+            vm.CommandLoadVets.Execute(null);
+
+            return vm;
+        }
+        public void ReloadPets(IEnumerable<Pet> pets)
         {
             _pets.Clear();
-            foreach (Pet pet in _vetSystem.Pets)
+            foreach (Pet pet in pets)
             {
                 _pets.Add(new PetViewModel(pet));
             }
         }
-        private void ReloadVets()
+        public void ReloadVets(IEnumerable<Vet> vets)
         {
             _vets.Clear();
-            foreach(Vet vet in _vetSystem.Vets)
+            foreach(Vet vet in vets)
             {
                 _vets.Add(new VetViewModel(vet));
             }

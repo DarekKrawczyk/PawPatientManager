@@ -30,6 +30,7 @@ namespace PawPatientManager.ViewModels
         public ICommand CommandRegisterVisit { get; }
         public ICommand CommandDeleteVisit { get; }
         public ICommand CommandEditVisit { get; }
+        public ICommand CommandLoadVisits { get; }
         public ICommand CommandHandleVisitSelectionChange { get; }
         #endregion
         public VisitsViewModel(VetSystem vetSystem, INavigationService<RegisterVisitViewModel> navRegisterVisitVMService,
@@ -41,34 +42,31 @@ namespace PawPatientManager.ViewModels
             _navEditVisitService = navEditVisitService;
 
             _visits = new ObservableCollection<VisitViewModel>();
-            ReloadVisits();
 
+            CommandLoadVisits = new Commands.VisitsCommandsCombobox.LoadVisits(_vetSystem, this);
             CommandRegisterVisit = new NavigateCommand<RegisterVisitViewModel>(_navRegisterVisitVMService);
             CommandEditVisit = new Commands.VisitsCommandsCombobox.EditVisit(this, _navEditVisitService);
-            CommandDeleteVisit = new Commands.VisitsCommandsCombobox.DeleteVisit(this);
+            CommandDeleteVisit = new Commands.VisitsCommandsCombobox.DeleteVisit(_vetSystem, this);
             CommandHandleVisitSelectionChange = new Commands.VisitsCommandsCombobox.UpdateSelected(this);
         }
 
-        private void ReloadVisits()
+        public static VisitsViewModel LoadViewModel (VetSystem vetSystem, INavigationService<RegisterVisitViewModel> navRegisterVisitVMService,
+             LayoutNavigationServiceParam<VisitViewModel, EditVisitViewModel> navEditVisitService)
+        {
+            VisitsViewModel vm = new VisitsViewModel(vetSystem, navRegisterVisitVMService, navEditVisitService);
+
+            vm.CommandLoadVisits.Execute(null);
+
+            return vm;
+        }
+
+        public void ReloadVisits(IEnumerable<Visit> visits)
         {
             _visits.Clear();
-            foreach (Visit visit in _vetSystem.Visits)
+            foreach (Visit visit in visits)
             {
                 _visits.Add(new VisitViewModel(visit));
             }
-        }
-
-        public bool DeleteVisit(VisitViewModel visitVM)
-        {
-            bool result = false;
-            if (visitVM == null)
-            {
-                result = _vetSystem.Visits.Remove(_selectedVisitViewModel.Visit);
-            }
-            else result = _vetSystem.Visits.Remove(visitVM.Visit);
-            ReloadVisits();
-            OnPropertyChanged(nameof(Visits));
-            return result;
         }
     }
 }
