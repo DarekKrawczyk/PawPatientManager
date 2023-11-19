@@ -198,7 +198,7 @@ namespace PawPatientManager
         {
             return new LayoutNavigationServiceParam<VisitViewModel, EditVisitViewModel>(
                 _navigationStore,
-                (paramater) => new EditVisitViewModel(
+                (paramater) => EditVisitViewModel.LoadViewModel(
                     _vetSystem,
                     paramater,
                     CreateVisitsNavService()
@@ -236,7 +236,12 @@ namespace PawPatientManager
         {
             return new NavigationService<LoginViewModel>(
                 _navigationStore,
-                () => new LoginViewModel(_accountStore, CreateHomeNavService()));
+                () => new LoginViewModel(
+                    _vetSystem,
+                    _accountStore, 
+                    CreateHomeNavService()
+                    )
+                );
         }
         #endregion
         #region Factories - Navigation bar

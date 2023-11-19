@@ -12,6 +12,7 @@ namespace PawPatientManager.Services.VetDatabaseActions
         Task CreateVet(Vet vet);
         Task DeleteVet(Vet vet);
         Task<Vet> GetConflictingVet(Vet vet);
+        Task<Vet> LoginVet(string login, string password);
         Task<IEnumerable<Vet>> GetAllVets();
     }
 }

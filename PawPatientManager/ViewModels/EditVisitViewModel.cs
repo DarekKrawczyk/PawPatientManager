@@ -51,6 +51,7 @@ namespace PawPatientManager.ViewModels
         public IEnumerable<VetViewModel> Vets { get { return _vets; } set { OnPropertyChanged(nameof(Vets)); } }
         public IEnumerable<PetViewModel> Pets { get { return _pets; } set { OnPropertyChanged(nameof(Pets)); } }
         public IEnumerable<HourViewModel> Hours { get { return HourViewModel.GenerateHours(); } set { OnPropertyChanged(nameof(Hours)); } }
+        public VisitViewModel SelectedVisit { get { return _selectedVisitVM; } set { _selectedVisitVM = value; OnPropertyChanged(nameof(SelectedVisit)); } }
         public PetViewModel SelectedPet { get { return _selectedPetVM; } set { _selectedPetVM = value; OnPropertyChanged(nameof(SelectedPet)); } }
         public HourViewModel SelectedHour { get { return _selectedHourVM; } set { _selectedHourVM = value; OnPropertyChanged(nameof(SelectedHour)); } }
         public VetViewModel SelectedVet { get { return _selectedVetVM; } set { _selectedVetVM = value; OnPropertyChanged(nameof(SelectedVet)); } }
@@ -59,6 +60,8 @@ namespace PawPatientManager.ViewModels
         #region Commands
         public ICommand CommandUpdateVisit { get; }
         public ICommand CommandReturn { get; }
+        public ICommand CommandLoadVets{ get; }
+        public ICommand CommandLoadPets{ get; }
         #endregion
         #region Constructor
         public EditVisitViewModel(VetSystem vetSystem, VisitViewModel visitVM, INavigationService<VisitsViewModel> nevReturnVM)
@@ -70,9 +73,6 @@ namespace PawPatientManager.ViewModels
             _pets = new ObservableCollection<PetViewModel>();
             _vets = new ObservableCollection<VetViewModel>();
 
-            ReloadPets();
-            ReloadVets();
-
             ID = _selectedVisitVM.ID;
             PetName = _selectedVisitVM.Pet.Name;
             OwnerFullName = _selectedVisitVM.OwnerFullName;
@@ -83,6 +83,9 @@ namespace PawPatientManager.ViewModels
             VetName = _selectedVisitVM.Vet.Name;
             VetSurname = _selectedVisitVM.Vet.Surname;
 
+            CommandLoadPets = new Commands.EditVisitCommands.LoadPets(_vetSystem, this);
+            CommandLoadVets = new Commands.EditVisitCommands.LoadVets(_vetSystem, this);
+
             SelectedDate = _selectedVisitVM.Date;
             SelectedVet = new VetViewModel(_selectedVisitVM.Vet);
             SelectedPet = new PetViewModel(_selectedVisitVM.Pet);
@@ -92,18 +95,28 @@ namespace PawPatientManager.ViewModels
             CommandReturn = new NavigateCommand<VisitsViewModel>(_nevReturnVM);
         }
         #endregion
-        private void ReloadPets()
+        public static EditVisitViewModel LoadViewModel(VetSystem vetSystem, VisitViewModel visitVM, INavigationService<VisitsViewModel> nevReturnVM)
+        { 
+            EditVisitViewModel vm = new EditVisitViewModel(vetSystem, visitVM, nevReturnVM);
+
+            vm.CommandLoadPets.Execute(null);
+            vm.CommandLoadVets.Execute(null);
+
+            return vm;  
+        }
+        
+        public void ReloadPets(IEnumerable<Pet> pets)
         {
             _pets.Clear();
-            foreach (Pet pet in _vetSystem.Pets)
+            foreach (Pet pet in pets)
             {
                 _pets.Add(new PetViewModel(pet));
             }
         }
-        private void ReloadVets()
+        public void ReloadVets(IEnumerable<Vet> vets)
         {
             _vets.Clear();
-            foreach (Vet vet in _vetSystem.Vets)
+            foreach (Vet vet in vets)
             {
                 _vets.Add(new VetViewModel(vet));
             }

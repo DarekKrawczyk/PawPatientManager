@@ -26,6 +26,7 @@ namespace PawPatientManager.ViewModels
         private string _editName;
         private string _editDescription;
         private int _editAmount;
+        private bool _isLoading;
         #endregion
         #region Properties for XAML
         public IEnumerable<MedViewModel> Meds { get { return _meds; } set { OnPropertyChanged(nameof(Meds)); } }
@@ -43,6 +44,13 @@ namespace PawPatientManager.ViewModels
         public string EditName { get { return _editName; } set { _editName = value; OnPropertyChanged(nameof(EditName)); } }
         public string EditDescription { get { return _editDescription; } set { _editDescription = value; OnPropertyChanged(nameof(EditDescription)); } }
         public int EditAmount { get { return _editAmount; } set { _editAmount = value; OnPropertyChanged(nameof(EditAmount)); } }
+        public bool IsLoading { get { return _isLoading; } 
+            set 
+            { 
+                _isLoading = value; 
+                OnPropertyChanged(nameof(IsLoading)); 
+            } 
+        }
         #endregion
         #region Commands
         public ICommand CommandAddMed { get; }

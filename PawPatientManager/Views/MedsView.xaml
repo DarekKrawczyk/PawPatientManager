@@ -5,9 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PawPatientManager.Views"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:loadingSpinnerControl="clr-namespace:LoadingSpinnerControl;assembly=LoadingSpinnerControl"
              mc:Ignorable="d" 
+             xmlns:converters="clr-namespace:PawPatientManager.Converters"
              d:DesignHeight="450" d:DesignWidth="800">
-
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:InverseBoolToVIsibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -37,7 +42,7 @@
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                
+
                 <TextBlock Text="Name:" Grid.Column="1"/>
                 <TextBox Margin="5" Grid.Column="2" Text="Filter by Name"/>
 
@@ -48,50 +53,54 @@
             </Grid>
         </Grid>
 
-        <!-- ListView Section -->
-        <ListView Name="MedsList" Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Meds}">
-            <ListView.View>
-                <GridView>
+        <Grid Grid.Row="1" Grid.Column="1">
+            <loadingSpinnerControl:LoadingSpinner Thickness="5" Diameter="100" Color="Gray" IsLoading="{Binding IsLoading}"/>
+            <!-- ListView Section -->
+            <ListView Name="MedsList" ItemsSource="{Binding Meds}"
+                  Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                <ListView.View>
+                    <GridView>
 
-                    <GridViewColumn Header="ID">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding ID}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
+                        <!--<GridViewColumn Header="ID">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding ID}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>-->
 
-                    <GridViewColumn Header="Name">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
+                        <GridViewColumn Header="Name">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
 
-                    <GridViewColumn Header="Description">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Description}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
+                        <GridViewColumn Header="Description">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Description}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
 
-                    <GridViewColumn Header="Amount">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Amount}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding CommandHandleMedSelectionChange}" CommandParameter="{Binding SelectedItem, ElementName=MedsList}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </ListView>
+                        <GridViewColumn Header="Amount">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Amount}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding CommandHandleMedSelectionChange}" CommandParameter="{Binding SelectedItem, ElementName=MedsList}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ListView>
+        </Grid>
 
         <!-- Add Drug Section -->
         <Grid Grid.Row="2" Grid.Column="1">
@@ -131,7 +140,7 @@
                 <TextBox Grid.Column="5" Text="{Binding AddAmount}"/>
                 <Button Grid.Column="6" Content="Add" Command="{Binding CommandAddMed}"/>
             </Grid>
-            
+
             <!-- Edit Drug -->
             <Grid Grid.Column="1" Grid.Row="2">
                 <Grid.ColumnDefinitions>

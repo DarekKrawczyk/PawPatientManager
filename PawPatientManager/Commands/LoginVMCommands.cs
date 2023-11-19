@@ -13,30 +13,43 @@ namespace PawPatientManager.Commands
 {
     public struct LoginVMCommands 
     {
-        public class Login : CommandBase
+        public class Login : AsyncCommandBase
         {
             private LoginViewModel _loginViewModel;
             private INavigationService<HomeViewModel> _navHomeService;
             private AccountStore _accountStore;
-            public Login(INavigationService<HomeViewModel> navHomeService, LoginViewModel loginViewModel, AccountStore accountStore)
+            private VetSystem _vetSystem;
+            public Login(INavigationService<HomeViewModel> navHomeService, LoginViewModel loginViewModel, AccountStore accountStore,
+                VetSystem vetSystem)
             {
+                _vetSystem = vetSystem;
                 _navHomeService = navHomeService;
                 _loginViewModel = loginViewModel;
                 _accountStore = accountStore;
             }
-            public override void Execute(object? parameter)
-            {
-                Account account = new Account(_loginViewModel.Username, _loginViewModel.Password);
-                bool isValid = account.IsValid();
 
-                if(isValid == true) 
+            public override async Task ExecuteAsync(object parameter)
+            {
+                try
                 {
-                    _accountStore.CurrentAccount = account;
-                    _navHomeService.Navigate();
-                }
-                else
+                    string login = _loginViewModel.Username;
+                    string password = _loginViewModel.Password;
+
+                    Vet account = await _vetSystem.LoginVet(login, password);
+
+                    if (account != null)
+                    {
+                        MessageBox.Show($"User {account.Name} {account.Surname} logged in sucessfully!", "PetPatientManager", MessageBoxButton.OK);
+                        _accountStore.CurrentAccount = account;
+                        _navHomeService.Navigate();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid login!", "PetPatientManager", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                } catch (Exception ex)
                 {
-                    MessageBox.Show("Invalid login!", "PetPatientManager", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(ex.Message, "LoginVMCommands.Login class");
                 }
             }
         }

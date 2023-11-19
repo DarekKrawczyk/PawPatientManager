@@ -48,6 +48,8 @@ namespace PawPatientManager.Models
             _vetCreator = vetCreator;
             _visitCreator = visitCreator;
 
+            //await PopulateMeds();
+
             _owners = new List<Owner>();
             _pets = new List<Pet>();
             _vets = new List<Vet>();
@@ -59,18 +61,6 @@ namespace PawPatientManager.Models
         public void AddVisit(Visit visit)
         {
             _visits.Add(visit);
-        }
-
-
-        public void EditVisit(Visit visit)
-        {
-            for (int i = 0; i < _visits.Count; i++)
-            {
-                if (_visits[i].ID == visit.ID)
-                {
-                    _visits[i] = visit;
-                }
-            }
         }
 
         #endregion
@@ -256,6 +246,10 @@ namespace PawPatientManager.Models
 
             else await _vetCreator.CreateVet(vet);
         }
+        public async Task<Vet> LoginVet(string login, string password)
+        {
+            return await _vetCreator.LoginVet(login, password);
+        }
         public async Task DeleteVet(Vet vet)
         {
             Vet conflictableVet = await _vetCreator.GetConflictingVet(vet);
@@ -280,7 +274,38 @@ namespace PawPatientManager.Models
         {
             await _visitCreator.DeleteVisit(visit);
         }
+        public async Task EditVisit(Visit selectedVisit, Visit editedVisit, Guid newVetID, Guid newPetID)
+        {
+            await _visitCreator.EditVisit(selectedVisit, editedVisit, newVetID, newPetID);
+        }
         #endregion
+        #region Methods - Database
+        private async void PopulateMeds()
+        {
+            string[] names = { "PawRelief", "FurGuard", "Meowlixir", "TailEase", "HoofHeal", "FeatherFix", "ScaleSoothe" };
+            string[] descriptions = { "Relieves joint pain", "Promotes shiny coat", "Soothes digestive issues", "Boosts immune system", "Heals minor wounds" };
+           
+            List<Medication> medsToPopulate = new List<Medication>();
 
+            for (int i = 0; i < 100; i++)
+            {
+                Guid id = Guid.NewGuid();
+                string name = names[new Random().Next(names.Length)];
+                string description = descriptions[new Random().Next(descriptions.Length)];
+                int amount = new Random().Next(1, 101);
+
+                medsToPopulate.Add(new Medication(id, name, description, amount));
+            }
+
+            foreach(Medication med in medsToPopulate)
+            {
+                await _medicationCreator.CreateMedication(med);
+            }
+        }
+        private async void PopulateOwners()
+        {
+
+        }
+        #endregion
     }
 }

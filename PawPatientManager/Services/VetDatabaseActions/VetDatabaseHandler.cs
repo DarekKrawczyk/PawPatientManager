@@ -27,6 +27,8 @@ namespace PawPatientManager.Services.VetDatabaseActions
                 {
                     Name = vet.Name,
                     Surname = vet.Surname,
+                    Login = vet.Login,
+                    Password = vet.Password,
                     Visits = null
                 };
 
@@ -66,6 +68,25 @@ namespace PawPatientManager.Services.VetDatabaseActions
             {
                 VetDTO vetDT = await dbContext.Vets.Where(x => x.Name == vet.Name).
                     Where(x => x.Surname == vet.Surname).FirstOrDefaultAsync();
+
+                if (vetDT == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return new Vet(vetDT);
+                }
+
+            }
+        }
+
+        public async Task<Vet> LoginVet(string login, string password)
+        {
+            using (MyDbContent dbContext = _dbContextFactory.CreateDbContext())
+            {
+                VetDTO vetDT = await dbContext.Vets.Where(x => x.Login == login).
+                    Where(x => x.Password == password).FirstOrDefaultAsync();
 
                 if (vetDT == null)
                 {

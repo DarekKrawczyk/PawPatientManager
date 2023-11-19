@@ -15,6 +15,8 @@ namespace PawPatientManager.DTOs
         public Guid ID { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
+        public string Login { get; set; }
+        public string Password { get; set; }    
         public ICollection<VisitDTO> Visits { get; set; } = new List<VisitDTO>();
     }
 }

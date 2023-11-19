@@ -18,7 +18,53 @@ namespace PawPatientManager.Commands
 {
     public struct EditVisitCommands
     {
-        public class EditVisit : CommandBase
+        public class LoadVets : AsyncCommandBase
+        {
+            private VetSystem _system;
+            private EditVisitViewModel _viewModel;
+            public LoadVets(VetSystem system, EditVisitViewModel viewModel)
+            {
+                _system = system;
+                _viewModel = viewModel;
+            }
+
+            public override async Task ExecuteAsync(object parameter)
+            {
+                try
+                {
+                    IEnumerable<Vet> vets = await _system.GetAllVetsAsync();
+                    _viewModel.ReloadVets(vets);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "LoadMeds class");
+                }
+            }
+        }
+        public class LoadPets : AsyncCommandBase
+        {
+            private VetSystem _system;
+            private EditVisitViewModel _viewModel;
+            public LoadPets(VetSystem system, EditVisitViewModel viewModel)
+            {
+                _system = system;
+                _viewModel = viewModel;
+            }
+
+            public override async Task ExecuteAsync(object parameter)
+            {
+                try
+                {
+                    IEnumerable<Pet> pets = await _system.GetAllPetsFromAllOwners();
+                    _viewModel.ReloadPets(pets);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "LoadMeds class");
+                }
+            }
+        }
+        public class EditVisit : AsyncCommandBase
         {
             private VetSystem _vetSystem;
             private EditVisitViewModel _vm;
@@ -28,9 +74,24 @@ namespace PawPatientManager.Commands
                 _vm = vm;
             }
 
-            public override void Execute(object? parameter)
+            //public override void Execute(object? parameter)
+            //{
+            //    DateTime date = Globals.GetVisitDateTime(_vm.SelectedDate, _vm.SelectedHour);
+            //    Visit editedVisit = new Visit(
+            //        new Guid(),
+            //        _vm.SelectedPet.Pet,
+            //        _vm.SelectedVet.Vet,
+            //        date,
+            //        null
+            //        );
+            //    _vetSystem.EditVisit(editedVisit);
+            //}
+
+            public override async Task ExecuteAsync(object parameter)
             {
                 DateTime date = Globals.GetVisitDateTime(_vm.SelectedDate, _vm.SelectedHour);
+                Guid newVetID = _vm.SelectedVet.ID; 
+                Guid newPetID = _vm.SelectedPet.ID; 
                 Visit editedVisit = new Visit(
                     new Guid(),
                     _vm.SelectedPet.Pet,
@@ -38,7 +99,7 @@ namespace PawPatientManager.Commands
                     date,
                     null
                     );
-                _vetSystem.EditVisit(editedVisit);
+                _vetSystem.EditVisit(_vm.SelectedVisit.Visit, editedVisit, newVetID, newPetID);
             }
         }
     }

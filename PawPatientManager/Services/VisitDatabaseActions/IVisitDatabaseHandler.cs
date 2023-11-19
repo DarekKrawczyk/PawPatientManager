@@ -11,7 +11,7 @@ namespace PawPatientManager.Services.VisitDatabaseActions
     {
         Task CreateVisit(Vet vet, Pet pet, DateTime dateTime);
         Task DeleteVisit(Visit visit);
-        Task EditVisit(Owner selectedowner, Owner editedowner);
+        Task EditVisit(Visit selectedVisit, Visit editedVisit, Guid newVetGUID, Guid newPetGUID);
         Task<Visit> GetConflictingVisit(Visit visit);
         Task<IEnumerable<Visit>> GetAllVisits();
     }

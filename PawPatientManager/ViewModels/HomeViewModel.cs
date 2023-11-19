@@ -16,7 +16,7 @@ namespace PawPatientManager.ViewModels
         //    _navigationBarVM = navigationBarVM;
         //}
         private AccountStore _accountStore;
-        public string Username { get { return _accountStore.CurrentAccount.Username; } }
+        public string Login { get { return _accountStore.CurrentAccount.Login; } }
         public HomeViewModel(AccountStore accountStore)
         {
             _accountStore = accountStore;

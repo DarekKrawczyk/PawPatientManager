@@ -9,8 +9,8 @@ namespace PawPatientManager.Stores
 {
     public class AccountStore
     {
-        private Account _account;
-        public Account CurrentAccount { get { return _account; } set { _account = value; } }
+        private Vet _account;
+        public Vet CurrentAccount { get { return _account; } set { _account = value; } }
         public AccountStore() 
         {
         }

@@ -28,11 +28,15 @@ namespace PawPatientManager.Commands
             {
                 try
                 {
+                    _viewModel.IsLoading = true;
                     IEnumerable<Medication> meds = await _system.GetAllMedicationsAsync();
                     _viewModel.ReloadMeds(meds);
                 }catch(Exception ex)
                 {
                     MessageBox.Show(ex.Message, "LoadMeds class");
+                } finally
+                {
+                    _viewModel.IsLoading = false;
                 }
             }
         }

@@ -65,9 +65,22 @@ namespace PawPatientManager.Services.VisitDatabaseActions
             }
         }
 
-        public Task EditVisit(Owner selectedowner, Owner editedowner)
+        public async Task EditVisit(Visit selectedVisit, Visit editedVisit, Guid newVetGUID, Guid newPetGUID)
         {
-            throw new NotImplementedException();
+            using (MyDbContent dbContext = _dbContextFactory.CreateDbContext())
+            {
+                VisitDTO visitToUpdate = await dbContext.Visits.FindAsync(selectedVisit.ID);
+
+                if (visitToUpdate != null)
+                {
+                    visitToUpdate.PetID = (newPetGUID==visitToUpdate.PetID)?(visitToUpdate.PetID):(newPetGUID);
+                    visitToUpdate.VetID = (newVetGUID== visitToUpdate.VetID) ? (visitToUpdate.VetID) : (newVetGUID);
+                    visitToUpdate.Date = editedVisit.Date;
+                    visitToUpdate.MedicalReceipts = visitToUpdate.MedicalReceipts;
+
+                    await dbContext.SaveChangesAsync();
+                }
+            }
         }
 
         public async Task<IEnumerable<Visit>> GetAllVisits()

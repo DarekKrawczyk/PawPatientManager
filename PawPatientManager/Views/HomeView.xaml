@@ -24,7 +24,7 @@
         
         <TextBlock Grid.Row="1" Grid.Column="1" Text="This is home page!"/>
         <TextBlock Grid.Row="2" Grid.Column="2" Text="Currently logged in user:"/>
-        <TextBlock Grid.Row="2" Grid.Column="3" Text="{Binding Username}"/>
+        <TextBlock Grid.Row="2" Grid.Column="3" Text="{Binding Login}"/>
                 
     </Grid>
 </UserControl>
