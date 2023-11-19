@@ -5,56 +5,141 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PawPatientManager.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid >
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+             d:DesignHeight="810" d:DesignWidth="1440">
+    <UserControl.Resources>
+        <!-- Styles -->
+        <Style x:Key="TextStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="Green"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="5,5,0,5"/>
+        </Style>
 
+        <Style x:Key="RoundedTextBoxStyle" TargetType="TextBox">
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="BorderBrush" Value="#ccc"/>
+            <Setter Property="Background" Value="DarkGray"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                            <ScrollViewer x:Name="PART_ContentHost" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#eee"/>
+                    <Setter Property="BorderBrush" Value="#999"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="NavigationButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="10,0,10,0"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="LightSkyBlue"/>
+                    <!-- Light Green -->
+                    <Setter Property="BorderBrush" Value="#45a049"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <Grid Background="LightGray">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="400"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="400"/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="100"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
 
-        <TextBlock Text="Pet Edit page" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-        <TextBlock Text="Owner" Grid.Row="1" Grid.Column="1"/>
-        <TextBlock Text="{Binding OwnerNameAndSurname}" Grid.Row="1" Grid.Column="2"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Text="Owner: " Grid.Row="1" Grid.Column="1" Style="{StaticResource TextStyle}"/>
+            <TextBlock Text="{Binding OwnerNameAndSurname}" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center"/>
 
-        <TextBlock Text="Name" Grid.Row="2" Grid.Column="1"/>
-        <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="2"/>
+            <TextBlock Text="Name: " Grid.Row="2" Grid.Column="1" Style="{StaticResource TextStyle}"/>
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="2" Style="{StaticResource RoundedTextBoxStyle}"/>
 
-        <TextBlock Text="Gender" Grid.Row="3" Grid.Column="1"/>
-        <CheckBox Grid.Row="3" Grid.Column="2" IsChecked="{Binding Gender, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Text="Gender: " Grid.Row="3" Grid.Column="1" Style="{StaticResource TextStyle}"/>
+            <Grid Grid.Row="3" Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <CheckBox Content="Male" Grid.Row="0" IsChecked="{Binding Gender, UpdateSourceTrigger=PropertyChanged}"/>
+                <CheckBox Content="Female" Grid.Row="1" IsChecked="{Binding GenderX, UpdateSourceTrigger=PropertyChanged}"/>
+            </Grid>
+            <TextBlock Text="Birth date: " Grid.Row="4" Grid.Column="1" Style="{StaticResource TextStyle}"/>
+            <DatePicker SelectedDate="{Binding BirthDate}" Grid.Row="4" Grid.Column="2"/>
 
-        <TextBlock Text="Birth date" Grid.Row="4" Grid.Column="1"/>
-        <DatePicker SelectedDate="{Binding BirthDate}" Grid.Row="4" Grid.Column="2"/>
+            <TextBlock Text="Spiecies: " Grid.Row="5" Grid.Column="1" Style="{StaticResource TextStyle}"/>
+            <TextBox Text="{Binding Spiecies, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="2" Style="{StaticResource RoundedTextBoxStyle}"/>
 
-        <TextBlock Text="Spiecies" Grid.Row="5" Grid.Column="1"/>
-        <TextBox Text="{Binding Spiecies, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="2"/>
+            <TextBlock Text="Race: " Grid.Row="6" Grid.Column="1" Style="{StaticResource TextStyle}"/>
+            <TextBox Text="{Binding Race, UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="2" Style="{StaticResource RoundedTextBoxStyle}"/>
 
-        <TextBlock Text="Race" Grid.Row="6" Grid.Column="1"/>
-        <TextBox Text="{Binding Race, UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="2"/>
+            <TextBlock Text="Microchip number: " Grid.Row="7" Grid.Column="1" Style="{StaticResource TextStyle}"/>
+            <TextBox Text="{Binding MicrochipNumber, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="2" Style="{StaticResource RoundedTextBoxStyle}"/>
 
-        <TextBlock Text="Microchip number" Grid.Row="7" Grid.Column="1"/>
-        <TextBox Text="{Binding MicrochipNumber, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="2"/>
-
-        <Button Content="Edit" Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2" Command="{Binding CommandEditPet}"></Button>
-        <Button Content="Return" Grid.Row="11" Grid.Column="1" Grid.ColumnSpan="2" Command="{Binding CommandReturn}"></Button>
+            <Button Content="Edit" Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2"  Margin="0,5,0,0" Width="220" Command="{Binding CommandEditPet}" Style="{StaticResource NavigationButtonStyle}"></Button>
+            <Button Content="Return" Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2"  Margin="0,5,0,0" Width="220" Command="{Binding CommandReturn}" Style="{StaticResource NavigationButtonStyle}"></Button>
+        </Grid>
     </Grid>
 </UserControl>

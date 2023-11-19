@@ -6,10 +6,79 @@
              xmlns:local="clr-namespace:PawPatientManager.Views"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+             d:DesignHeight="810" d:DesignWidth="1440">
+    <UserControl.Resources>
+
+        <!-- Styles -->
+        <Style x:Key="TextStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="Green"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="5,5,0,5"/>
+        </Style>
+
+        <Style x:Key="RoundedTextBoxStyle" TargetType="TextBox">
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="BorderBrush" Value="#ccc"/>
+            <Setter Property="Background" Value="DarkGray"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                            <ScrollViewer x:Name="PART_ContentHost" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#eee"/>
+                    <Setter Property="BorderBrush" Value="#999"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="NavigationButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="10,0,10,0"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="LightSkyBlue"/>
+                    <!-- Light Green -->
+                    <Setter Property="BorderBrush" Value="#45a049"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <Grid Background="LightGray">
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="20"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
@@ -18,42 +87,62 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="auto"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="100"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="Manage Owners View" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"/>
-
         <Grid Grid.Row="1" Grid.Column="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Button Content="Filter" Grid.Row="4" Grid.Column="3"></Button>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="1" Background="LightGray">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Name:" Grid.Column="1" Style="{StaticResource TextStyle}"/>
+                    <TextBox Margin="5" Grid.Column="2" Text="{Binding NameFilter, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource RoundedTextBoxStyle}"/>
+
+                    <TextBlock Text="Owner:" Grid.Column="3" Style="{StaticResource TextStyle}"/>
+                    <TextBox Margin="5" Grid.Column="4" Text="{Binding OwnerFilter, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource RoundedTextBoxStyle}"/>
+
+                    <TextBlock Text="Spieces:" Grid.Column="5" Style="{StaticResource TextStyle}"/>
+                    <TextBox Margin="5" Grid.Column="6" Text="{Binding SpiecesFilter, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource RoundedTextBoxStyle}"/>
+
+                    <TextBlock Text="Race:" Grid.Column="7" Style="{StaticResource TextStyle}"/>
+                    <TextBox Margin="5" Grid.Column="8" Text="{Binding RaceFilter, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource RoundedTextBoxStyle}"/>
+
+                    <TextBlock Text="Age:" Grid.Column="9" Style="{StaticResource TextStyle}"/>
+                    <TextBox Margin="5" Grid.Column="10" Text="{Binding AgeFilter, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource RoundedTextBoxStyle}"/>
+
+                    <TextBlock Text="Microchip number:" Grid.Column="11" Style="{StaticResource TextStyle}"/>
+                    <TextBox Margin="5" Grid.Column="12" Text="{Binding MicrochipNumberFilter, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource RoundedTextBoxStyle}"/>
+
+                </Grid>
+            </Grid>
         </Grid>
-        
+
         <ListView Name="PetsList" Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Pets}">
             <ListView.View>
                 <GridView>
-
-                    <GridViewColumn Header="ID">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding ID}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
 
                     <GridViewColumn Header="Name">
                         <GridViewColumn.CellTemplate>
@@ -102,6 +191,22 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
+
+                    <GridViewColumn Header="Age">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Age}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Microchip number">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding MicrochipNumber}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
             <i:Interaction.Triggers>
@@ -113,14 +218,15 @@
 
         <Grid Grid.Row="3" Grid.Column="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Button Content="Register" Grid.Row="2" Grid.Column="0" Command="{Binding CommandRegisterPet}"/>
-            <Button Content="Delete" Grid.Row="2" Grid.Column="1" Command="{Binding CommandDeletePet}"/>
-            <Button Content="Edit" Grid.Row="2" Grid.Column="2" Command="{Binding CommandEditPet}"/>
+            <Button Content="Register" Grid.Column="0" Margin="0,0,10,0" Command="{Binding CommandRegisterPet}" Style="{StaticResource NavigationButtonStyle}"/>
+            <Button Content="Delete" Grid.Column="1" Margin="0,0,10,0" Command="{Binding CommandDeletePet}" Style="{StaticResource NavigationButtonStyle}"/>
+            <Button Content="Edit" Grid.Column="2" Margin="0,0,10,0" Command="{Binding CommandEditPet}" Style="{StaticResource NavigationButtonStyle}"/>
         </Grid>
 
     </Grid>

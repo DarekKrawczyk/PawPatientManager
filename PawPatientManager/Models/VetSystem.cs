@@ -327,9 +327,39 @@ namespace PawPatientManager.Models
                 ownersToPopulate.Add(new Owner(id, name, surname, gender, birthDate, null, address, phoneNumber, email, pesel));
             }
 
+            // -- Pets --
+            string[] pet_names = { "Bella", "Max", "Charlie", "Lucy", "Cooper", "Luna", "Rocky" };
+            string[] speciesList = { "Dog", "Cat", "Bird", "Rabbit", "Fish" };
+            string[] races = { "Labrador", "Siamese", "Parrot", "Dwarf Rabbit", "Goldfish" };
+
+            List<Pet> petsToPopulate = new List<Pet>();
+
+            int numberOfPets = 100;
+
+            for (int i = 0; i < numberOfPets; i++)
+            {
+                Guid id = Guid.NewGuid();
+                string name = pet_names[random.Next(pet_names.Length)];
+                bool gender = random.Next(2) == 0; // Randomly assign gender
+                Owner owner = ownersToPopulate[random.Next(ownersToPopulate.Count)];
+                DateTime birthDate = DateTime.Now.AddMonths(-random.Next(1, 120));
+                List<Visit> visits = null;
+                List<MedicalReceipt> medicals = null;
+                string species = speciesList[random.Next(speciesList.Length)];
+                string race = races[random.Next(races.Length)];
+                string microchipNumber = GenerateRandomMicrochipNumber();
+
+                petsToPopulate.Add(new Pet(id, name, gender, owner, birthDate, visits, medicals, species, race, microchipNumber));
+            }
+
             foreach (Owner owner in ownersToPopulate)
             {
                 await _ownerCreator.CreateOwner(owner);
+            }
+
+            foreach (Pet pet in petsToPopulate)
+            {
+                await _petCreator.AssignPetToOwner(pet.Owner, pet);
             }
 
         }
@@ -355,6 +385,19 @@ namespace PawPatientManager.Models
             peselBuilder.Append(controlDigit);
 
             return peselBuilder.ToString();
+        }
+        public static string GenerateRandomMicrochipNumber()
+        {
+            Random random = new Random();
+            StringBuilder microchipNumberBuilder = new StringBuilder();
+
+            // Add random digits for microchip number
+            for (int i = 0; i < 15; i++)
+            {
+                microchipNumberBuilder.Append(random.Next(10));
+            }
+
+            return microchipNumberBuilder.ToString();
         }
         #endregion
     }

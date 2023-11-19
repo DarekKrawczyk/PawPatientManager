@@ -23,6 +23,7 @@ namespace PawPatientManager.ViewModels
         private Guid _id;
         private string _name;
         private bool _gender;
+        private bool _genderX;
         private string _species;
         private string _race;
         private string _microchipNumber;
@@ -35,7 +36,8 @@ namespace PawPatientManager.ViewModels
         public Guid ID { get { return _id; } set { _id = value; OnPropertyChanged(nameof(ID)); } }
         public string Name { get { return _name; } set { _name = value; OnPropertyChanged(nameof(Name)); } }
         public string OwnerNameAndSurname { get { return $"{_owner?.Name} {_owner?.Surname}"; } }
-        public bool Gender { get { return _gender; } set { _gender = value; OnPropertyChanged(nameof(Gender)); } }
+        public bool Gender { get { return _gender; } set { _gender = value; _genderX = !value; OnPropertyChanged(nameof(Gender)); } }
+        public bool GenderX { get { return _genderX; } set { _genderX = value; _gender = !value; OnPropertyChanged(nameof(GenderX)); } }
         public string Spiecies { get { return _species; } set { _species = value; OnPropertyChanged(nameof(Spiecies)); } }
         public string Race { get { return _race; } set { _race = value; OnPropertyChanged(nameof(Race)); } }
         public string MicrochipNumber { get { return _microchipNumber; } set { _microchipNumber = value; OnPropertyChanged(nameof(MicrochipNumber)); } }
@@ -58,7 +60,7 @@ namespace PawPatientManager.ViewModels
             _id = petVM.ID;
             _name = petVM.Name;
             _owner = petVM.Owner;
-            _gender = petVM.Gender;
+            Gender = petVM.Gender;
             _species = petVM.Species;
             _race = petVM.Race;
             _microchipNumber = petVM.MicrochipNumber;

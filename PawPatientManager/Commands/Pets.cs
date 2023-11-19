@@ -442,8 +442,21 @@ namespace PawPatientManager.Commands
             {
                 _petsViewModel = petsViewModel;
                 _vetSystem = vetSystem;
+                _petsViewModel.PropertyChanged += _petsViewModel_PropertyChanged;
             }
 
+            private void _petsViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+            {
+                if (e.PropertyName == nameof(PetsViewModel.SelectedPet))
+                {
+                    OnCanExecutedChange();
+                }
+            }
+
+            public override bool CanExecute(object? parameter)
+            {
+                return (_petsViewModel.SelectedPet != null) && (_petsViewModel.SelectedPet.IsNull() == false) && base.CanExecute(parameter);
+            }
             public override async Task ExecuteAsync(object parameter)
             {
                 try
@@ -451,14 +464,15 @@ namespace PawPatientManager.Commands
                     Pet petToDelete = new Pet(_petsViewModel.SelectedPet);
                     Owner petsOwner = _petsViewModel.SelectedPet.Owner;
 
-                    _vetSystem.DeletePet(petsOwner, petToDelete);
+                    await _vetSystem.DeletePet(petsOwner, petToDelete);
 
                     IEnumerable<Pet> pets = await _vetSystem.GetAllPetsFromAllOwners();
                     _petsViewModel.ReloadPets(pets);
+                    MessageBox.Show($"Pet: {petToDelete.Name}, of {petsOwner.Name} {petsOwner.Surname} owner, has been deleted from database!", "Paw Patient Manager", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "DeletePet class");
+                    MessageBox.Show($"There was an error while deleting pet: {_petsViewModel.SelectedPet.Name}","Paw Patient Manager", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -470,15 +484,25 @@ namespace PawPatientManager.Commands
             {
                 _petsVM = petsVM;
                 _navService = navService;
+                _petsVM.PropertyChanged += _petsVM_PropertyChanged;
+            }
+
+            private void _petsVM_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+            {
+                if (e.PropertyName == nameof(PetsViewModel.SelectedPet))
+                {
+                    OnCanExecutedChange();
+                }
+            }
+
+            public override bool CanExecute(object? parameter)
+            {
+                return (_petsVM.SelectedPet != null) && (_petsVM.SelectedPet.IsNull() == false) && base.CanExecute(parameter);
             }
             public override void Execute(object? parameter)
             {
                 PetViewModel petVM = _petsVM.SelectedPet;
-                if (petVM is null || petVM.IsNull() == true)
-                {
-                    MessageBox.Show("Invalid pet selected", "PawPatientManager", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                else _navService.Navigate(petVM);
+                 _navService.Navigate(petVM);
             }
         }
         public class UpdateSelectedOwner : CommandBase

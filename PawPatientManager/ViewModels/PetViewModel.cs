@@ -29,6 +29,7 @@ namespace PawPatientManager.ViewModels
         #region Properties - *RegisterVisitViewModel.cs*
         public string OwnerFullName { get { return $"{_pet.Owner?.Name} { _pet.Owner?.Surname}"; } }
         public string Species { get { return _pet.Species; } set { _pet.Species = value; } }
+        public string Age { get { return ((DateTime.Now - BirthDate).Days/365).ToString(); } }
         #endregion
         #region Constructor
         public PetViewModel(Pet pet)
