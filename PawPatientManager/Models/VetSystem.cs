@@ -48,7 +48,8 @@ namespace PawPatientManager.Models
             _vetCreator = vetCreator;
             _visitCreator = visitCreator;
 
-            //await PopulateMeds();
+            //PopulateMeds();
+            //PopulateOwners();
 
             _owners = new List<Owner>();
             _pets = new List<Pet>();
@@ -304,7 +305,56 @@ namespace PawPatientManager.Models
         }
         private async void PopulateOwners()
         {
+            string[] names = { "John", "Jane", "Alice", "Bob", "Eva", "Michael", "Sophia" };
+            string[] surnames = { "Smith", "Johnson", "Williams", "Jones", "Brown", "Davis", "Miller" };
+            string[] addresses = { "123 Main St", "456 Oak Ave", "789 Elm Blvd", "101 Pine Ln", "202 Cedar Rd" };
 
+            List<Owner> ownersToPopulate = new List<Owner>();
+            Random random = new Random();
+
+            for (int i = 0; i < 20; i++)
+            {
+                Guid id = Guid.NewGuid();
+                string name = names[random.Next(names.Length)];
+                string surname = surnames[random.Next(surnames.Length)];
+                bool gender = random.Next(2) == 0; // Randomly assign gender
+                DateTime birthDate = DateTime.Now.AddYears(-random.Next(30, 60));
+                string address = addresses[random.Next(addresses.Length)];
+                string phoneNumber = $"(+{random.Next(1, 100)}) {random.Next(100000000, 999999999)}";
+                string email = $"{name.ToLower()}.{surname.ToLower()}@example.com";
+                string pesel = GenerateRandomPesel();
+
+                ownersToPopulate.Add(new Owner(id, name, surname, gender, birthDate, null, address, phoneNumber, email, pesel));
+            }
+
+            foreach (Owner owner in ownersToPopulate)
+            {
+                await _ownerCreator.CreateOwner(owner);
+            }
+
+        }
+        public static string GenerateRandomPesel()
+        {
+            Random random = new Random();
+            StringBuilder peselBuilder = new StringBuilder();
+
+            for (int i = 0; i < 10; i++)
+            {
+                peselBuilder.Append(random.Next(10));
+            }
+
+            int[] weights = { 1, 3, 7, 9, 1, 3, 7, 9, 1, 3, 1 };
+            int controlSum = 0;
+
+            for (int i = 0; i < 10; i++)
+            {
+                controlSum += weights[i] * (peselBuilder[i] - '0');
+            }
+
+            int controlDigit = (10 - (controlSum % 10)) % 10;
+            peselBuilder.Append(controlDigit);
+
+            return peselBuilder.ToString();
         }
         #endregion
     }

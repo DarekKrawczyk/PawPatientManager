@@ -24,6 +24,7 @@ namespace PawPatientManager.ViewModels
         private string _name;
         private string _surname;
         private bool _gender;
+        private bool _genderX;
         private DateTime _birthDate;
         private string _adress;
         private string _phoneNumber;
@@ -35,13 +36,14 @@ namespace PawPatientManager.ViewModels
         public Guid ID { get { return _id; } set { _id = value; OnPropertyChanged(nameof(ID)); } }
         public string Name { get { return _name; } set { _name = value; OnPropertyChanged(nameof(Name)); } }
         public string Surname { get { return _surname; } set { _surname = value; OnPropertyChanged(nameof(Surname)); } }
-        public bool Gender { get { return _gender; } set { _gender = value; OnPropertyChanged(nameof(Gender)); } }
+        public bool Gender { get { return _gender; } set { _gender = value; _genderX = !value; OnPropertyChanged(nameof(Gender)); OnPropertyChanged(nameof(GenderX)); } }
+        public bool GenderX { get { return _genderX; } set { _genderX = value; _gender = !value; OnPropertyChanged(nameof(Gender)); OnPropertyChanged(nameof(GenderX)); } }
         public DateTime BirthDate { get { return _birthDate; } set { _birthDate = value; OnPropertyChanged(nameof(BirthDate)); } }
         public string Adress { get { return _adress; } set { _adress = value; OnPropertyChanged(nameof(Adress)); } }
         public string PhoneNumber { get { return _phoneNumber; } set { _phoneNumber = value; OnPropertyChanged(nameof(PhoneNumber)); } }
         public string Email { get { return _email; } set { _email = value; OnPropertyChanged(nameof(Email)); } }
         public string PESEL { get { return _pesel; } set { _pesel = value; OnPropertyChanged(nameof(PESEL)); } }
-        public OwnerViewModel OriginalOwner { get { return _originalOwner; } }
+        public OwnerViewModel OriginalOwner { get { return _originalOwner; } set { _originalOwner = value; } }
         #endregion
         #region Commands
         public ICommand CommandEditOwner { get; }
@@ -56,7 +58,7 @@ namespace PawPatientManager.ViewModels
 
             _name = ownerVM.Name;
             _surname = ownerVM.Surname;
-            _gender = ownerVM.Gender;
+            Gender = ownerVM.Gender;
             _birthDate = ownerVM.BirthDate;
             _adress = ownerVM.Adress;
             _phoneNumber = ownerVM.PhoneNumber;

@@ -25,6 +25,7 @@ namespace PawPatientManager.ViewModels
         public string NameAndSurname { get { return $"{_ownerModel.Name} {_ownerModel.Surname}"; } }
         public string Surname { get { return _ownerModel.Surname; } }
         public bool Gender { get { return _ownerModel.Gender; } }
+        public string GenderName { get { return (_ownerModel.Gender == true)?"Male":"Female"; } }
         public List<Pet> Pets { get { return _ownerModel.Pets; } }
         public DateTime BirthDate { get { return _ownerModel.BirthDate; } }
         public string BirthDateAsString { get { return $"{_ownerModel.BirthDate}"; } }

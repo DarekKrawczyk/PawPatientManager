@@ -5,6 +5,7 @@ using PawPatientManager.Stores;
 using PawPatientManager.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,18 @@ namespace PawPatientManager.Commands
             {
                 _system = vetSystem;
                 _manageOwnersVM = manageOwnersVM;
+                _manageOwnersVM.PropertyChanged += _ownerDeleteVM_PropertyChanged;
+            }
+            private void _ownerDeleteVM_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+            {
+                if (e.PropertyName == nameof(ManageOwnersViewModel.SelectedOwner))
+                {
+                    OnCanExecutedChange();
+                }
+            }
+            public override bool CanExecute(object? parameter)
+            {
+                return (_manageOwnersVM.SelectedOwner != null && !_manageOwnersVM.SelectedOwner.IsNull()) && base.CanExecute(parameter);
             }
 
             public override async Task ExecuteAsync(object parameter)
@@ -51,6 +64,18 @@ namespace PawPatientManager.Commands
             {
                 _manageOwnersVM = manageOwnersVM;
                 _navService = navService;
+                _manageOwnersVM.PropertyChanged += _ownerEditVM_PropertyChanged;
+            }
+            private void _ownerEditVM_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+            {
+                if (e.PropertyName == nameof(ManageOwnersViewModel.SelectedOwner))
+                {
+                    OnCanExecutedChange();
+                }
+            }
+            public override bool CanExecute(object? parameter)
+            {
+                return (_manageOwnersVM.SelectedOwner != null && !_manageOwnersVM.SelectedOwner.IsNull()) && base.CanExecute(parameter);
             }
             public override void Execute(object? parameter)
             {

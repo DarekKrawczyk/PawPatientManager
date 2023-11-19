@@ -1,6 +1,7 @@
 ﻿using PawPatientManager.Models;
 using PawPatientManager.Services;
 using PawPatientManager.Stores;
+using PawPatientManager.Utility;
 using PawPatientManager.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -315,10 +316,34 @@ namespace PawPatientManager.Commands
             {
                 _vetSystem = vetSystem;
                 _ownerRegistrationViewModel = ownerRegistrationViewModel;
+                _ownerRegistrationViewModel.PropertyChanged += _ownerRegistrationViewModel_PropertyChanged;
             }
+
+            private void _ownerRegistrationViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+            {
+                if (e.PropertyName == nameof(EditOwnerViewModel.Name) || e.PropertyName == nameof(EditOwnerViewModel.Surname) ||
+                    e.PropertyName == nameof(EditOwnerViewModel.Adress) || e.PropertyName == nameof(EditOwnerViewModel.BirthDate) ||
+                    e.PropertyName == nameof(EditOwnerViewModel.PhoneNumber) || e.PropertyName == nameof(EditOwnerViewModel.Email) ||
+                    e.PropertyName == nameof(EditOwnerViewModel.PESEL))
+                {
+                    OnCanExecutedChange();
+                }
+            }
+
             public override bool CanExecute(object? parameter)
             {
-                return !string.IsNullOrEmpty(_ownerRegistrationViewModel.Name) && base.CanExecute(parameter);
+                bool nameValid = Globals.IsNameValid(_ownerRegistrationViewModel.Name);
+                bool surnameValid = Globals.IsSurnameValid(_ownerRegistrationViewModel.Surname);
+                bool addressValid = _ownerRegistrationViewModel.Adress != string.Empty;
+                bool phoneNumberValid = Globals.IsPhoneNumberValid(_ownerRegistrationViewModel.PhoneNumber);
+                bool emailValid = Globals.IsEmailValid(_ownerRegistrationViewModel.Email);
+                bool peselValid = Globals.IsPeselValid(_ownerRegistrationViewModel.PESEL);
+                bool areFieldsValid = false;
+                if (nameValid && surnameValid && addressValid && phoneNumberValid && emailValid && peselValid)
+                {
+                    areFieldsValid = true;
+                }
+                return areFieldsValid && !string.IsNullOrEmpty(_ownerRegistrationViewModel.Name) && base.CanExecute(parameter);
             }
 
             //public override void Execute(object? parameter)
@@ -356,11 +381,13 @@ namespace PawPatientManager.Commands
                         _ownerRegistrationViewModel.Email,
                         _ownerRegistrationViewModel.PESEL
                         );
-                    _vetSystem.EditOwner(selectedOwner, newOwner);
+                    await _vetSystem.EditOwner(selectedOwner, newOwner);
+                    _ownerRegistrationViewModel.OriginalOwner = new OwnerViewModel(newOwner);
+                    MessageBox.Show($"Owner {newOwner.Name} {newOwner.Surname} has been edited!","Paw Patient Manager", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch(Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "OwnerRegistratorViewModelCommands.EditOwner class");
+                    MessageBox.Show("Something went wrong while editing owner!", "Paw Patient Manager", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -389,7 +416,10 @@ namespace PawPatientManager.Commands
                  *  *Name* changed. (We dont want to call this function on every property change...). If it is this property, then 
                  *  *OnCanExecutedChange()* function is called which causes *CanExecute()* event ti fire?? not sure.
                  */
-                if (e.PropertyName == nameof(OwnerRegistrationViewModel.Name))
+                if (e.PropertyName == nameof(OwnerRegistrationViewModel.Name) || e.PropertyName == nameof(OwnerRegistrationViewModel.Surname) ||
+                    e.PropertyName == nameof(OwnerRegistrationViewModel.Adress) || e.PropertyName == nameof(OwnerRegistrationViewModel.BirthDate) ||
+                    e.PropertyName == nameof(OwnerRegistrationViewModel.PhoneNumber) || e.PropertyName == nameof(OwnerRegistrationViewModel.Email) ||
+                    e.PropertyName == nameof(OwnerRegistrationViewModel.PESEL))
                 {
                     OnCanExecutedChange();
                 }
@@ -397,7 +427,18 @@ namespace PawPatientManager.Commands
 
             public override bool CanExecute(object? parameter)
             {
-                return !string.IsNullOrEmpty(_ownerRegistrationViewModel.Name) && base.CanExecute(parameter);
+                bool nameValid = Globals.IsNameValid(_ownerRegistrationViewModel.Name);
+                bool surnameValid = Globals.IsSurnameValid(_ownerRegistrationViewModel.Surname);
+                bool addressValid = _ownerRegistrationViewModel.Adress != string.Empty;
+                bool phoneNumberValid = Globals.IsPhoneNumberValid(_ownerRegistrationViewModel.PhoneNumber);
+                bool emailValid = Globals.IsEmailValid(_ownerRegistrationViewModel.Email);
+                bool peselValid = Globals.IsPeselValid(_ownerRegistrationViewModel.PESEL);
+                bool areFieldsValid = false;
+                if(nameValid && surnameValid && addressValid && phoneNumberValid && emailValid && peselValid)
+                {
+                    areFieldsValid = true;
+                }
+                return areFieldsValid && !string.IsNullOrEmpty(_ownerRegistrationViewModel.Name) && base.CanExecute(parameter);
             }
 
             //public override void Execute(object? parameter)

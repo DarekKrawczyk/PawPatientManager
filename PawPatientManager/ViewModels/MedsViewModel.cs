@@ -104,8 +104,8 @@ namespace PawPatientManager.ViewModels
             MedsView = CollectionViewSource.GetDefaultView(_meds);
 
             MedsView.Filter = FilterMeds;
-            MedsView.GroupDescriptions.Add(new PropertyGroupDescription(nameof(MedViewModel.Name)));
-            MedsView.SortDescriptions.Add(new SortDescription(nameof(MedViewModel.Name), ListSortDirection.Ascending));
+            //MedsView.GroupDescriptions.Add(new PropertyGroupDescription(nameof(MedViewModel.Name)));
+            //MedsView.SortDescriptions.Add(new SortDescription(nameof(MedViewModel.Name), ListSortDirection.Ascending));
 
             CommandAddMed = new Commands.MedsCommands.AddMed(_vetSystem, this);
             CommandEditMed = new Commands.MedsCommands.EditMed(_vetSystem, this);

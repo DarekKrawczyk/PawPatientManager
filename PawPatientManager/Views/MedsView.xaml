@@ -73,7 +73,9 @@
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#45A849"/>
+                    <Setter Property="Background" Value="LightSkyBlue"/>
+                    <!-- Light Green -->
+                    <Setter Property="BorderBrush" Value="#45a049"/>
                 </Trigger>
             </Style.Triggers>
         </Style>

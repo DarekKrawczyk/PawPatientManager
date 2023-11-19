@@ -37,6 +37,7 @@ namespace PawPatientManager.ViewModels
         private string _name;
         private string _surname;
         private bool _gender;
+        private bool _genderX;
         private DateTime _birthDate;
         private string _adress;
         private string _phoneNumber;
@@ -53,7 +54,8 @@ namespace PawPatientManager.ViewModels
         public Guid ID { get { return _id; } set { _id = value; OnPropertyChanged(nameof(ID)); } }
         public string Name { get { return _name; } set { _name = value; OnPropertyChanged(nameof(Name)); } }
         public string Surname { get { return _surname; } set { _surname = value; OnPropertyChanged(nameof(Surname)); } }
-        public bool Gender { get { return _gender; } set { _gender = value; OnPropertyChanged(nameof(Gender)); } }
+        public bool Gender { get { return _gender; } set { _gender = value; _genderX = !value; OnPropertyChanged(nameof(Gender)); OnPropertyChanged(nameof(GenderX)); } }
+        public bool GenderX { get { return _genderX; } set { _genderX = value; _gender = !value; OnPropertyChanged(nameof(Gender)); OnPropertyChanged(nameof(GenderX)); } }
         public DateTime BirthDate { get { return _birthDate; } set { _birthDate = value; OnPropertyChanged(nameof(BirthDate)); } }
         public string Adress { get { return _adress; } set { _adress = value; OnPropertyChanged(nameof(Adress)); } }
         public string PhoneNumber { get { return _phoneNumber; } set { _phoneNumber = value; OnPropertyChanged(nameof(PhoneNumber)); } }
@@ -73,6 +75,10 @@ namespace PawPatientManager.ViewModels
         {
             _vetSystem = vetSystem;
             _navManageOwnersService = navManageOwnersService;
+
+            _birthDate = DateTime.Now;
+            Gender = false;
+
             CommandRegisterOwner = new Commands.OwnerRegistratorViewModelCommands.RegisterOwner(_vetSystem, this);
             CommandClearData = new Commands.OwnerRegistratorViewModelCommands.ClearData(this);
             CommandReturn = new NavigateCommand<ManageOwnersViewModel>(_navManageOwnersService);
