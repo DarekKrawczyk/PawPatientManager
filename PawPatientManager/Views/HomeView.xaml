@@ -7,6 +7,18 @@
              xmlns:components="clr-namespace:PawPatientManager.Components"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Color x:Key="GrayColor">#333333</Color>
+            <Color x:Key="LightGreenColor">#8BC34A</Color>
+            <Color x:Key="DarkGreenColor">#4CAF50</Color>
+
+            <SolidColorBrush x:Key="GrayBrush" Color="{StaticResource GrayColor}" />
+            <SolidColorBrush x:Key="LightGreenBrush" Color="{StaticResource LightGreenColor}" />
+            <SolidColorBrush x:Key="DarkGreenBrush" Color="{StaticResource DarkGreenColor}" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
@@ -21,10 +33,9 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="This is home page!"/>
-        <TextBlock Grid.Row="2" Grid.Column="2" Text="Currently logged in user:"/>
-        <TextBlock Grid.Row="2" Grid.Column="3" Text="{Binding Login}"/>
-                
+
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="This is home page!" Foreground="{StaticResource DarkGreenBrush}"/>
+        <TextBlock Grid.Row="2" Grid.Column="2" Text="Currently logged in user:" Foreground="{StaticResource GrayBrush}"/>
+        <TextBlock Grid.Row="2" Grid.Column="3" Text="{Binding Login}" Foreground="{StaticResource LightGreenBrush}"/>
     </Grid>
 </UserControl>

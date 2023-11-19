@@ -4,10 +4,12 @@ using PawPatientManager.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace PawPatientManager.ViewModels
@@ -27,8 +29,13 @@ namespace PawPatientManager.ViewModels
         private string _editDescription;
         private int _editAmount;
         private bool _isLoading;
+        // -- Filters --
+        private string _nameFilter = string.Empty;
+        private string _descriptionFilter = string.Empty;
+        private string _amountFilter = string.Empty;
         #endregion
         #region Properties for XAML
+        public ICollectionView MedsView;
         public IEnumerable<MedViewModel> Meds { get { return _meds; } set { OnPropertyChanged(nameof(Meds)); } }
         public MedViewModel SelectedMed { get { return _selectedMedVM; } 
             set { 
@@ -51,6 +58,35 @@ namespace PawPatientManager.ViewModels
                 OnPropertyChanged(nameof(IsLoading)); 
             } 
         }
+        // -- Filters --
+        public string NameFilter { get { return _nameFilter; } 
+            set 
+            { 
+                _nameFilter = value; 
+                OnPropertyChanged(nameof(NameFilter));
+                MedsView.Refresh();
+            } 
+        }
+        public string DescriptionFilter
+        {
+            get { return _descriptionFilter; }
+            set
+            {
+                _descriptionFilter = value;
+                OnPropertyChanged(nameof(DescriptionFilter));
+                MedsView.Refresh();
+            }
+        }
+        public string AmountFilter
+        {
+            get { return _amountFilter; }
+            set
+            {
+                _amountFilter = value;
+                OnPropertyChanged(nameof(AmountFilter));
+                MedsView.Refresh();
+            }
+        }
         #endregion
         #region Commands
         public ICommand CommandAddMed { get; }
@@ -65,6 +101,11 @@ namespace PawPatientManager.ViewModels
             _vetSystem = vetSystem;
 
             _meds = new ObservableCollection<MedViewModel>();
+            MedsView = CollectionViewSource.GetDefaultView(_meds);
+
+            MedsView.Filter = FilterMeds;
+            MedsView.GroupDescriptions.Add(new PropertyGroupDescription(nameof(MedViewModel.Name)));
+            MedsView.SortDescriptions.Add(new SortDescription(nameof(MedViewModel.Name), ListSortDirection.Ascending));
 
             CommandAddMed = new Commands.MedsCommands.AddMed(_vetSystem, this);
             CommandEditMed = new Commands.MedsCommands.EditMed(_vetSystem, this);
@@ -81,7 +122,15 @@ namespace PawPatientManager.ViewModels
 
             return _vm;
         }
-
+        public bool FilterMeds(object obj)
+        {
+            if(obj is MedViewModel med)
+            {
+                return med.Name.Contains(NameFilter, StringComparison.InvariantCultureIgnoreCase) && med.Description.Contains(DescriptionFilter, StringComparison.InvariantCultureIgnoreCase) &&
+                    med.Amount == ((AmountFilter == string.Empty)?(med.Amount):int.Parse(AmountFilter));
+            }
+            return false;
+        }
         public void ReloadMeds(IEnumerable<Medication> meds)
         {
             _meds.Clear();

@@ -6,7 +6,7 @@
         xmlns:viewModels="clr-namespace:PawPatientManager.ViewModels" 
         xmlns:views="clr-namespace:PawPatientManager.Views" 
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="810" Width="1440">
     <ContentControl Content="{Binding CurrentViewModel}">
         <ContentControl.Resources>
             <DataTemplate DataType="{x:Type viewModels:ManageOwnersViewModel}">

@@ -65,6 +65,10 @@ namespace PawPatientManager.Commands
                     // Then refresh
                     IEnumerable<Medication> meds = await _vetSystem.GetAllMedicationsAsync();
                     _medVM.ReloadMeds(meds);
+                    _medVM.AddName = string.Empty;
+                    _medVM.AddDescription = string.Empty;
+                    _medVM.AddAmount = 0;
+                    MessageBox.Show($"Medication {newMed.Name} added successfully!", "Paw Patient Manager", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch(Exception ex)
                 {
@@ -103,6 +107,18 @@ namespace PawPatientManager.Commands
             {
                 _system = vetSystem;
                 _medVM = medVM;
+                _medVM.PropertyChanged += _medEditVM_PropertyChanged;
+            }
+            private void _medEditVM_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+            {
+                if (e.PropertyName == nameof(MedsViewModel.EditAmount) || e.PropertyName == nameof(MedsViewModel.EditDescription) || e.PropertyName == nameof(MedsViewModel.EditName))
+                {
+                    OnCanExecutedChange();
+                }
+            }
+            public override bool CanExecute(object? parameter)
+            {
+                return (_medVM.EditAmount > -1) && !string.IsNullOrEmpty(_medVM.EditDescription) && !string.IsNullOrEmpty(_medVM.EditName) && base.CanExecute(parameter);
             }
 
             public override async Task ExecuteAsync(object parameter)
