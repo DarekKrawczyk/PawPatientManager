@@ -49,6 +49,8 @@ namespace PawPatientManager.Commands
                     // Then refresh data
                     IEnumerable<Owner> meds = await _system.GetAllOwnersAsync();
                     _manageOwnersVM.ReloadOwners(meds);
+
+                    MessageBox.Show("Owner deleted", "PawPatientManager", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {

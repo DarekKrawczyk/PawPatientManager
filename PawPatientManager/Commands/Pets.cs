@@ -348,44 +348,6 @@ namespace PawPatientManager.Commands
                 //_editPetVM.PropertyChanged += _ownerRegistrationViewModel_PropertyChanged;
             }
 
-            //THIS COMMENTED CODE IS FOR CHECKING VIEW'S FIELDS 
-
-            //private void _ownerRegistrationViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-            //{
-            //    if (e.PropertyName == nameof(OwnerRegistrationViewModel.Name))
-            //    {
-            //        OnCanExecutedChange();
-            //    }
-            //}
-            //public override bool CanExecute(object? parameter)
-            //{
-            //    return !string.IsNullOrEmpty(_editPetVM.Name) && base.CanExecute(parameter);
-            //}
-
-            //public override void Execute(object? parameter)
-            //{
-            //    if(_editPetVM == null || _editPetVM.Owners == null)
-            //    {
-            //        MessageBox.Show("Please select owner of the pet!", "PawPatientManager", MessageBoxButton.OK);
-            //    }
-            //    else
-            //    {
-            //        Pet newPet = new Pet(
-            //            _editPetVM.ID,
-            //            _editPetVM.Name,
-            //            _editPetVM.Gender,
-            //            new Owner(_editPetVM.SelectedOwner),
-            //            _editPetVM.BirthDate,
-            //            null,
-            //            null,
-            //            _editPetVM.Spieces,
-            //            _editPetVM.Race,
-            //            _editPetVM.MicrochipNumber
-            //            );
-            //        _vetSystem.AddPetToOwner(newPet);
-            //    }
-            //}
-
             public override async Task ExecuteAsync(object parameter)
             {
                 if (_editPetVM == null || _editPetVM.Owners == null)
@@ -408,6 +370,7 @@ namespace PawPatientManager.Commands
                         _editPetVM.MicrochipNumber
                         );
                     await _vetSystem.AssignPetToOwner(owner, newPet);
+                    MessageBox.Show("Pet registered", "PawPatientManager", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
         }
@@ -443,6 +406,7 @@ namespace PawPatientManager.Commands
                         );
 
                     await _vetSystem.EditPet(editedPet);
+                    MessageBox.Show("Pet edited", "PawPatientManager", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
@@ -487,11 +451,11 @@ namespace PawPatientManager.Commands
 
                     IEnumerable<Pet> pets = await _vetSystem.GetAllPetsFromAllOwners();
                     _petsViewModel.ReloadPets(pets);
-                    MessageBox.Show($"Pet: {petToDelete.Name}, of {petsOwner.Name} {petsOwner.Surname} owner, has been deleted from database!", "Paw Patient Manager", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show($"Pet deleted", "PawPatientManager", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"There was an error while deleting pet: {_petsViewModel.SelectedPet.Name}","Paw Patient Manager", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"There was an error while deleting pet: {_petsViewModel.SelectedPet.Name}","PawPatientManager", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }

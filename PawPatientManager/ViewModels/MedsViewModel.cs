@@ -43,6 +43,7 @@ namespace PawPatientManager.ViewModels
                 EditName = _selectedMedVM?.Name;
                 EditDescription = _selectedMedVM?.Description;
                 EditAmount = (_selectedMedVM != null)? _selectedMedVM.Amount:0;
+                OnPropertyChanged(nameof(SelectedMed));
             } 
         }
         public string AddName { get { return _addName; } set { _addName = value; OnPropertyChanged(nameof(AddName)); } }

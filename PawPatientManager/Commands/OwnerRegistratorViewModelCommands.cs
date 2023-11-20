@@ -49,8 +49,19 @@ namespace PawPatientManager.Commands
             {
                 _vetSystem = vetSystem;
                 _medVM = medVM;
+                _medVM.PropertyChanged += _medEditVM_PropertyChanged;
             }
-
+            private void _medEditVM_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+            {
+                if (e.PropertyName == nameof(MedsViewModel.AddAmount) || e.PropertyName == nameof(MedsViewModel.AddDescription) || e.PropertyName == nameof(MedsViewModel.AddName))
+                {
+                    OnCanExecutedChange();
+                }
+            }
+            public override bool CanExecute(object? parameter)
+            {
+                return !string.IsNullOrEmpty(_medVM.AddDescription) && !string.IsNullOrEmpty(_medVM.AddName) && base.CanExecute(parameter);
+            }
             public override async Task ExecuteAsync(object parameter)
             {
                 Medication newMed = new Medication(new Guid(),
@@ -134,6 +145,8 @@ namespace PawPatientManager.Commands
                     // Then refresh data
                     IEnumerable<Medication> meds = await _system.GetAllMedicationsAsync();
                     _medVM.ReloadMeds(meds);
+
+                    MessageBox.Show($"Medication: {editedMed.Name} edited","PawPatientManager",MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
@@ -149,8 +162,21 @@ namespace PawPatientManager.Commands
             {
                 _system = vetSystem;
                 _medVM = medVM;
+                _medVM.PropertyChanged += _medVM_PropertyChanged;
             }
 
+            private void _medVM_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+            {
+                if (e.PropertyName == nameof(MedsViewModel.SelectedMed))
+                {
+                    OnCanExecutedChange();
+                }
+            }
+
+            public override bool CanExecute(object? parameter)
+            {
+                return (_medVM.SelectedMed != null) && (!_medVM.SelectedMed.IsNull()) && base.CanExecute(parameter);
+            }
             public override async Task ExecuteAsync(object parameter)
             {
                 try
@@ -162,6 +188,8 @@ namespace PawPatientManager.Commands
                     // Then refresh data
                     IEnumerable<Medication> meds = await _system.GetAllMedicationsAsync();
                     _medVM.ReloadMeds(meds);
+
+                    MessageBox.Show("Medication deleted", "PawPatientManager", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
