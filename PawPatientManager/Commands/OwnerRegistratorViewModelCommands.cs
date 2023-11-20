@@ -180,19 +180,21 @@ namespace PawPatientManager.Commands
             {
                 _visitsVM = visitsVM;
                 _vetSystem = vetSystem;
+                _visitsVM.PropertyChanged += _visitsVM_PropertyChanged1;
             }
-            //public override void Execute(object? parameter)
-            //{
-            //    bool result = false;
-            //    VisitViewModel visitVM = _visitsVM.SelectedVisit;
-            //    if (visitVM != null)
-            //    {
-            //        result = _visitsVM.DeleteVisit(visitVM);
-            //    }
-            //    string text = (result == true) ? "deleted succesfully!" : "not deleted!";
-            //    MessageBox.Show($"Visit {text}", "PawPatientManager", MessageBoxButton.OK);
-            //}
 
+            private void _visitsVM_PropertyChanged1(object? sender, PropertyChangedEventArgs e)
+            {
+                if (e.PropertyName == nameof(VisitsViewModel.SelectedVisit))
+                {
+                    OnCanExecutedChange();
+                }
+            }
+
+            public override bool CanExecute(object? parameter)
+            {
+                return (_visitsVM.SelectedVisit != null) && (!_visitsVM.SelectedVisit.IsNull()) && base.CanExecute(parameter);
+            }
             public override async Task ExecuteAsync(object parameter)
             {
                 try
@@ -204,6 +206,7 @@ namespace PawPatientManager.Commands
                     // Then refresh data
                     IEnumerable<Visit> meds = await _vetSystem.GetAllVisitsAsync();
                     _visitsVM.ReloadVisits(meds);
+                    MessageBox.Show($"Visit with {editedMed.Pet.Name} and {editedMed.Vet.Name} vet, has been deleted!", "PawPatientManager",MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
@@ -273,6 +276,20 @@ namespace PawPatientManager.Commands
             {
                 _visitsVM = visitsVM;
                 _navService = navService;
+                _visitsVM.PropertyChanged += _visitsVM_PropertyChanged;
+            }
+
+            private void _visitsVM_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+            {
+                if (e.PropertyName == nameof(VisitsViewModel.SelectedVisit))
+                {
+                    OnCanExecutedChange();
+                }
+            }
+
+            public override bool CanExecute(object? parameter)
+            {
+                return (_visitsVM.SelectedVisit != null) && (!_visitsVM.SelectedVisit.IsNull()) && base.CanExecute(parameter);
             }
             public override void Execute(object? parameter)
             {

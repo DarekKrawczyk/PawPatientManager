@@ -80,20 +80,24 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-    <Grid>
+    <Grid Background="LightGray">
         <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
 
+        <TextBlock Grid.Column="1" FontSize="35" Grid.Row="1" Text="Medication storage" Style="{StaticResource TextStyle}"/>
         <!-- Filters Section -->
-        <Grid Grid.Row="0" Grid.Column="1">
+        <Grid Grid.Row="2" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -115,7 +119,7 @@
                 <TextBlock Text="Name:" Grid.Column="1" Style="{StaticResource TextStyle}"/>
                 <TextBox Margin="5" Grid.Column="2" Text="{Binding NameFilter, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource RoundedTextBoxStyle}"/>
 
-                <TextBlock Text="Name:" Grid.Column="3" Style="{StaticResource TextStyle}"/>
+                <TextBlock Text="Description:" Grid.Column="3" Style="{StaticResource TextStyle}"/>
                 <TextBox Margin="5" Grid.Column="4" Text="{Binding DescriptionFilter, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource RoundedTextBoxStyle}"/>
                                 
                 <TextBlock Text="Amount:" Grid.Column="5" Style="{StaticResource TextStyle}"/>
@@ -124,7 +128,7 @@
             </Grid>
         </Grid>
 
-        <Grid Grid.Row="1" Grid.Column="1">
+        <Grid Grid.Row="3" Grid.Column="1">
             <loadingSpinnerControl:LoadingSpinner Thickness="5" Diameter="100" Color="Gray" IsLoading="{Binding IsLoading}"/>
             <!-- ListView Section -->
             <ListView Name="MedsList" ItemsSource="{Binding Meds}"
@@ -165,7 +169,7 @@
         </Grid>
 
         <!-- Drug Section -->
-        <Grid Grid.Row="2" Grid.Column="1" Background="LightGray">
+        <Grid Grid.Row="4" Grid.Column="1" Background="LightGray">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>

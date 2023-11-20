@@ -20,7 +20,7 @@
         <Style x:Key="RoundedTextBoxStyle" TargetType="TextBox">
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Height" Value="40"/>
-            <Setter Property="Width" Value="100"/>
+            <Setter Property="Width" Value="400"/>
             <Setter Property="BorderBrush" Value="#ccc"/>
             <Setter Property="Background" Value="DarkGray"/>
             <Setter Property="Foreground" Value="Black"/>
@@ -113,43 +113,57 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Text="Owner: " Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource TextStyle}"/>
-            <ComboBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding Owners}" SelectedItem="{Binding SelectedOwner}">
+            <ComboBox Grid.Row="1" Grid.Column="2" Width="400" ItemsSource="{Binding Owners}" SelectedItem="{Binding SelectedOwner}" 
+          BorderBrush="#ccc" BorderThickness="1" Background="White" Foreground="Black" 
+          HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,5,0,5">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto"/>
                                 <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto"/>
                                 <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
                             </Grid.RowDefinitions>
 
-                            <TextBlock Text="Name: " Grid.Row="0" Grid.Column="0"/>
-                            <TextBlock Text="{Binding Name}" Grid.Row="0" Grid.Column="1"/>
+                            <TextBlock Text="Name: " Grid.Row="0" Grid.Column="0" Margin="5"/>
+                            <TextBlock Text="{Binding Name}" Grid.Row="0" Grid.Column="1" Margin="5"/>
 
-                            <TextBlock Text="Surname: " Grid.Row="1" Grid.Column="0"/>
-                            <TextBlock Text="{Binding Surname}" Grid.Row="1" Grid.Column="1"/>
+                            <TextBlock Text="Surname: " Grid.Row="1" Grid.Column="0" Margin="5"/>
+                            <TextBlock Text="{Binding Surname}" Grid.Row="1" Grid.Column="1" Margin="5"/>
 
-                            <TextBlock Text="Birth date: " Grid.Row="0" Grid.Column="2"/>
-                            <TextBlock Text="{Binding BirthDateAsString}" Grid.Row="0" Grid.Column="3"/>
+                            <TextBlock Text="Birth date: " Grid.Row="2" Grid.Column="0" Margin="5"/>
+                            <TextBlock Text="{Binding BirthDateAsString}" Grid.Row="2" Grid.Column="1" Margin="5"/>
 
-                            <TextBlock Text="Adress: " Grid.Row="1" Grid.Column="2"/>
-                            <TextBlock Text="{Binding Adress}" Grid.Row="1" Grid.Column="3"/>
+                            <TextBlock Text="Adress: " Grid.Row="3" Grid.Column="0" Margin="5"/>
+                            <TextBlock Text="{Binding Adress}" Grid.Row="3" Grid.Column="1" Margin="5"/>
 
-                            <TextBlock Text="Phone number: " Grid.Row="0" Grid.Column="4"/>
-                            <TextBlock Text="{Binding PhoneNumber}" Grid.Row="0" Grid.Column="5"/>
+                            <TextBlock Text="Phone number: " Grid.Row="4" Grid.Column="0" Margin="5"/>
+                            <TextBlock Text="{Binding PhoneNumber}" Grid.Row="4" Grid.Column="1" Margin="5"/>
 
-                            <TextBlock Text="E-mail: " Grid.Row="1" Grid.Column="4"/>
-                            <TextBlock Text="{Binding Email}" Grid.Row="1" Grid.Column="5"/>
+                            <TextBlock Text="E-mail: " Grid.Row="5" Grid.Column="0" Margin="5"/>
+                            <TextBlock Text="{Binding Email}" Grid.Row="5" Grid.Column="1" Margin="5"/>
                         </Grid>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
+                <ComboBox.Style>
+                    <Style TargetType="ComboBox">
+                        <Setter Property="FontSize" Value="14"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#eee"/>
+                                <Setter Property="BorderBrush" Value="#999"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ComboBox.Style>
             </ComboBox>
 
             <TextBlock Text="Name: " Grid.Row="2" Grid.Column="1" Style="{StaticResource TextStyle}"/>

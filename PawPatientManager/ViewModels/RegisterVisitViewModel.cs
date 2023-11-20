@@ -32,9 +32,9 @@ namespace PawPatientManager.ViewModels
         public IEnumerable<VetViewModel> Vets { get { return _vets; } set { OnPropertyChanged(nameof(Vets)); } }
         public IEnumerable<PetViewModel> Pets { get { return _pets; } set { OnPropertyChanged(nameof(Pets)); } }
         public IEnumerable<HourViewModel> Hours { get { return HourViewModel.GenerateHours(); } }
-        public PetViewModel SelectedPet { get { return _selectedPetVM; } set { _selectedPetVM = value; } }
-        public HourViewModel SelectedHour { get { return _selectedHourVM; } set { _selectedHourVM = value; } }
-        public VetViewModel SelectedVet { get { return _selectedVetVM; } set { _selectedVetVM = value; } }
+        public PetViewModel SelectedPet { get { return _selectedPetVM; } set { _selectedPetVM = value; OnPropertyChanged(nameof(SelectedPet)); } }
+        public HourViewModel SelectedHour { get { return _selectedHourVM; } set { _selectedHourVM = value; OnPropertyChanged(nameof(SelectedHour)); } }
+        public VetViewModel SelectedVet { get { return _selectedVetVM; } set { _selectedVetVM = value; OnPropertyChanged(nameof(SelectedVet)); } }
         public DateTime SelectedDate { get { return _selectedDate; } set { _selectedDate = value; OnPropertyChanged(nameof(SelectedDate)); } }
         #endregion
         #region Commands

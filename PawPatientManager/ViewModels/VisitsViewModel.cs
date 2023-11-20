@@ -1,12 +1,16 @@
 ﻿using PawPatientManager.Commands;
 using PawPatientManager.Models;
 using PawPatientManager.Services;
+using PawPatientManager.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace PawPatientManager.ViewModels
@@ -17,6 +21,10 @@ namespace PawPatientManager.ViewModels
         private VetSystem _vetSystem;
         private INavigationService<RegisterVisitViewModel> _navRegisterVisitVMService;
         private LayoutNavigationServiceParam<VisitViewModel, EditVisitViewModel> _navEditVisitService;
+        // -- Filters --
+        private string _petFilter = string.Empty;
+        private string _ownerFilter = string.Empty;
+        private string _vetFilter = string.Empty;
         #endregion
         #region Fields for XAML
         private VisitViewModel _selectedVisitViewModel;
@@ -24,7 +32,12 @@ namespace PawPatientManager.ViewModels
         #endregion
         #region Properties for XAML
         public IEnumerable<VisitViewModel> Visits { get { return _visits; } set { OnPropertyChanged(nameof(Visits)); } }
-        public VisitViewModel SelectedVisit { get { return _selectedVisitViewModel; } set { _selectedVisitViewModel = value; } }
+        public VisitViewModel SelectedVisit { get { return _selectedVisitViewModel; } set { _selectedVisitViewModel = value; OnPropertyChanged(nameof(SelectedVisit)); } }
+        // -- Filters --
+        public ICollectionView VisitsView;
+        public string PetFilter { get { return _petFilter; } set { _petFilter = value; OnPropertyChanged(nameof(PetFilter)); VisitsView.Refresh(); } }
+        public string VetFilter { get { return _vetFilter ; } set { _vetFilter = value; OnPropertyChanged(nameof(VetFilter)); VisitsView.Refresh(); } }
+        public string OwnerFilter { get { return _ownerFilter; } set { _ownerFilter = value; OnPropertyChanged(nameof(OwnerFilter)); VisitsView.Refresh(); } }
         #endregion
         #region Commands
         public ICommand CommandRegisterVisit { get; }
@@ -42,6 +55,9 @@ namespace PawPatientManager.ViewModels
             _navEditVisitService = navEditVisitService;
 
             _visits = new ObservableCollection<VisitViewModel>();
+            VisitsView = CollectionViewSource.GetDefaultView(_visits);
+
+            VisitsView.Filter = FilterVisits;
 
             CommandLoadVisits = new Commands.VisitsCommandsCombobox.LoadVisits(_vetSystem, this);
             CommandRegisterVisit = new NavigateCommand<RegisterVisitViewModel>(_navRegisterVisitVMService);
@@ -58,6 +74,17 @@ namespace PawPatientManager.ViewModels
             vm.CommandLoadVisits.Execute(null);
 
             return vm;
+        }
+
+        public bool FilterVisits(object obj)
+        {
+            if (obj is VisitViewModel visit)
+            {
+                return visit.VetFullName.Contains(VetFilter, StringComparison.InvariantCultureIgnoreCase) &&
+                    visit.PetFullName.Contains(PetFilter, StringComparison.InvariantCultureIgnoreCase) &&
+                    visit.OwnerFullName.Contains(OwnerFilter, StringComparison.InvariantCultureIgnoreCase);
+            }
+            return false;
         }
 
         public void ReloadVisits(IEnumerable<Visit> visits)

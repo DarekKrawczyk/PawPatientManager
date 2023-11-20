@@ -13,6 +13,7 @@ using static PawPatientManager.Commands.ManageOwnersViewModelCommands;
 using System.Windows.Input;
 using static PawPatientManager.ViewModels.RegisterVisitViewModel;
 using PawPatientManager.Utility;
+using Accessibility;
 
 namespace PawPatientManager.Commands
 {
@@ -72,20 +73,22 @@ namespace PawPatientManager.Commands
             {
                 _vetSystem = vetSystem;
                 _vm = vm;
+                _vm.PropertyChanged += _vm_PropertyChanged1;
             }
 
-            //public override void Execute(object? parameter)
-            //{
-            //    DateTime date = Globals.GetVisitDateTime(_vm.SelectedDate, _vm.SelectedHour);
-            //    Visit editedVisit = new Visit(
-            //        new Guid(),
-            //        _vm.SelectedPet.Pet,
-            //        _vm.SelectedVet.Vet,
-            //        date,
-            //        null
-            //        );
-            //    _vetSystem.EditVisit(editedVisit);
-            //}
+            private void _vm_PropertyChanged1(object? sender, PropertyChangedEventArgs e)
+            {
+                if (e.PropertyName == nameof(EditVisitViewModel.SelectedVet) || e.PropertyName == nameof(EditVisitViewModel.SelectedPet) ||
+                    e.PropertyName == nameof(EditVisitViewModel.SelectedHour) || e.PropertyName == nameof(EditVisitViewModel.SelectedDate))
+                {
+                    OnCanExecutedChange();
+                }
+            }
+
+            public override bool CanExecute(object? parameter)
+            {
+                return (_vm.SelectedDate >= DateTime.Now) && (_vm.SelectedHour != null) && (_vm.SelectedPet != null) && (_vm.SelectedVet != null) && base.CanExecute(parameter);
+            }
 
             public override async Task ExecuteAsync(object parameter)
             {
@@ -99,7 +102,8 @@ namespace PawPatientManager.Commands
                     date,
                     null
                     );
-                _vetSystem.EditVisit(_vm.SelectedVisit.Visit, editedVisit, newVetID, newPetID);
+                await _vetSystem.EditVisit(_vm.SelectedVisit.Visit, editedVisit, newVetID, newPetID);
+                MessageBox.Show($"Visit has been updated!","PawPatientManager",MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
     }
@@ -130,21 +134,36 @@ namespace PawPatientManager.Commands
         }
         public class RegisterVisit : AsyncCommandBase
         {
-            private static uint _idIterator;
             private VetSystem _vetSystem;
             private RegisterVisitViewModel _vm;
             public RegisterVisit(VetSystem vetSystem, RegisterVisitViewModel vm)
             {
                 _vetSystem = vetSystem;
                 _vm = vm;
+                _vm.PropertyChanged += _vm_PropertyChanged;
             }
 
+            private void _vm_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+            {
+                if (e.PropertyName == nameof(RegisterVisitViewModel.SelectedVet) || e.PropertyName == nameof(RegisterVisitViewModel.SelectedPet) ||
+                    e.PropertyName == nameof(RegisterVisitViewModel.SelectedHour) || e.PropertyName == nameof(RegisterVisitViewModel.SelectedDate))
+                {
+                    OnCanExecutedChange();
+                }
+            }
+
+
+            public override bool CanExecute(object? parameter)
+            {
+                return (_vm.SelectedDate >= DateTime.Now) && (_vm.SelectedHour != null) && (_vm.SelectedPet != null) && (_vm.SelectedVet != null) && base.CanExecute(parameter);
+            }
             public override async Task ExecuteAsync(object parameter)
             {
                 try
                 {
                     DateTime date = Globals.GetVisitDateTime(_vm.SelectedDate, _vm.SelectedHour);
                     await _vetSystem.AddVisit(_vm.SelectedVet.Vet, _vm.SelectedPet.Pet, date);
+                    MessageBox.Show($"Visit for {_vm.SelectedPet.Name} with {_vm.SelectedVet.Name} registered at {date}","PawPatientManager",MessageBoxButton.OK, MessageBoxImage.Information);
                 } catch(Exception ex)
                 {
                     MessageBox.Show(ex.Message,"RegisterVisitsCommands.RegisterVisit");

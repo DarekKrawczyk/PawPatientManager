@@ -5,99 +5,88 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PawPatientManager.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+             d:DesignHeight="810" d:DesignWidth="1440">
+    <UserControl.Resources>
+
+        <!-- Styles -->
+        <Style x:Key="TextStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="Green"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="5,5,0,5"/>
+        </Style>
+
+        <Style x:Key="RoundedTextBoxStyle" TargetType="TextBox">
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="BorderBrush" Value="#ccc"/>
+            <Setter Property="Background" Value="DarkGray"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                            <ScrollViewer x:Name="PART_ContentHost" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#eee"/>
+                    <Setter Property="BorderBrush" Value="#999"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="NavigationButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="10,0,10,0"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="LightSkyBlue"/>
+                    <!-- Light Green -->
+                    <Setter Property="BorderBrush" Value="#45a049"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <Grid Background="LightGray">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="100" />
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
-        </Grid.ColumnDefinitions>
-        <TextBlock Text="MODIFIED" Grid.Row="1" Grid.Column="1"/>
-        <Grid Grid.Row="2" Grid.Column="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-            <TextBlock Text="Vet:" Grid.Row="0" Grid.Column="0"/>
-            <Grid Grid.Row="1" Grid.Column="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
-
-                <TextBlock Text="Name:" Grid.Row="0" Grid.Column="0"/>
-                <TextBlock Text="{Binding PetName}" Grid.Row="0" Grid.Column="1"/>
-
-                <TextBlock Text="Owner:" Grid.Row="1" Grid.Column="0"/>
-                <TextBlock Text="{Binding OwnerFullName}" Grid.Row="1" Grid.Column="1"/>
-
-                <TextBlock Text="Species:" Grid.Row="0" Grid.Column="2"/>
-                <TextBlock Text="{Binding Species}" Grid.Row="0" Grid.Column="3"/>
-
-                <TextBlock Text="Race:" Grid.Row="1" Grid.Column="2"/>
-                <TextBlock Text="{Binding Race}" Grid.Row="1" Grid.Column="3"/>
-
-                <TextBlock Text="Gender:" Grid.Row="0" Grid.Column="4"/>
-                <TextBlock Text="{Binding Gender}" Grid.Row="0" Grid.Column="5"/>
-
-                <TextBlock Text="Micochip number:" Grid.Row="1" Grid.Column="4"/>
-                <TextBlock Text="{Binding MicrochipNumber}" Grid.Row="1" Grid.Column="5"/>
-
-            </Grid>
-            
-            <TextBlock Text="Pet:" Grid.Row="1" Grid.Column="0"/>
-            <Grid Grid.Row="0" Grid.Column="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
-
-                <TextBlock Text="Name:"  Grid.Column="0" Grid.Row="0"/>
-                <TextBlock Text="{Binding VetName}" Grid.Row="0" Grid.Column="1"/>
-
-                <TextBlock Text="Surname:" Grid.Row="1" Grid.Column="0"/>
-                <TextBlock Text="{Binding VetSurname}" Grid.Row="1" Grid.Column="1"/>
-            </Grid>
-
-            <TextBlock Text="Date:" Grid.Row="2" Grid.Column="0"/>
-            <TextBlock Text="Hour:" Grid.Row="3" Grid.Column="0"/>
-        </Grid>
-
-        <TextBlock Text="NEW CONFIG" Grid.Row="1" Grid.Column="2"/>
-        <Grid Grid.Row="2" Grid.Column="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
+        <Grid Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
@@ -107,92 +96,235 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <TextBlock Text="Vet:" Grid.Row="1" Grid.Column="1"/>
-            <TextBlock Text="Pet:" Grid.Row="2" Grid.Column="1"/>
-            <TextBlock Text="Date:" Grid.Row="3" Grid.Column="1"/>
-            <TextBlock Text="Hour:" Grid.Row="4" Grid.Column="1"/>
-            <DatePicker SelectedDate="{Binding SelectedDate}" Grid.Column="2" Grid.Row="3" />
-            <ComboBox Grid.Row="4" Grid.Column="2" ItemsSource="{Binding Hours}" SelectedItem="{Binding SelectedHour}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Hour}"/>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-            <ComboBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding Vets}" SelectedItem="{Binding SelectedVet}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="auto"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
-                            </Grid.RowDefinitions>
-
-                            <TextBlock Text="Name:"  Grid.Column="0" Grid.Row="0"/>
-                            <TextBlock Text="{Binding Name}" Grid.Row="0" Grid.Column="1"/>
-
-                            <TextBlock Text="Surname:" Grid.Row="1" Grid.Column="0"/>
-                            <TextBlock Text="{Binding Surname}" Grid.Row="1" Grid.Column="1"/>
-                        </Grid>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-            <ComboBox Grid.Row="2" Grid.Column="2" ItemsSource="{Binding Pets}" SelectedItem="{Binding SelectedPet}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="auto"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
-                            </Grid.RowDefinitions>
-
-                            <TextBlock Text="Name:" Grid.Row="0" Grid.Column="0"/>
-                            <TextBlock Text="{Binding Name}" Grid.Row="0" Grid.Column="1"/>
-
-                            <TextBlock Text="Owner:" Grid.Row="1" Grid.Column="0"/>
-                            <TextBlock Text="{Binding OwnerFullName}" Grid.Row="1" Grid.Column="1"/>
-
-                            <TextBlock Text="Species:" Grid.Row="0" Grid.Column="2"/>
-                            <TextBlock Text="{Binding Species}" Grid.Row="0" Grid.Column="3"/>
-
-                            <TextBlock Text="Race:" Grid.Row="1" Grid.Column="2"/>
-                            <TextBlock Text="{Binding Race}" Grid.Row="1" Grid.Column="3"/>
-
-                            <TextBlock Text="Gender:" Grid.Row="0" Grid.Column="4"/>
-                            <TextBlock Text="{Binding Gender}" Grid.Row="0" Grid.Column="5"/>
-
-                            <TextBlock Text="Micochip number:" Grid.Row="1" Grid.Column="4"/>
-                            <TextBlock Text="{Binding MicrochipNumber}" Grid.Row="1" Grid.Column="5"/>
-
-                        </Grid>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-        </Grid>
-        <Grid Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="1" Content="Update visit" Command="{Binding CommandUpdateVisit}"/>
-            <Button Grid.Column="2" Content="Return" Command="{Binding CommandReturn}"/>
+            <TextBlock Text="Current configuration" Grid.Row="1" Grid.Column="1" Style="{StaticResource TextStyle}"/>
+            <Grid Grid.Row="2" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Vet:" Grid.Row="0" Grid.Column="0" Style="{StaticResource TextStyle}"/>
+                <Grid Grid.Row="1" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Name:" Grid.Row="0" Grid.Column="0" Margin="5"/>
+                    <TextBlock Text="{Binding PetName}" Grid.Row="0" Grid.Column="1" Margin="5"/>
+
+                    <TextBlock Text="Owner:" Grid.Row="1" Grid.Column="0" Margin="5"/>
+                    <TextBlock Text="{Binding OwnerFullName}" Grid.Row="1" Grid.Column="1" Margin="5"/>
+
+                    <TextBlock Text="Species:" Grid.Row="2" Grid.Column="0" Margin="5"/>
+                    <TextBlock Text="{Binding Species}" Grid.Row="2" Grid.Column="1" Margin="5"/>
+
+                    <TextBlock Text="Race:" Grid.Row="3" Grid.Column="0" Margin="5"/>
+                    <TextBlock Text="{Binding Race}" Grid.Row="3" Grid.Column="1" Margin="5"/>
+
+                    <TextBlock Text="Gender:" Grid.Row="4" Grid.Column="0" Margin="5"/>
+                    <TextBlock Text="{Binding Gender}" Grid.Row="4" Grid.Column="1" Margin="5"/>
+
+                    <TextBlock Text="Micochip number:" Grid.Row="5" Grid.Column="0" Margin="5"/>
+                    <TextBlock Text="{Binding MicrochipNumber}" Grid.Row="5" Grid.Column="1" Margin="5"/>
+
+                </Grid>
+
+                <TextBlock Text="Pet:" Grid.Row="1" Grid.Column="0" Style="{StaticResource TextStyle}"/>
+                <Grid Grid.Row="0" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Name:" Grid.Row="0" Grid.Column="0" Margin="5"/>
+                    <TextBlock Text="{Binding VetName}" Grid.Row="0" Grid.Column="1" Margin="5"/>
+
+                    <TextBlock Text="Surname:" Grid.Row="1" Grid.Column="0" Margin="5"/>
+                    <TextBlock Text="{Binding VetSurname}" Grid.Row="1" Grid.Column="1" Margin="5"/>
+                </Grid>
+
+                <TextBlock Text="Date:" Grid.Row="2" Grid.Column="0" Style="{StaticResource TextStyle}"/>
+                <TextBlock Text="{Binding DateString}" Grid.Row="2" Grid.Column="1" Margin="5"/>
+                
+                <TextBlock Text="Hour:" Grid.Row="3" Grid.Column="0" Style="{StaticResource TextStyle}"/>
+                <TextBlock Text="{Binding HourString}" Grid.Row="3" Grid.Column="1" Margin="5"/>
+            </Grid>
+
+            <TextBlock Text="Enter new configuration" Grid.Row="3" Grid.Column="1" Style="{StaticResource TextStyle}"/>
+            <Grid Grid.Row="4" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Vet:" Grid.Row="1" Grid.Column="1" Style="{StaticResource TextStyle}"/>
+                <TextBlock Text="Pet:" Grid.Row="2" Grid.Column="1" Style="{StaticResource TextStyle}"/>
+                <TextBlock Text="Date:" Grid.Row="3" Grid.Column="1" Style="{StaticResource TextStyle}"/>
+                <TextBlock Text="Hour:" Grid.Row="4" Grid.Column="1" Style="{StaticResource TextStyle}"/>
+                <DatePicker SelectedDate="{Binding SelectedDate}" Grid.Column="2" Grid.Row="3"
+BorderBrush="#ccc" BorderThickness="1" Background="White" Foreground="Black" VerticalAlignment="Center" Margin="0,5,0,5">
+                </DatePicker>
+                <ComboBox Grid.Row="4" Grid.Column="2" Width="300" ItemsSource="{Binding Hours}" SelectedItem="{Binding SelectedHour}" 
+          BorderBrush="#ccc" BorderThickness="1" Background="White" Foreground="Black" 
+          HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,5,0,5">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Hour}" Margin="5"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                    <ComboBox.Style>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="FontSize" Value="14"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#eee"/>
+                                    <Setter Property="BorderBrush" Value="#999"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ComboBox.Style>
+                </ComboBox>
+
+                <ComboBox Grid.Row="1" Grid.Column="2" Width="300" ItemsSource="{Binding Vets}" SelectedItem="{Binding SelectedVet}" 
+          BorderBrush="#ccc" BorderThickness="1" Background="White" Foreground="Black" 
+          HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,5,0,5">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="Name:" Grid.Column="0" Grid.Row="0" Margin="5"/>
+                                <TextBlock Text="{Binding Name}" Grid.Row="0" Grid.Column="1" Margin="5"/>
+
+                                <TextBlock Text="Surname:" Grid.Row="1" Grid.Column="0" Margin="5"/>
+                                <TextBlock Text="{Binding Surname}" Grid.Row="1" Grid.Column="1" Margin="5"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                    <ComboBox.Style>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="FontSize" Value="14"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#eee"/>
+                                    <Setter Property="BorderBrush" Value="#999"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ComboBox.Style>
+                </ComboBox>
+
+                <ComboBox Grid.Row="2" Grid.Column="2" Width="300" ItemsSource="{Binding Pets}" SelectedItem="{Binding SelectedPet}" 
+          BorderBrush="#ccc" BorderThickness="1" Background="White" Foreground="Black" 
+          HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,5,0,5">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="Name:" Grid.Row="0" Grid.Column="0" Margin="5"/>
+                                <TextBlock Text="{Binding Name}" Grid.Row="0" Grid.Column="1" Margin="5"/>
+
+                                <TextBlock Text="Owner:" Grid.Row="1" Grid.Column="0" Margin="5"/>
+                                <TextBlock Text="{Binding OwnerFullName}" Grid.Row="1" Grid.Column="1" Margin="5"/>
+
+                                <TextBlock Text="Species:" Grid.Row="2" Grid.Column="0" Margin="5"/>
+                                <TextBlock Text="{Binding Species}" Grid.Row="2" Grid.Column="1" Margin="5"/>
+
+                                <TextBlock Text="Race:" Grid.Row="3" Grid.Column="0" Margin="5"/>
+                                <TextBlock Text="{Binding Race}" Grid.Row="3" Grid.Column="1" Margin="5"/>
+
+                                <TextBlock Text="Gender:" Grid.Row="4" Grid.Column="0" Margin="5"/>
+                                <TextBlock Text="{Binding Gender}" Grid.Row="4" Grid.Column="1" Margin="5"/>
+
+                                <TextBlock Text="Micochip number:" Grid.Row="5" Grid.Column="0" Margin="5"/>
+                                <TextBlock Text="{Binding MicrochipNumber}" Grid.Row="5" Grid.Column="1" Margin="5"/>
+
+                            </Grid>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                    <ComboBox.Style>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="FontSize" Value="14"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#eee"/>
+                                    <Setter Property="BorderBrush" Value="#999"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ComboBox.Style>
+                </ComboBox>
+            </Grid>
+            <Grid Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="1" Content="Update visit" Command="{Binding CommandUpdateVisit}" Style="{StaticResource NavigationButtonStyle}"/>
+                <Button Grid.Column="2" Content="Return" Command="{Binding CommandReturn}" Style="{StaticResource NavigationButtonStyle}"/>
+            </Grid>
         </Grid>
     </Grid>
-    
-    
 </UserControl>

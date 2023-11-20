@@ -37,6 +37,8 @@ namespace PawPatientManager.ViewModels
         public string _microchipNumber;
         public string _vetName;
         public string _vetSurname;
+        public string _dateString;
+        public string _hourString;
         #endregion
         #region Properties for XAML
         public Guid ID { get { return _id; } set { _id = value; } }
@@ -44,6 +46,8 @@ namespace PawPatientManager.ViewModels
         public string OwnerFullName { get { return _ownerFullName; } set { _ownerFullName = value; OnPropertyChanged(nameof(OwnerFullName)); } }
         public string Species { get { return _species; } set { _species = value; OnPropertyChanged(nameof(Species)); } }
         public string Race { get { return _race; } set { _race = value; OnPropertyChanged(nameof(Race)); } }
+        public string DateString { get { return _dateString; } set { _dateString  = value; OnPropertyChanged(nameof(DateString)); } }
+        public string HourString { get { return _hourString; } set {_hourString = value; OnPropertyChanged(nameof(HourString)); } }
         public bool Gender { get { return _gender; } set { _gender = value; OnPropertyChanged(nameof(Gender)); } }
         public string MicrochipNumber { get { return _microchipNumber; } set { _microchipNumber = value; OnPropertyChanged(nameof(MicrochipNumber)); } }
         public string VetName { get { return _vetName; } set { _vetName = value; OnPropertyChanged(nameof(VetName)); } }
@@ -82,6 +86,8 @@ namespace PawPatientManager.ViewModels
             MicrochipNumber = _selectedVisitVM.Pet.MicrochipNumber;
             VetName = _selectedVisitVM.Vet.Name;
             VetSurname = _selectedVisitVM.Vet.Surname;
+            DateString = _selectedVisitVM.VisitDate;
+            HourString = _selectedVisitVM.VisitDateHour;
 
             CommandLoadPets = new Commands.EditVisitCommands.LoadPets(_vetSystem, this);
             CommandLoadVets = new Commands.EditVisitCommands.LoadVets(_vetSystem, this);

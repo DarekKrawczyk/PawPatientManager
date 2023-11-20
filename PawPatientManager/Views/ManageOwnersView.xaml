@@ -81,6 +81,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="20"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="20"></RowDefinition>
@@ -92,7 +93,9 @@
             <ColumnDefinition Width="100"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Row="1" Grid.Column="1">
+        <TextBlock Grid.Column="1" FontSize="35" Grid.Row="1" Text="Owners" Style="{StaticResource TextStyle}"/>
+
+        <Grid Grid.Row="2" Grid.Column="1">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -135,7 +138,7 @@
             </Grid>
         </Grid>
         
-        <ListView Name="OwnersList" Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Owners}">
+        <ListView Name="OwnersList" Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Owners}">
             <ListView.View>
                 <GridView>
                     
@@ -218,7 +221,7 @@
             </i:Interaction.Triggers>
         </ListView>
 
-        <Grid Grid.Row="3" Grid.Column="1" Margin="0,5,0,5" Background="LightGray">
+        <Grid Grid.Row="4" Grid.Column="1" Margin="0,5,0,5" Background="LightGray">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"></ColumnDefinition>
                 <ColumnDefinition Width="auto"></ColumnDefinition>
