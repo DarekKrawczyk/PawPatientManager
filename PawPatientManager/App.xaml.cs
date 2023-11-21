@@ -227,7 +227,7 @@ namespace PawPatientManager
         {
             return new LayoutNavigationService<HomeViewModel>(
                 _navigationStore,
-                () => new HomeViewModel(_accountStore),
+                () => HomeViewModel.LoadViewModel(_vetSystem,_accountStore),
                 CreateNavBarVM);
         }
         #endregion

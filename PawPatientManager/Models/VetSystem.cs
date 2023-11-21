@@ -51,6 +51,7 @@ namespace PawPatientManager.Models
             //PopulateMeds();
             //PopulateOwners();
             //PopulatePets(100);
+            //PopulateVets();
 
             _owners = new List<Owner>();
             _pets = new List<Pet>();
@@ -264,6 +265,10 @@ namespace PawPatientManager.Models
         }
         #endregion
         #region Methods - Database - Visits
+        public async Task<IEnumerable<Visit>> GetAllVisitsFromVetAsync(Vet vet)
+        {
+            return await _visitCreator.GetAllVisits(vet, DateTime.Now);
+        }
         public async Task<IEnumerable<Visit>> GetAllVisitsAsync()
         {
             return await _visitCreator.GetAllVisits();
@@ -279,6 +284,10 @@ namespace PawPatientManager.Models
         public async Task EditVisit(Visit selectedVisit, Visit editedVisit, Guid newVetID, Guid newPetID)
         {
             await _visitCreator.EditVisit(selectedVisit, editedVisit, newVetID, newPetID);
+        }
+        public async Task AddReceiptToVisit(Visit visit, MedicalReceipt receipt)
+        {
+            await _visitCreator.AddMedicalReceipt(visit, receipt);
         }
         #endregion
         #region Methods - Database
@@ -337,6 +346,72 @@ namespace PawPatientManager.Models
                 //}
             }
 
+        }
+        private async void PopulateVets()
+        {
+            string[] vetNames = { "Dr. Adam", "Dr. Pope", "Dr. Max", "Dr. Bently", "Dr. Chris", "Dr. Trevor", "Dr. Amanda" };
+            List<string> vetSurnames = new List<string>
+                {
+                    "Smith",
+                    "Johnson",
+                    "Williams",
+                    "Jones",
+                    "Brown",
+                    "Davis",
+                    "Miller",
+                    "Wilson",
+                    "Moore",
+                    "Taylor",
+                    "Anderson",
+                    "Thomas",
+                    "Jackson",
+                    "White",
+                    "Harris",
+                    "Martin",
+                    "Thompson",
+                    "Garcia",
+                    "Martinez",
+                    "Davis"
+                };
+            List<Vet> vetsToPopulate = new List<Vet>();
+            Random random = new Random();
+
+            for (int i = 0; i < 10; i++)
+            {
+                Guid id = Guid.NewGuid();
+                string name = vetNames[random.Next(vetNames.Length)];
+                string surname = vetSurnames[random.Next(vetSurnames.Count)];
+                string login = GenerateNickname(name);
+                string password = surname;
+
+                vetsToPopulate.Add(new Vet(id, name, surname, login, password));
+
+                MessageBox.Show($"Login: {login}\nPassword: {password}", "PawPatientManager", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+
+            foreach (Vet vet in vetsToPopulate)
+            {
+                await _vetCreator.CreateVet(vet);
+            }
+        }
+        public string GenerateNickname(string inputString)
+        {
+            // Split the input string into words
+            string[] words = inputString.Split(' ');
+
+            // Use the first word as the basis for the nickname
+            string nickname = words.Length > 0 ? words[0] : "";
+
+            // Add the first letter of each subsequent word to the nickname
+            for (int i = 1; i < words.Length; i++)
+            {
+                if (!string.IsNullOrWhiteSpace(words[i]))
+                {
+                    nickname += char.ToUpper(words[i][0]);
+                }
+            }
+
+            return nickname;
         }
         public async void PopulatePets(int numberOfPets)
         {

@@ -4,38 +4,206 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PawPatientManager.Views"
-             xmlns:components="clr-namespace:PawPatientManager.Components"
+             xmlns:components="clr-namespace:PawPatientManager.Components" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <ResourceDictionary>
-            <Color x:Key="GrayColor">#333333</Color>
-            <Color x:Key="LightGreenColor">#8BC34A</Color>
-            <Color x:Key="DarkGreenColor">#4CAF50</Color>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <!-- Styles -->
+        <Style x:Key="TextStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="Green"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="5,5,0,5"/>
+        </Style>
 
-            <SolidColorBrush x:Key="GrayBrush" Color="{StaticResource GrayColor}" />
-            <SolidColorBrush x:Key="LightGreenBrush" Color="{StaticResource LightGreenColor}" />
-            <SolidColorBrush x:Key="DarkGreenBrush" Color="{StaticResource DarkGreenColor}" />
-        </ResourceDictionary>
+        <Style x:Key="TextStyleBlack" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="5,5,0,5"/>
+        </Style>
+
+        <Style x:Key="RoundedTextBoxStyle" TargetType="TextBox">
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="auto"/>
+            <Setter Property="BorderBrush" Value="#ccc"/>
+            <Setter Property="Background" Value="DarkGray"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                            <ScrollViewer x:Name="PART_ContentHost" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#eee"/>
+                    <Setter Property="BorderBrush" Value="#999"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="NavigationButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="10,0,10,0"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="LightSkyBlue"/>
+                    <!-- Light Green -->
+                    <Setter Property="BorderBrush" Value="#45a049"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Background="LightGray">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="20"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
+        <TextBlock Grid.Column="1" FontSize="35" Grid.ColumnSpan="2" Grid.Row="1" Text="Home page" Style="{StaticResource TextStyle}"/>
 
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="This is home page!" Foreground="{StaticResource DarkGreenBrush}"/>
-        <TextBlock Grid.Row="2" Grid.Column="2" Text="Currently logged in user:" Foreground="{StaticResource GrayBrush}"/>
-        <TextBlock Grid.Row="2" Grid.Column="3" Text="{Binding Login}" Foreground="{StaticResource LightGreenBrush}"/>
+        <Grid Grid.Column="2" Grid.Row="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="1" Text="Welcome!" Style="{StaticResource TextStyle}"/>
+            <TextBlock Grid.Row="2" Text="You are logged in from vet account"/>
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Name:" Style="{StaticResource TextStyle}"/>
+                <TextBlock Grid.Column="1" Text="{Binding Name}" Style="{StaticResource TextStyleBlack}"/>
+            </Grid>
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Surname:" Style="{StaticResource TextStyle}"/>
+                <TextBlock Grid.Column="1" Text="{Binding Surname}" Style="{StaticResource TextStyleBlack}"/>
+            </Grid>
+            <TextBlock Grid.Row="5" Text="{Binding VisitsText}" Style="{StaticResource TextStyleBlack}"/>
+            <Grid Grid.Row="6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="First visit:" Style="{StaticResource TextStyle}" />
+                <TextBlock Grid.Column="1" Text="{Binding FirstVisitTime}" Style="{StaticResource TextStyleBlack}"/>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="3" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <ListView Name="VisitsList" ItemsSource="{Binding Visits}">
+                    <ListView.View>
+                        <GridView>
+
+                            <GridViewColumn Header="Owner">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding OwnerFullName}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="Pet">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding PetFullName}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="Date">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding VisitDate}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="Hour">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding VisitDateHour}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding CommandHandleVisitSelectionChange}" CommandParameter="{Binding SelectedItem, ElementName=VisitsList}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ListView>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Column="1" Grid.Row="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Medical receipt:" Grid.Row="0" Style="{StaticResource TextStyle}"/>
+            <TextBox Grid.Row="1" Text="{Binding MedicalReceipt, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource RoundedTextBoxStyle}" Margin="0,0,0,5"/>
+            <Button Grid.Row="2" Content="Prescribe" Command="{Binding CommandPrescribe}" Style="{StaticResource NavigationButtonStyle}"/>
+        </Grid>
     </Grid>
 </UserControl>

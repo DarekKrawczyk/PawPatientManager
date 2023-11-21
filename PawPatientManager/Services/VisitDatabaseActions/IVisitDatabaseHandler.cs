@@ -12,7 +12,9 @@ namespace PawPatientManager.Services.VisitDatabaseActions
         Task CreateVisit(Vet vet, Pet pet, DateTime dateTime);
         Task DeleteVisit(Visit visit);
         Task EditVisit(Visit selectedVisit, Visit editedVisit, Guid newVetGUID, Guid newPetGUID);
+        Task AddMedicalReceipt(Visit visit, MedicalReceipt receipt);
         Task<Visit> GetConflictingVisit(Visit visit);
         Task<IEnumerable<Visit>> GetAllVisits();
+        Task<IEnumerable<Visit>> GetAllVisits(Vet vet, DateTime dateTime);
     }
 }

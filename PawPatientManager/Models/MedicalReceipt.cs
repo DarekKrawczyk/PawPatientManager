@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PawPatientManager.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,19 +9,25 @@ namespace PawPatientManager.Models
 {
     public class MedicalReceipt
     {
-        private uint _id;
+        private Guid _id;
         private DateTime _signed;
-        private Medication _medication;
+        private string _recommendation;
         // Dawkowanie...
 
-        public uint ID { get { return _id; } set { _id = value; } }
+        public Guid ID { get { return _id; } set { _id = value; } }
         public DateTime Signed { get { return _signed; } set { _signed = value; } }
-        public Medication Medication { get { return _medication; } set { _medication = value; } }
-        public MedicalReceipt(uint id, DateTime signed, Medication medication) 
+        public string Recommendation { get { return _recommendation; } set { _recommendation = value; } }
+        public MedicalReceipt(Guid id, DateTime signed, string recommendation) 
         { 
             _id = id;
             _signed = signed;
-            _medication = medication;
+            _recommendation = recommendation;
+        }        
+        public MedicalReceipt(MedicalReceiptDTO receipt) 
+        { 
+            _id = receipt.ID;
+            _signed = receipt.Signed;
+            _recommendation = receipt.Recommendation;
         }
 
     }

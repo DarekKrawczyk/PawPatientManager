@@ -38,7 +38,7 @@ namespace PawPatientManager.Models
             _pet = new Pet(pet, petOwner);
             _vet = new Vet(vet);
             _date = visit.Date;
-            _medicalReceipts = null;
+            _medicalReceipts = new List<MedicalReceipt>();
         }
         public Visit(VisitViewModel visitVM)
         {

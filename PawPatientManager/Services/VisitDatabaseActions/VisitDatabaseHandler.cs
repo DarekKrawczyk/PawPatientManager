@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
+using System.Windows.Media;
 
 namespace PawPatientManager.Services.VisitDatabaseActions
 {
@@ -17,6 +19,24 @@ namespace PawPatientManager.Services.VisitDatabaseActions
         {
             _dbContextFactory = dbContextFactory;
         }
+
+        public async Task AddMedicalReceipt(Visit visit, MedicalReceipt receipt)
+        {
+            using (MyDbContent dbContext = _dbContextFactory.CreateDbContext())
+            {
+
+                MedicalReceiptDTO medDT = new MedicalReceiptDTO()
+                {
+                    VisitID = visit.ID,
+                    Signed = receipt.Signed,
+                    Recommendation = receipt.Recommendation,
+                };
+
+                dbContext.MedicalReceipts.Add(medDT);
+                await dbContext.SaveChangesAsync();
+            }
+        }
+
         public async Task CreateVisit(Vet vet, Pet pet, DateTime dateTime)
         {
             using (MyDbContent dbContext = _dbContextFactory.CreateDbContext())
@@ -104,7 +124,41 @@ namespace PawPatientManager.Services.VisitDatabaseActions
                 //return await visitDTOs.Select(visit => new Visit(visit, await dbContext.Pets.FindAsync(visit.PetID), await dbContext.Vets.FindAsync(visit)));
             }
         }
+        public async Task<IEnumerable<Visit>> GetAllVisits(Vet vet, DateTime dateTime)
+        {
+            using (MyDbContent dbContext = _dbContextFactory.CreateDbContext())
+            {
+                IEnumerable<VisitDTO> visitDTOs = await dbContext.Visits.Where(x=>x.VetID == vet.ID).Where(x=>x.Date>=dateTime).ToListAsync();
 
+                List<Visit> visits = new List<Visit>();
+                for (int i = 0; i < visitDTOs.Count(); i++)
+                {
+                    VetDTO vett = await dbContext.Vets.FindAsync(visitDTOs.ElementAt(i).VetID);
+                    PetDTO pet = await dbContext.Pets.FindAsync(visitDTOs.ElementAt(i).PetID);
+                    OwnerDTO owner = await dbContext.Owners.FindAsync(pet.OwnerID);
+                    Visit visit = new Visit(visitDTOs.ElementAt(i), pet, vett, owner);
+
+                    IEnumerable<MedicalReceiptDTO> meds = await dbContext.MedicalReceipts.ToListAsync();
+
+                    List<MedicalReceipt> filtred = new List<MedicalReceipt>();
+                    foreach(MedicalReceiptDTO med in meds)
+                    {
+                        if(med.VisitID == visit.ID)
+                        {
+                            filtred.Add(new MedicalReceipt(med));
+                        }
+                    }
+
+                    visit.MedicalReceipts = filtred;
+
+                    visits.Add(visit);
+                }
+
+                return visits;
+
+                //return await visitDTOs.Select(visit => new Visit(visit, await dbContext.Pets.FindAsync(visit.PetID), await dbContext.Vets.FindAsync(visit)));
+            }
+        }
         public Task<Visit> GetConflictingVisit(Visit visit)
         {
             throw new NotImplementedException();

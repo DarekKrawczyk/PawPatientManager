@@ -72,10 +72,10 @@
                 <TextBlock Text="Paw Patient Manager" Style="{StaticResource LogoTextStyle}" Grid.Row="0" Grid.Column="1"/>
                 <TextBlock Grid.Column="1" Grid.Row="2" Text="Username:" Margin="10" HorizontalAlignment="Center"/>
                 <Border Grid.Row="3" Grid.Column="1" x:Name="usernameBorder" CornerRadius="10" Background="#F2F2F2" BorderBrush="#D9D9D9" BorderThickness="1" Margin="10" Width="150">
-                    <TextBox Text="{Binding Username}" Width="150" Padding="8" Background="Transparent" BorderThickness="0" Foreground="#333333" TextAlignment="Center"/>
+                    <TextBox Text="{Binding Username}" Width="150" Padding="8" Background="Transparent" BorderThickness="0" Foreground="#333333"/>
                 </Border>
                 <TextBlock Grid.Column="1" Grid.Row="4" Text="Password:" Margin="10" HorizontalAlignment="Center"/>
-                <components:BindablePasswordBox Grid.Column="1" Grid.Row="5" Width="200" Password="{Binding Password, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="10" HorizontalContentAlignment="Center">
+                <components:BindablePasswordBox Grid.Column="1" Grid.Row="5" Password="{Binding Password, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="10" HorizontalContentAlignment="Center">
                 </components:BindablePasswordBox>
                 <Button Grid.Column="1" Grid.Row="6" Content="Login" Command="{Binding CommandLogin}" Width="150" HorizontalAlignment="Center" Margin="10">
                     <Button.Style>
