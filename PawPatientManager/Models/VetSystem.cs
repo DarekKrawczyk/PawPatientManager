@@ -48,6 +48,11 @@ namespace PawPatientManager.Models
             _vetCreator = vetCreator;
             _visitCreator = visitCreator;
 
+            // Create default account
+            //_vetCreator.CreateVet(new Vet(new Guid(), "Dr. Dariusz", "Krawczyk", "darikra473", "darikra473", null));
+            
+            //_vetCreator.DeleteAllVets();
+
             //PopulateMeds();
             //PopulateOwners();
             //PopulatePets(100);
@@ -237,6 +242,10 @@ namespace PawPatientManager.Models
         public async Task<IEnumerable<Vet>> GetAllVetsAsync()
         {
             return await _vetCreator.GetAllVets();
+        }
+        public async Task DeleteAllVets()
+        {
+            await _vetCreator.DeleteAllVets();
         }
         public async Task AddVet(Vet vet)
         {

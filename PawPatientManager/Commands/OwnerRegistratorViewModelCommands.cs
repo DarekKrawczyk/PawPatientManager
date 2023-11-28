@@ -486,22 +486,6 @@ namespace PawPatientManager.Commands
                 return areFieldsValid && !string.IsNullOrEmpty(_ownerRegistrationViewModel.Name) && base.CanExecute(parameter);
             }
 
-            //public override void Execute(object? parameter)
-            //{
-            //    Owner newOwner = new Owner(_ownerRegistrationViewModel.ID,
-            //        _ownerRegistrationViewModel.Name,
-            //        _ownerRegistrationViewModel.Surname,
-            //        _ownerRegistrationViewModel.Gender,
-            //        _ownerRegistrationViewModel.BirthDate,
-            //        _ownerRegistrationViewModel.Adress,
-            //        _ownerRegistrationViewModel.PhoneNumber,
-            //        _ownerRegistrationViewModel.Email,
-            //        _ownerRegistrationViewModel.PESEL
-            //        );
-            //    _vetSystem.AddOwner(newOwner);
-
-            //}
-
             public override async Task ExecuteAsync(object parameter)
             {
                 try
@@ -518,6 +502,7 @@ namespace PawPatientManager.Commands
                         _ownerRegistrationViewModel.PESEL
                         );
                     await _vetSystem.AddOwner(newOwner);
+                    MessageBox.Show($"Owner {newOwner.Name} {newOwner.Surname} has been added!!", "PawPatientManager", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch(Exception ex)
                 {

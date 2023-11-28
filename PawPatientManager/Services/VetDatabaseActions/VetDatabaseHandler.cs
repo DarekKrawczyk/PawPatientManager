@@ -37,6 +37,24 @@ namespace PawPatientManager.Services.VetDatabaseActions
             }
         }
 
+        public async Task DeleteAllVets()
+        {
+            using (MyDbContent dbContext = _dbContextFactory.CreateDbContext())
+            {
+                // Step 1: Retrieve Entities
+                var allEntities = dbContext.Vets.ToList(); // Replace YourEntities with the DbSet property in your DbContext
+
+                // Step 2: Delete Entities
+                foreach (var entity in allEntities)
+                {
+                    dbContext.Entry(entity).State = EntityState.Deleted;
+                }
+
+                // Step 3: Save Changes
+                dbContext.SaveChanges();
+            }
+        }
+
         public async Task DeleteVet(Vet vet)
         {
             using (MyDbContent dbContext = _dbContextFactory.CreateDbContext())

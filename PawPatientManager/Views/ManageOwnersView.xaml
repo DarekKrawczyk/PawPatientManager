@@ -185,7 +185,7 @@
                     <GridViewColumn Header="Birth date">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding BirthDate}"/>
+                                <TextBlock Text="{Binding BirthDateAsString}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

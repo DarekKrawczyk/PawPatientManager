@@ -345,9 +345,24 @@ namespace PawPatientManager.Commands
             {
                 _vetSystem = vetSystem;
                 _editPetVM = editPetVM;
-                //_editPetVM.PropertyChanged += _ownerRegistrationViewModel_PropertyChanged;
+                _editPetVM.PropertyChanged += _vm_PropertyChanged;
             }
 
+            private void _vm_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+            {
+                if (e.PropertyName == nameof(RegisterPetViewModel.Name) || e.PropertyName == nameof(RegisterPetViewModel.Spieces) ||
+                    e.PropertyName == nameof(RegisterPetViewModel.Race) || e.PropertyName == nameof(RegisterPetViewModel.MicrochipNumber))
+                {
+                    OnCanExecutedChange();
+                }
+            }
+
+
+            public override bool CanExecute(object? parameter)
+            {
+                return (_editPetVM.Name != string.Empty && _editPetVM.Name != null) && (_editPetVM.Spieces != string.Empty && _editPetVM.Spieces != null) && 
+                    (_editPetVM.Race != string.Empty && _editPetVM.Race != null) && (_editPetVM.MicrochipNumber != string.Empty && _editPetVM.MicrochipNumber != null) && base.CanExecute(parameter);
+            }
             public override async Task ExecuteAsync(object parameter)
             {
                 if (_editPetVM == null || _editPetVM.Owners == null)
