@@ -54,7 +54,7 @@ namespace PawPatientManagerWebAPI.Controllers
             return CreatedAtAction(nameof(GetMedication), new { ID = med.ID }, med);
         }
 
-        [HttpPut]
+        [HttpPut("{ID}")]
         public async Task<ActionResult> UpdateMedication(Guid ID, MedicationDTO med)
         {
             if(ID != med.ID)

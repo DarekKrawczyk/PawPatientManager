@@ -1,6 +1,8 @@
-﻿using System;
+﻿using PawPatientManager.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,6 +29,13 @@ namespace PawPatientManager.Models
             _name = name;
             _description = description;
             _amount = amount;
+        }
+        public Medication(MedicationDTO med)
+        {
+            _id = med.ID;
+            _name = med.Name;
+            _description = med.Description;
+            _amount = med.Amount;
         }
         #endregion
     }

@@ -45,7 +45,8 @@ namespace PawPatientManager
         {
             _dbContextFactory = new DbContentFactory(ConnectionString);
 
-            _medicationCreator = new MedicationDatabaseHandler(_dbContextFactory);
+            //_medicationCreator = new MedicationDatabaseHandler(_dbContextFactory);
+            _medicationCreator = new MedicationDatabaseHandlerREST();
             _ownerCreator = new OwnerDatabaseHandler(_dbContextFactory);
             _petCreator = new PetDatabaseHandler(_dbContextFactory);
             _vetCreator = new VetDatabaseHandler(_dbContextFactory);

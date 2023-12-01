@@ -125,7 +125,7 @@ namespace PawPatientManager.ViewModels
         }
         public bool FilterMeds(object obj)
         {
-            if(obj is MedViewModel med)
+            if(obj is MedViewModel med && ((med.ID != null) && (med.Name != null) && (med.Description!= null) && (med.Amount != null)))
             {
                 return med.Name.Contains(NameFilter, StringComparison.InvariantCultureIgnoreCase) && med.Description.Contains(DescriptionFilter, StringComparison.InvariantCultureIgnoreCase) &&
                     med.Amount == ((AmountFilter == string.Empty)?(med.Amount):int.Parse(AmountFilter));

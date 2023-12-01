@@ -79,34 +79,15 @@ namespace PawPatientManager.Models
         }
         public async Task AddMedication(Medication medication)
         { 
-            Medication conflictableMedication = await _medicationCreator.GetConflictingMedication(medication);
-
-            if(conflictableMedication != null)
-            {
-                MessageBox.Show("AddMedication() - there was conflict whil adding medication");
-            }
-
-            else await _medicationCreator.CreateMedication(medication);
+            await _medicationCreator.CreateMedication(medication);
         }
         public async Task DeleteMedication(Medication medication)
         {
-            Medication conflictableMedication = await _medicationCreator.GetConflictingMedication(medication);
-
-            if (conflictableMedication == null)
-            {
-                MessageBox.Show("DeleteMedication() - there is no such medication!");
-            }
-            else await _medicationCreator.DeleteMedication(medication);
+            await _medicationCreator.DeleteMedication(medication);
         }
         public async Task EditMedication(Medication selected, Medication edited)
         {
-            Medication conflictableMedication = await _medicationCreator.GetConflictingMedication(selected);
-
-            if (conflictableMedication == null)
-            {
-                MessageBox.Show("EditMedication() - medication wasnt found");
-            }
-            else await _medicationCreator.EditMedication(selected, edited);
+            await _medicationCreator.EditMedication(selected, edited);
         }
         #endregion
         #region Methods - Database - Owner
