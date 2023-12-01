@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PawPatientManager", "PawPatientManager\PawPatientManager.csproj", "{776CE931-C7A7-4A77-B31F-687BE8F4C74F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PawPatientManager", "PawPatientManager\PawPatientManager.csproj", "{776CE931-C7A7-4A77-B31F-687BE8F4C74F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PawPatientManagerWebAPI", "PawPatientManagerWebAPI\PawPatientManagerWebAPI.csproj", "{1AF7F251-3593-4557-894E-D4FF2EC28B4B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{776CE931-C7A7-4A77-B31F-687BE8F4C74F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{776CE931-C7A7-4A77-B31F-687BE8F4C74F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{776CE931-C7A7-4A77-B31F-687BE8F4C74F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AF7F251-3593-4557-894E-D4FF2EC28B4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AF7F251-3593-4557-894E-D4FF2EC28B4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AF7F251-3593-4557-894E-D4FF2EC28B4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AF7F251-3593-4557-894E-D4FF2EC28B4B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
